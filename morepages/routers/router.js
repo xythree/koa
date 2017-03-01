@@ -5,9 +5,9 @@
 
 module.exports = function (app, router, render, parse) {
 
-    var sql = require(__dirname + "/sql")
-    var fn = require(__dirname + "/function")()
-    var validator = require(__dirname + "/controllers/validator")
+    var sql = require(__dirname + "/../services/sql")
+    var fn = require(__dirname + "/../services/function")()
+    var validator = require(__dirname + "/../controllers/validator")
     var md5 = require("md5")
 
     router.all("/api/comment",async function () {
@@ -44,7 +44,7 @@ module.exports = function (app, router, render, parse) {
         var result = {
             status: 0,
             msg: ""
-        }        
+        }
         var username = validator.empty(params.name)
         var password = validator.empty(params.password)
 

@@ -1,7 +1,7 @@
 
 
-var mg = require(__dirname + "/public/mongoose")
-var m = require(__dirname + "/model")
+var mg = require("./mongoose")
+var m = require("./model")
 
 var mongoose = mg.mongoose
 var Schema = mg.Schema

@@ -4,8 +4,8 @@
 
 module.exports = function (sql) {
 
-    var sql = sql || require(__dirname + "/sql")
-    var models = require(__dirname + "/model")
+    var sql = sql || require("./sql")
+    var models = require("./model")
 
     return {
         loginTime() {

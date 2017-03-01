@@ -36,7 +36,7 @@ app.use(router.routes())
 
 
 
-require(__dirname + "/router")(app, router, render, parse)
+require(__dirname + "/routers/router")(app, router, render, parse)
 
 
 
