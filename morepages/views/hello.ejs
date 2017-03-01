@@ -1,0 +1,128 @@
+
+
+<div id="app">
+    <p><input type="text" id="title" v-model="title" /></p>
+    <p><textarea id="textarea" cols="30" rows="10">{{body}}</textarea></p>
+    <p><button id="submit" @click="submit" >submit</button></p>
+	<p><button id="editSubmit" @click="editSubmit" >edit</button></p>
+  
+    
+    <ul>
+    
+        <li v-for="(list, index) in list">author: {{list.author}} - {{list.title}} <a href="javascript:;" @click="deleteFn(index)">del</a> <a href="javascript:;" @click="editFn(index)">edit</a></li>
+    
+    </ul>
+
+    <ul>
+        <li v-for="item in zh.top_stories" >
+            <a :href="item.ga_prefix" v-text="item.title"></a>
+            <img :src="item.image" /> 
+        </li>
+    </ul>
+
+    <ul>
+        <li v-for="item in zh.stories" >
+            <a :href="item.ga_prefix" v-text="item.title"></a>
+            <img :src="item.images[0]" /> 
+        </li>
+    </ul>
+   
+
+</div>
+
+<!--
+<script src="/javascripts/jquery.1.8.3.js" ></script>
+-->
+<script src="/javascripts/vue.min.js"></script>
+<script src="/javascripts/vue-resource.min.js"></script>
+<script>
+
+var vm = new Vue({
+    http: {
+        header: {        
+            'Content-Type': 'application/text; charset=UTF-8'        
+        }
+    },
+    el: "#app",
+    data: {
+        zh: {},
+		title: "testTitle",
+		body: "testBody",
+		id: "",
+        list: [<% for(var i = 0; i < list.length; i++) { %> <%- JSON.stringify(list[i]) %> <% if(i != list.length - 1){ %> <%= "," %>   <%}}%>]
+    },
+	mounted() {
+        var _this = this
+        this.$http.get("/zh").then(function (data) {
+            console.log(data.data)
+            _this.zh = data.data
+        })
+
+        this.$http.get("/cnode").then(function (data) {
+            console.log(data.data)
+        })
+        
+	},
+    methods: {
+        submit() {
+            var d = {
+                title: title.value,
+                body: textarea.value
+            }
+
+            this.$http.post("/add", d).then(function (data) {
+                this.list = data.data.pr
+            })
+
+        },
+		editFn(index) {
+			var t = this.list[index]
+			this.title = t.title
+			this.body = t.body
+			this.id = t._id
+		},
+		editSubmit(index) {
+			if (!Boolean(this.id)) return
+			var d = {
+				title: this.title,
+				body: this.body,
+				id: this.id
+			}
+
+			this.$http.post("/update", d).then(function (data) {
+				console.log(data)
+			})
+
+		},
+        deleteFn(index) {
+            var d = {
+                id: this.list[index]._id
+            }
+
+            this.$http.post("/del", d).then(function (data) {
+                if (data.data.status) {
+                    //this.list.splice(index, 1)
+                    this.list.$remove(this.list[index])
+                }
+            })
+
+        }
+    }
+})
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

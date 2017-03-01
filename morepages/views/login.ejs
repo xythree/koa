@@ -1,0 +1,81 @@
+<%include head.ejs %>
+
+
+
+<a href="/register">register</a>
+
+<div id="login">
+    
+    <div class="loginBox" v-if="!isLogin" >
+        <input type="text" v-model="un" />
+        <input type="password" v-model="pd" />
+        <button @click="login" >Submit</button>
+    </div>
+    
+    <div class="logoutBox" v-else >
+        <a href="javascript:;" @click="logout" >logout</a><br />
+        <a href="javascript:;" @click="comment" >评论</a>
+    </div>
+
+    
+
+</div>
+
+
+
+
+
+
+
+<%include scripts.ejs %>
+
+
+<script>
+
+    var vm = new Vue({
+        el: "#login",
+        data: {
+            isLogin: <%= list.isLogin %>,
+            un: "demoabc1",
+            pd: "aaaaaa",
+            loginUrl: "/api/login",
+            logoutUrl: "/api/logout"
+        },
+        methods: {
+            comment() {
+                this.$http.post("/api/comment").then(function (data) {
+                    if (data.data) {
+                        console.log("可以提交")
+                    } else {
+                        console.log("不可以提交")
+                    }
+                })
+            },
+            login() {
+                var d = {
+                    name: this.un,
+                    password: this.pd
+                }
+                this.$http.post(this.loginUrl, d).then(function (data) {
+                    if (data.data.status === 1) {
+                        this.isLogin = true
+                    }
+                })
+            },
+            logout() {
+                this.$http.get(this.logoutUrl).then(function (data) {
+                    if (data.data.status === 1) {
+                        this.isLogin = false
+                    }
+                })
+            }
+        },
+        mounted() {
+
+        }
+    })
+
+</script>
+
+<%include footer.ejs %>
+

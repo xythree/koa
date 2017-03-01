@@ -1,0 +1,57 @@
+<%include head.ejs %>
+
+
+
+
+<a href="/login">login</a>
+
+
+<div id="register">
+    <input type="text" v-model="un" /><br />
+    <input type="password" v-model="pd" /><br />
+    <button @click="register">Submit</button>
+</div>
+
+
+
+
+
+<%include scripts.ejs %>
+
+<script>
+
+    var vm = new Vue({
+        el: "#register",
+        data: {            
+            un: "",
+            pd: "",
+            registerUrl: "/api/register"
+        },
+        methods: {
+            register() {
+                if (this.un === "" || this.pd === "") {
+                    return
+                }
+                var d = {
+                    name: this.un,
+                    password: this.pd
+                }
+                this.$http.post(this.registerUrl, d).then(function (data) {
+                    var result = data.data
+                    if (result.status === 1) {
+                        console.log(result.msg)
+                    } else if (result.status === 0) {
+                        console.log(result.msg)
+                    }
+                })
+            }
+        },
+        mounted() {
+
+        }
+    })
+
+</script>
+
+<%include footer.ejs %>
+
