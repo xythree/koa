@@ -22,12 +22,9 @@ app.use(logger())
 
 
 
-
-
-
 app.use(serve(__dirname + "/static"))
 
-var render = views(path.join(__dirname+"/views"), {
+var render = views(path.join(__dirname + "/views"), {
     ext: "ejs"
 })
 
@@ -35,17 +32,10 @@ var render = views(path.join(__dirname+"/views"), {
 app.use(router.routes())
 
 
-
 require(__dirname + "/routers/router")(app, router, render, parse)
 
 
-
-
-app.listen(config.port)
-
-
-
-
+app.listen(config.port, "192.168.1.42")
 
 module.exports = app
 
