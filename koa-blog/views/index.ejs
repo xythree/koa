@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <title></title>
+    
+    <style type="text/css">
+        
+        
+    </style>
+    
+</head>
+<body>
+    
+
+<div id="search">
+    
+    <select v-model="selectVal" >
+        <option v-for="item in selectList" :value="item.type">{{item.value}}</option>
+    </select>
+    <input type="text" v-model="searchVal" />
+    <button @click="search">search</button>
+    
+    <ol>
+        <todo-item v-for="item in groceryList" :todo="item" ></todo-item>
+    </ol>
+
+	<div>
+		<a href="javascript:;" @click="prev">上一页</a>
+		<a href="javascript:;" @click="next">下一页</a>
+	</div>
+	
+    <music-box :info="songsInfo" :lyric="lyric" ></music-box>
+    
+</div>
+    
+    
+<script type="text/javascript" src="/javascripts/vue.min.js"></script>
+<script type="text/javascript" src="/javascripts/axios.min.js"></script>
+<script type="text/javascript">
+
+
+
+    const bus = new Vue()
+
+    bus.$on("songsInfo", data => {        
+        vm.songsInfo = data
+    })
+	
+	bus.$on("getLyric", data => {		
+		vm.lyric = data.lrc.lyric.replace(/\n/g, "</p>").replace(/\[([\d,\.,:]+)\]/g, "<p data-time='$1'>")
+	})
+
+    
+    Vue.component("music-box", {
+        props: ["info", "lyric"],
+        template: "<div><img :src='info.album && info.album.picUrl'/><video :src='info.mp3Url' controls ></video><div v-html='lyric'></div></div>"
+    })
+    
+
+    Vue.component("todo-item", {
+        template: `<li @click='getSongs(todo.id)'>{{todo.artists[0].name}} - {{todo.name}} - {{todo.album.name}}</li>`,
+        props: ["todo", "index"],
+        methods: {
+            getSongs(id) {
+                axios.get(`/detail?id=${id}`).then(d => {
+                    const data =d.data
+                    if (data.code == 200) {                     
+                        bus.$emit("songsInfo", data.songs[0])
+                    }
+                })
+				axios.get(`/lyric?id=${id}`).then(d => {
+					const data = d.data
+					if (data.code == 200) {
+						bus.$emit("getLyric", data)
+					}
+				})
+            }
+        }
+    })
+
+    const vm = new Vue({
+        el: "#search",
+        data: {
+			lyric: "",
+            songsInfo: "",
+            searchVal: "遇见",
+            offset: 1,
+            selectVal: 1,
+            selectList: [
+                {value: "歌曲", type: 1},
+                /*
+                {value: "专辑", type: 10},
+                {value: "歌手", type: 100},
+                {value: "歌单", type: 1000},
+                {value: "用户", type: 1002},
+                {value: "mv", type: 1004},
+                {value: "歌词", type: 1006},
+                {value: "主播电台", type: 1009}
+                */
+            ],
+            groceryList: []
+        },
+        methods: {
+            search({selectVal = 1, offset = 0}) {
+                
+                axios.post("/search", {
+                    s: this.searchVal,
+                    type: selectVal,
+                    offset: offset
+                }).then(d => {
+                    const data = d.data
+                    if (data.code == 200) {
+                        this.groceryList = data.result.songs
+                    }                   
+                })
+            },
+			prev() {
+				let offset = this.offset <= 0 ? 0 : this.offset--
+				this.search({offset: offset})
+			},
+			next() {
+				let offset = this.offset++
+				this.search({offset: offset})
+			}
+        }
+    })
+
+</script>
+
+</body>
+</html>
+
