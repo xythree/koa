@@ -3,7 +3,7 @@
 const querystring = require("querystring")
 const http = require("http")
 
-module.exports = function (params = {}) {
+const request = function (params) {
 
     let options = {
         hostname: "",
@@ -66,5 +66,19 @@ module.exports = function (params = {}) {
         }
     }    
 }
+
+
+module.exports = function (params = {}) {
+	const req = request(params)
+	return async (ctx, next) => {
+		ctx.post = req.post
+		ctx.get = req.get
+		await next()
+	}
+	
+}
+
+
+
 
 

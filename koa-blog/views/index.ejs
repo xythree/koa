@@ -49,29 +49,53 @@
         vm.songsInfo = data
     })
 	
-	bus.$on("getLyric", data => {		
-		vm.lyric = data.lrc.lyric.replace(/\n/g, "</p>").replace(/\[([\d,\.,:]+)\]/g, "<p data-time='$1'>")
+	bus.$on("getLyric", data => {
+        let lyric = ""
+        if (!data.nolyric && data.lrc.lyric) {
+		    lyric = data.lrc.lyric.replace(/\n/g, "</p>").replace(/\[([\d,\.,:]+)\]/g, "<p id='id$1' data-time='$1'>")
+        }
+        vm.lyric = lyric
 	})
 
     
     Vue.component("music-box", {
+        data() {
+            return {
+                videoBox: "",
+                toggleText: "play"
+            }
+        },
         props: ["info", "lyric"],
-        template: "<div><img :src='info.album && info.album.picUrl'/><video :src='info.mp3Url' controls ></video><div v-html='lyric'></div></div>"
+        template: "<div><img :src='info.album && info.album.picUrl'/><button @click='toggle'>{{toggleText}}</button><video ref='videoBox' :src='info.mp3Url' autoplay controls ></video><div v-html='lyric'></div></div>",
+        methods: {
+            toggle() {
+                const videoBox = this.$refs.videoBox
+
+                if (videoBox.paused) {
+                    this.toggleText = "stop"
+                    videoBox.play()
+                } else {
+                    this.toggleText = "play"
+                    videoBox.pause()
+                }
+                
+            }
+        }
     })
     
 
     Vue.component("todo-item", {
-        template: `<li @click='getSongs(todo.id)'>{{todo.artists[0].name}} - {{todo.name}} - {{todo.album.name}}</li>`,
+        template: `<li><a @click='getSongs(todo.id)'>{{todo.artists[0].name}} - {{todo.name}} - {{todo.album.name}}</a></li>`,
         props: ["todo", "index"],
         methods: {
             getSongs(id) {
-                axios.get(`/detail?id=${id}`).then(d => {
+                axios.get(`/music/detail?id=${id}`).then(d => {
                     const data =d.data
                     if (data.code == 200) {                     
                         bus.$emit("songsInfo", data.songs[0])
                     }
                 })
-				axios.get(`/lyric?id=${id}`).then(d => {
+				axios.get(`/music/lyric?id=${id}`).then(d => {
 					const data = d.data
 					if (data.code == 200) {
 						bus.$emit("getLyric", data)
@@ -103,10 +127,13 @@
             ],
             groceryList: []
         },
+        mounted() {
+            this.search({selectVal: 1})
+        },
         methods: {
             search({selectVal = 1, offset = 0}) {
                 
-                axios.post("/search", {
+                axios.post("/music/search", {
                     s: this.searchVal,
                     type: selectVal,
                     offset: offset

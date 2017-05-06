@@ -10,8 +10,13 @@ function log(ctx) {
 
 module.exports = function () {
 	
-	return function (ctx, next) {
+	return async (ctx, next) => {
 		
+		log(ctx)
+
+		await next()
+		
+		/*
 		return new Promise((resolve, reject) => {
 			
 			log(ctx)
@@ -24,7 +29,7 @@ module.exports = function () {
 			
 			return next()
 		})
-		
+		*/
 	}
 	
 }
