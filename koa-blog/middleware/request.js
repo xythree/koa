@@ -67,7 +67,6 @@ const request = function (params) {
     }    
 }
 
-
 module.exports = function (params = {}) {
 	const req = request(params)
 	return async (ctx, next) => {
