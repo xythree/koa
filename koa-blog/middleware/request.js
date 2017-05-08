@@ -47,14 +47,14 @@ const request = function (params) {
 
             return promise(options, data)
         },
-        get(data) {         
+        get(data) {
             const obj = {
-                method: "GET"                
+                method: "GET"
             }
 
-            if (typeof data == "string") {                
+            if (typeof data == "string") {
                 obj.path = data
-            } else {                
+            } else {
                 obj.path = data.path
                 delete data.path
                 obj.path += "?" + querystring.stringify(data)
@@ -62,17 +62,17 @@ const request = function (params) {
 
             Object.assign(options, obj)
 
-            return promise(options, null)            
+            return promise(options, null)
         }
-    }    
+    }
 }
 
 module.exports = function (params = {}) {
-	const req = request(params)
-	return async (ctx, next) => {
-		ctx.post = req.post
-		ctx.get = req.get
-		await next()
-	}
-	
+    const req = request(params)
+    return async (ctx, next) => {
+        ctx.post = req.post
+        ctx.get = req.get
+        await next()
+    }
+
 }

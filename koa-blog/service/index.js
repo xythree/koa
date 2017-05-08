@@ -19,7 +19,7 @@ module.exports = function (router) {
             offset: (params.offset || 0) * limit,
             total: true,
             limit: limit
-        }).then(result => {            
+        }).then(result => {
             ctx.body = result
         }, () => {
             ctx.status = 502
@@ -30,9 +30,9 @@ module.exports = function (router) {
     //获取歌曲信息    
     router.get("/music/detail", async ctx => {
         const params = ctx.request.query
-        
+
         await ctx.get({
-            path: "/api/song/detail/",        
+            path: "/api/song/detail/",
             id: params.id,
             ids: `[${params.id}]`
         }).then(result => {

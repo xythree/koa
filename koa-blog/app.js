@@ -10,12 +10,12 @@ const config = require("./config")
 
 
 const mw_request = require("./middleware/request")({
-    hostname: "music.163.com", 
+    hostname: "music.163.com",
     headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "Cookie": "appver=1.5.0.75771",
         "Referer": "http://music.163.com"
-    }	
+    }
 })
 
 const render = views("./views", {
@@ -35,7 +35,7 @@ app.use(router.routes())
 router.get("/", async ctx => {
 
     ctx.body = await render("index")
-    
+
 })
 
 
