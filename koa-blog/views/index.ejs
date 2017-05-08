@@ -20,9 +20,11 @@
     <select v-model="selectVal" >
         <option v-for="item in selectList" :value="item.type">{{item.value}}</option>
     </select>
+
     <input type="text" v-model="searchVal" />
+
     <button @click="search">search</button>
-    
+
     <ol>
         <todo-item v-for="item in groceryList" :todo="item" ></todo-item>
     </ol>
@@ -31,33 +33,86 @@
 		<a href="javascript:;" @click="prev">上一页</a>
 		<a href="javascript:;" @click="next">下一页</a>
 	</div>
-	
-    <music-box :info="songsInfo" :lyric="lyric" ></music-box>
+
+    <h5>播放列表:</h5>
+    <ol>
+        <play-list v-for="item in playList" :item="item" ></play-list>
+    </ol>
+
+    <music-box></music-box>
     
+
 </div>
     
     
-<script type="text/javascript" src="/javascripts/vue.min.js"></script>
-<script type="text/javascript" src="/javascripts/axios.min.js"></script>
-<script type="text/javascript">
+<script src="/js/vue.js"></script>
+<script src="/js/vuex.js"></script>
+<script src="/js/axios.min.js"></script>
+<script>
 
 
 
-    const bus = new Vue()
+    const store = new Vuex.Store({
+        state: {
+            songsInfo: {},
+            lyric: "",
+            playList: []
+        },
+        mutations: {
 
-    bus.$on("songsInfo", data => {        
-        vm.songsInfo = data
-    })
-	
-	bus.$on("getLyric", data => {
-        let lyric = ""
-        if (!data.nolyric && data.lrc.lyric) {
-		    lyric = data.lrc.lyric.replace(/\n/g, "</p>").replace(/\[([\d,\.,:]+)\]/g, "<p id='id$1' data-time='$1'>")
+        },
+        getters: {
+
+        },
+        actions: {
+            addPlayList({state}, data) {
+                let flag = false
+                state.playList.forEach(t => {
+                    if (t.id == data.id) flag = true
+                })
+
+                if (!flag) {
+                    state.playList.push(data)
+                    localStorage.playList = JSON.stringify(state.playList)
+                }
+            },
+            getSong({commit, dispatch}, id) {
+                axios.get(`/music/detail?id=${id}`).then(d => {
+                    const data =d.data
+                    if (data.code == 200) {
+                        dispatch("songsInfo", data.songs[0])                        
+                    }
+                })
+				axios.get(`/music/lyric?id=${id}`).then(d => {
+					const data = d.data
+					if (data.code == 200) {						                        
+                        dispatch("lyric", data)
+					}
+				})
+            },
+            songsInfo({state}, data) {                
+                state.songsInfo = data
+            },
+            lyric({state}, data) {
+                let lyric = ""
+                if (!data.nolyric && data.lrc.lyric) {
+                    lyric = data.lrc.lyric.replace(/\n/g, "</p>").replace(/\[([\d,\.,:]+)\]/g, "<p id='id$1' data-time='$1'>")
+                }
+                state.lyric = lyric
+            }
         }
-        vm.lyric = lyric
-	})
+    })
 
-    
+    Vue.component("play-list", {
+        props: ["item"],
+        template: "<li><a @click='getSong(item)'>{{item.songerName}} - {{item.name}} - {{item.albumName}}</a></li>",
+        methods: {
+            getSong(item) {
+                this.$store.dispatch("getSong", item.id)
+            }
+        }
+    })
+
     Vue.component("music-box", {
         data() {
             return {
@@ -65,7 +120,14 @@
                 toggleText: "play"
             }
         },
-        props: ["info", "lyric"],
+        computed: {
+            info() {
+                return this.$store.state.songsInfo
+            },
+            lyric() {
+                return this.$store.state.lyric
+            }
+        },                
         template: "<div><img :src='info.album && info.album.picUrl'/><button @click='toggle'>{{toggleText}}</button><video ref='videoBox' :src='info.mp3Url' autoplay controls ></video><div v-html='lyric'></div></div>",
         methods: {
             toggle() {
@@ -77,39 +139,32 @@
                 } else {
                     this.toggleText = "play"
                     videoBox.pause()
-                }
-                
+                }                
             }
         }
     })
     
 
     Vue.component("todo-item", {
-        template: `<li><a @click='getSongs(todo.id)'>{{todo.artists[0].name}} - {{todo.name}} - {{todo.album.name}}</a></li>`,
+        template: `<li><a @click='getSong(todo)'>{{todo.artists[0].name}} - {{todo.name}} - {{todo.album.name}}</a></li>`,
         props: ["todo", "index"],
         methods: {
-            getSongs(id) {
-                axios.get(`/music/detail?id=${id}`).then(d => {
-                    const data =d.data
-                    if (data.code == 200) {                     
-                        bus.$emit("songsInfo", data.songs[0])
-                    }
+            getSong(item) {
+                this.$store.dispatch("getSong", item.id)
+                this.$store.dispatch("addPlayList", {
+                    id: item.id,
+                    songerName: item.artists[0].name,
+                    name: item.name,
+                    albumName: item.album.name
                 })
-				axios.get(`/music/lyric?id=${id}`).then(d => {
-					const data = d.data
-					if (data.code == 200) {
-						bus.$emit("getLyric", data)
-					}
-				})
             }
         }
     })
 
     const vm = new Vue({
         el: "#search",
+        store,
         data: {
-			lyric: "",
-            songsInfo: "",
             searchVal: "遇见",
             offset: 1,
             selectVal: 1,
@@ -126,6 +181,15 @@
                 */
             ],
             groceryList: []
+        },
+        computed: {
+            playList() {
+                let _ls = localStorage
+                if (_ls.playList) {
+                    this.$store.state.playList = JSON.parse(_ls.playList)
+                }
+                return this.$store.state.playList
+            }
         },
         mounted() {
             this.search({selectVal: 1})
@@ -154,6 +218,8 @@
 			}
         }
     })
+
+
 
 </script>
 
