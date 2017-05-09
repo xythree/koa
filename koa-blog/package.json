@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "supervisor app.js"
+    "test": "supervisor app.js",
+	"fis3": " fis3 release sass -d .\\"
   },
   "author": "xythree",
   "license": "ISC",

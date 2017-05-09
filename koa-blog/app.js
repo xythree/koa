@@ -31,11 +31,14 @@ app.use(serve("./static"))
 app.use(router.routes())
 
 
-
 router.get("/", async ctx => {
 
     ctx.body = await render("index")
 
+})
+
+router.get("/music", async ctx => {
+    ctx.body = await render("music")
 })
 
 
