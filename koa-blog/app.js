@@ -8,7 +8,6 @@ const bodyparser = require("koa-bodyparser")
 const app = new koa()
 const config = require("./config")
 
-
 const mw_request = require("./middleware/request")({
     hostname: "music.163.com",
     headers: {
@@ -38,7 +37,7 @@ router.get("/", async ctx => {
 })
 
 router.get("/music", async ctx => {
-    ctx.body = await render("music")
+    ctx.body = await render("/mobile/music/index")
 })
 
 

@@ -1,0 +1,36 @@
+@mixin bg_size ($size: cover) {
+    background-size: $size;
+}
+
+@mixin center_center ($pos: absolute,$left: 50%, $top: 50%) {
+    position: $pos;
+    left: $left;
+    top: $top;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+@mixin center ($left: 50%, $top: 50%) {
+    position: absolute;
+    left: $left;
+    top: $top;
+    -webkit-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+}
+
+@function v($v) {
+    @return ($v/100)+rem;
+}
+
+@mixin transition($type: all, $time: .5s, $fn: ease-out) {
+    -webkit-transition: $type $time $fn;
+    transition: $type $time $fn;
+}
+
+@mixin width($v) {
+    width: v($v);
+}
+
+@mixin height($v) {
+    height: v($v);
+}

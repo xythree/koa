@@ -1,0 +1,110 @@
+
+
+
+@import "public.scss";
+@import "reset.scss";
+
+
+
+
+.music {
+  position: absolute;
+  width: v(750);
+}
+
+
+
+.searchBox{
+  $h: 60;
+  $radius: 6px;
+  font-size: v(30);
+
+  @include center_center($pos: fixed, $top: 35%);
+  width: 90%;
+  padding: v(20) 5%;  
+  transition: all .35s ease-out;  
+  background: #fff;
+
+  .selectListBox {
+    position: relative;
+    display: inline-block;
+    height: v($h);
+    line-height: v($h);
+    padding: 0 v(15);
+    vertical-align: middle;
+    border: 1px solid #ededed;
+    border-right-color: #ddd;
+    border-radius: $radius 0 0 $radius;
+    background: #eee;
+    color: #666;
+
+    .selectItem {
+      position: absolute;
+      top: v($h);
+      left: v(-2);      
+      white-space: nowrap;      
+
+      li {
+        padding: 0 v(15);
+        width: 100%;
+        transform: rotateX(-90deg);
+        transform-origin: top center;
+        background: #eee;
+
+        &:last-child {
+          padding-bottom: v(15);
+          border-bottom-left-radius: $radius;
+          border-bottom-right-radius: $radius;
+        }
+      }
+    }    
+  }
+  .showSelectList {
+    border-bottom-left-radius: 0;
+    $time: .06;
+    @for $i from 1 through 7 {      
+      .selectItem li:nth-child(#{$i}) {
+        $s1: #{$time * $i}s;
+        $s2: #{($i - 1 + .1) * $time}s;        
+        animation: ani_selectItem $s1 $s2 ease-out both;
+      }
+    }
+    .selectItem:nth-child(1) {
+      transform: translate(10%, -20%);
+    }
+  }
+
+  .searchInput {
+    width: auto;
+    border: 1px solid #ededed;
+    height: v($h);
+    padding: 0 v(10);
+    border-radius: 0 $radius $radius 0;
+    transition: all .5s linear;
+
+    &:focus {
+      border-color: #ddd;
+      box-shadow: 0 0 15px rgba(200,200,200,.5);
+    }
+  }
+
+}
+.searchTop {
+  top: 0;
+  transform: translate(-50%, 0);
+  box-shadow: 0 v(5) v(15) rgba(3,3,3,.25);
+}
+
+
+
+@keyframes ani_selectItem {
+  0%{
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+
+

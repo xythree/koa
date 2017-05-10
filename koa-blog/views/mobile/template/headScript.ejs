@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    ;(function (win, doc) {
+        var timer
+        function fontSize() {
+            var deviceWidth = doc.documentElement.clientWidth
+            var widthVal = 750
+            if (deviceWidth > widthVal) {
+                deviceWidth = widthVal
+            }
+            doc.documentElement.style.fontSize = deviceWidth / (widthVal / 100) + 'px'
+        }
+        fontSize()
+        win.addEventListener("resize", function () {
+            clearTimeout(timer)
+            timer = setTimeout(fontSize, 300)
+        }, false)
+    })(window, document);
+</script>
