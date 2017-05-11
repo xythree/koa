@@ -2,20 +2,30 @@
     background-size: $size;
 }
 
-@mixin center_center ($pos: absolute,$left: 50%, $top: 50%) {
+@mixin center_center ($pos: absolute,$left: 50%, $top: 50%, $other: "") {
     position: $pos;
     left: $left;
     top: $top;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    @if $other == "" {
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    } @else {
+        -webkit-transform: translate(-50%, -50%) $other;
+        transform: translate(-50%, -50%) $other;        
+    }
 }
 
-@mixin center ($left: 50%, $top: 50%) {
-    position: absolute;
+@mixin center ($pos: absolute, $left: 50%, $top: 50%, $other: "") {
+    position: $pos;
     left: $left;
     top: $top;
-    -webkit-transform: translate(-50%, 0);
-    transform: translate(-50%, 0);
+    @if $other == "" {
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+    } @else {
+        -webkit-transform: translate(-50%, 0) $other;
+        transform: translate(-50%, 0) $other;        
+    }    
 }
 
 @function v($v) {

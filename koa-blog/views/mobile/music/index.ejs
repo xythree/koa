@@ -15,39 +15,27 @@
 <body>
 
 
-    <div id="music" class="music" >
-        
-        <div class="searchBox" :class="{searchTop: searchTop}">
+    <div id="music" class="music" ref="music">
+        <touch-move-prevent></touch-move-prevent>
 
-            <div @click="showSelectItem" class="selectListBox" :class="{showSelectList: showSelectList}">
-                <span>{{selectList[selectIndex].value}}</span>
-                <ul class="selectItem">
-                    <li v-for="(item,index) in selectList" v-if="selectIndex != index" @click="selectValFn(item.type, index)" >{{item.value}}</li>
-                </ul>
-            </div><input class="searchInput" type="text" @focus="searchFocus" @keyup="searchKeyUp" v-model="searchVal" />
-        </div>
-        
+        <search-box></search-box>
 
-        <ol class="" >
-            <search-list v-for="item in searchList" :searchList="item"></search-list>
-        </ol>
+        <search-list-box></search-list-box>
 
-        <div>
-            <a href="javascript:;" @click="prev">上一页</a>
-            <a href="javascript:;" @click="next">下一页</a>
-        </div>
 
-        <div class="playListBox">
-            <ol>
-                <play-list v-for="item in playList" :item="item"></play-list>
+        <div class="playListBox" v-if="false">
+            <ol class="listBox">
+                <list-box v-for="item in playList" :todo="item"></list-box>
             </ol>
         </div>
 
         <music-box></music-box>
 
+        <load-box></load-box>
+
     </div>
 
-    <script src="/js/vue.js"></script>    
+    <script src="/js/vue.js"></script>
     <script src="/js/vuex.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/mobile/music/index.js"></script>
@@ -55,8 +43,3 @@
 </body>
 
 </html>
-
-
-
-
-
