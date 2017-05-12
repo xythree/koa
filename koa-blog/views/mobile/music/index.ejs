@@ -16,18 +16,14 @@
 
 
     <div id="music" class="music" ref="music">
+        
         <touch-move-prevent></touch-move-prevent>
 
         <search-box></search-box>
 
         <search-list-box></search-list-box>
 
-
-        <div class="playListBox" v-if="false">
-            <ol class="listBox">
-                <list-box v-for="item in playList" :todo="item"></list-box>
-            </ol>
-        </div>
+        <play-list></play-list>
 
         <music-box></music-box>
 
