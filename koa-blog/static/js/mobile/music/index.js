@@ -80,6 +80,10 @@ const store = new Vuex.Store({
         playToggle({ state }) {
             state.playToggleFn && state.playToggleFn()
         },
+        removePlayList({ state }, data) {
+            state.playList.splice(data, 1)
+            localStorage.playList = JSON.stringify(state.playList)
+        },
         setPlayList({ state }, data) {
             state.playList = data
         },
@@ -110,7 +114,7 @@ const store = new Vuex.Store({
             })
         },
         songsInfo({ state, dispatch }, data) {
-            //data.mp3Url = '/3374401185703022.mp3'
+            // data.mp3Url = '/3374401185703022.mp3'
             state.songsInfo = data
             dispatch('playToggle')
         },
@@ -160,7 +164,7 @@ Vue.component('play-list', {
             return this.$store.state.playList
         }
     },
-    template: '<div class="playListBox" v-show="playListStatus"><h5>播放列表:</h5><div class="scrollBox"><ol class="listBox"><list-box v-for="item in playList" :todo="item"></list-box></ol></div></div>',
+    template: '<div class="playListBox" v-show="playListStatus"><h5>播放列表:</h5><div class="scrollBox"><ol class="listBox"><list-box v-for="(item,index) in playList" :index="index" :todo="item"></list-box></ol></div></div>',
     methods: {
         getSong(item) {
             this.$store.dispatch('getSong', item.id)
@@ -339,12 +343,15 @@ Vue.component('music-box', {
 })
 
 Vue.component('list-box', {
-    template: `<li><a @click='getSong(todo)'>{{todo.artists[0].name}} - {{todo.name}} - {{todo.album.name}}</a></li>`,
-    props: ['todo'],
+    template: '<li><a @click="getSong(todo)">{{todo.artists[0].name}} - {{todo.name}} - {{todo.album.name}}</a> <template v-if="index != undefined"><span @click="remove(index)" class="playListRemove"></span></template></li>',
+    props: ['todo', 'index'],
     methods: {
         getSong(item) {
             this.$store.dispatch('getSong', item.id)
             this.$store.dispatch('addPlayList', item)
+        },
+        remove(index) {
+            this.$store.dispatch("removePlayList", index)
         }
     }
 })

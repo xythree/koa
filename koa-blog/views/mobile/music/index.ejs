@@ -8,7 +8,7 @@
 
     <% include ../template/headScript.ejs %>
 
-    <link rel="stylesheet" href="/css/mobile/music/index.css">
+        <link rel="stylesheet" href="/css/mobile/music/index.css">
 
 </head>
 
@@ -16,7 +16,7 @@
 
 
     <div id="music" class="music" ref="music">
-        
+
         <touch-move-prevent></touch-move-prevent>
 
         <search-box></search-box>
@@ -36,7 +36,27 @@
     <script src="/js/vuex.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/mobile/music/index.js"></script>
+    <script>
+        let scroll = {}
 
+        scroll.install = (Vue) => {
+
+
+
+        }
+
+        if (typeof exports == "Object") {
+            module.exports = scroll
+        } else if (typeof define == "function" && define.amd) {
+            define([], function() {
+                return scroll
+            })
+
+        } else if (window.Vue) {
+            window.scroll = scroll
+            Vue.use(scroll)
+        }
+    </script>
 </body>
 
 </html>

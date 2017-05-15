@@ -335,6 +335,14 @@ body {
   border-bottom: 1px dotted #ddd;
 }
 
+.listBox li .playListRemove {
+  float: right;
+  width: 0.32rem;
+  height: 0.32rem;
+  background: url(/images/mobile/music/delete.png) no-repeat center;
+  background-size: cover;
+}
+
 .musicBox {
   position: fixed;
   top: 0;

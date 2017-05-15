@@ -209,6 +209,13 @@ body {
         list-style: decimal;
         padding: v(15) 0;
         border-bottom: 1px dotted #ddd;
+        .playListRemove {
+            float: right;
+            width: v(32);
+            height: v(32);
+            background: url(/images/mobile/music/delete.png) no-repeat center;
+            background-size: cover;
+        }
     }
 }
 
