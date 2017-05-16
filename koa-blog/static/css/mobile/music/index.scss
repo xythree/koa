@@ -385,6 +385,9 @@ body {
     h5 {
         margin: v(10) v(30);
     }
+    .listBox {
+        padding-bottom: v(150);
+    }
 }
 
 @-webkit-keyframes playListBox_ani {
@@ -436,7 +439,7 @@ body {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 100px;
+    max-height: 120px;
     z-index: 666;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -455,7 +458,7 @@ body {
     animation: playControllBox_ani .5s ease-out both;
     .playControllBoxTop {
         width: 90%;
-        height: 30px;
+        height: 20px;
         margin: 0 5%;
     }
     .audioTimeBox {
@@ -507,16 +510,50 @@ body {
             right: 0;
         }
     }
+    .playControllTitleBox {
+        width: 90%;
+        margin: 0 5%;
+        padding: v(5) 0;
+        text-align: center;
+        p {
+            max-height: 18px;
+            overflow: hidden;
+        }
+        p:nth-child(2) {
+            font-size: v(10);
+        }
+    }
     .playControllBoxLeft,
     .playControllBoxCenter,
     .playControllBoxRight {
         position: relative;
-        height: 60px;
+        height: 50px;
     }
     .playControllBoxLeft {
         -webkit-box-flex: 1;
         -ms-flex: 1;
         flex: 1;
+        .condSingle {
+            background: url(/images/mobile/music/cond_icon_0.png) no-repeat center;
+        }
+        .condRandom {
+            background: url(/images/mobile/music/cond_icon_1.png) no-repeat center;
+        }
+        .condList {
+            background: url(/images/mobile/music/cond_icon_2.png) no-repeat center;
+        }
+        .cond_icon {
+            @include center_center($pos: relative, $other: scale(1.8));
+            width: v(18);
+            height: v(20);
+            background-size: cover;
+            opacity: .8;
+            span {
+                @include center_center($top: -50%, $other: scale(.5));
+                width: v(100);
+                font-size: v(12);
+            }
+        }
     }
     .playControllBoxCenter {
         -webkit-box-flex: 2;
@@ -584,6 +621,16 @@ body {
     }
 }
 
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0
+}
+
 .playStatus {
     .audioPlayBtn {
         &:after {
@@ -591,6 +638,56 @@ body {
         }
         &:before {
             display: none;
+        }
+    }
+}
+
+.alertBox {
+    @include center_center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 999999;
+    .alertBoxContent {
+        @include center_center($top: 35%);
+        width: 80%;
+        background: #fff;
+        border-radius: 5px;
+        h3 {
+            padding: v(5) v(10);
+            font-weight: normal;
+            border-bottom: 1px dotted #ddd;
+            background: #eee;
+            border-radius: 5px 5px 0 0;
+            $v: 35;
+            span {
+                float: right;
+                height: v($v);
+                line-height: v($v);
+                width: v($v);
+                text-align: center;
+            }
+        }
+        .alertBoxText {
+            min-height: v(180);
+            max-height: v(380);
+            overflow-y: auto;
+            padding: v(20);
+        }
+        .alertBoxBtn {
+            $v: 50;
+            display: flex;
+            height: v($v);
+            line-height: v($v);
+            border-top: 1px dotted #ddd;
+            text-align: center;
+            a {
+                flex: 1;
+                color: #333;
+            }
+            a:last-child {
+                border-left: 1px dotted #ddd;
+            }
         }
     }
 }

@@ -1,11 +1,12 @@
 const store = new Vuex.Store({
     state: {
         loadBoxStatue: false,
-        songsInfo: {},
         lyric: '',
         lyricItem: [],
         openMusicBoxStatus: false,
+        songsInfo: {},
         playList: [],
+        playListIndex: 0,
         offset: 0,
         searchVal: '',
         selectVal: 1,
@@ -15,7 +16,16 @@ const store = new Vuex.Store({
         showPage: false,
         playListStatus: false,
         audioCurrentTime: '',
-        audioDuration: ''
+        audioDuration: '',
+        alertBoxStatus: false,
+        alertBoxFn: "",
+        alertBoxText: "",
+        condIconIndex: 0,
+        condIcon: [
+            { text: "单曲循环", type: "condSingle" },
+            { text: "随机播放", type: "condRandom" },
+            { text: "列表循环", type: "condList" }
+        ]
     },
     mutations: {
 
@@ -24,6 +34,22 @@ const store = new Vuex.Store({
 
     },
     actions: {
+        setCondIconIndex({ state }, data) {
+            state.condIconIndex = data
+        },
+        setAlertBoxStatus({ state }, data) {
+            state.alertBoxStatus = data
+        },
+        setAlertBoxText({ state }, data) {
+            state.alertBoxText = data
+        },
+        setAlertBoxFn({ state }, fn) {
+            state.alertBoxFn = fn
+        },
+        alertBoxSure({ state, dispatch }) {
+            dispatch("setAlertBoxStatus", false)
+            state.alertBoxFn && state.alertBoxFn()
+        },
         setPlayStatus({ state }, data) {
             state.playStatus = data
         },
@@ -77,8 +103,8 @@ const store = new Vuex.Store({
         setPlayToggleFn({ state }, fn) {
             state.playToggleFn = fn
         },
-        playToggle({ state }) {
-            state.playToggleFn && state.playToggleFn()
+        playToggle({ state }, data) {
+            state.playToggleFn && state.playToggleFn(data)
         },
         removePlayList({ state }, data) {
             state.playList.splice(data, 1)
@@ -97,6 +123,9 @@ const store = new Vuex.Store({
                 localStorage.playList = JSON.stringify(state.playList)
             }
         },
+        setPlayListIndex({ state }, data) {
+            state.playListIndex = data
+        },
         getSong({ commit, dispatch }, id) {
             dispatch('setLoadBoxStatue', true)
             axios.get(`/music/detail?id=${id}`).then(d => {
@@ -114,7 +143,6 @@ const store = new Vuex.Store({
             })
         },
         songsInfo({ state, dispatch }, data) {
-            // data.mp3Url = '/3374401185703022.mp3'
             state.songsInfo = data
             dispatch('playToggle')
         },
@@ -174,11 +202,22 @@ Vue.component('play-list', {
 
 Vue.component('play-controll-box', {
     data() {
+        const _state = this.$store.state
         return {
-            radius: 0
+            show: false,
+            timer: "",
+            index: _state.condIconIndex,
+            radius: 0,
+            condIcon: _state.condIcon
         }
     },
     computed: {
+        condIconIndex() {
+            return this.$store.state.condIconIndex
+        },
+        songsInfo() {
+            return this.$store.state.songsInfo
+        },
         playStatus() {
             return this.$store.state.playStatus
         },
@@ -199,13 +238,57 @@ Vue.component('play-controll-box', {
             return this.timeFormat(this.$store.state.audioDuration)
         }
     },
-    template: '<div class="playControllBox" :class="{playStatus: this.playStatus}" ref="playControllBox"><div ref="playControllBoxTop" class="playControllBoxTop"><ul class="audioTimeBox"><li class="audioLine" ref="audioLine" :style="{width: audioLineWidth}"></li><li class="audioBtn" ref="audioBtn" :style="{left: audioBtnLeft}"></li><li class="audioCurrentTime">{{audioCurrentTime}}</li><li class="audioDuration">{{audioDuration}}</li></ul></div><div class="playControllBoxLeft">&nbsp;</div><div class="playControllBoxCenter"><div class="audioPrevBtn"></div><div class="audioPlayBtn" @click="audioPlayBtn"></div><div class="audioNextBtn"></div></div><div class="playControllBoxRight"><play-list-btn></play-list-btn></div></div>',
+    template: '<div class="playControllBox" :class="{playStatus: this.playStatus}" ref="playControllBox"><div class="playControllTitleBox"><p>{{songsInfo.name}}</p><p>{{songsInfo.artists && songsInfo.artists[0].name}}</p></div><div ref="playControllBoxTop" class="playControllBoxTop"><ul class="audioTimeBox"><li class="audioLine" ref="audioLine" :style="{width: audioLineWidth}"></li><li class="audioBtn" ref="audioBtn" :style="{left: audioBtnLeft}"></li><li class="audioCurrentTime">{{audioCurrentTime}}</li><li class="audioDuration">{{audioDuration}}</li></ul></div><div class="playControllBoxLeft"><div class="cond_icon" :class="condIcon[condIconIndex].type" @click="condIconFn">&nbsp;<transition name="fade"><span v-if="show">{{condIcon[condIconIndex].text}}</span></transition></div></div><div class="playControllBoxCenter"><div class="audioPrevBtn" @click="prev"></div><div class="audioPlayBtn" @click="audioPlayBtn"></div><div class="audioNextBtn" @click="next"></div></div><div class="playControllBoxRight"><play-list-btn></play-list-btn></div></div>',
     mounted() {
         const ref = this.$refs
         this.radius = ref.audioBtn.offsetWidth / 2
         this.width = ref.playControllBoxTop.offsetWidth
     },
     methods: {
+        condIconFn() {
+            clearTimeout(this.timer)
+            this.index = this.index >= this.condIcon.length - 1 ? 0 : ++this.index
+            this.$store.dispatch("setCondIconIndex", this.index)
+            this.show = true
+            this.timer = setTimeout(() => {
+                this.show = false
+            }, 1500)
+        },
+        prev() {
+            const _state = this.$store.state
+            const playList = _state.playList
+            let index = _state.playListIndex
+
+            if (!playList.length) return
+            if (playList.length == 1) {
+                index = 0
+            } else {
+                index = index == 0 ? playList.length - 1 : --index
+            }
+            this.toggle(index)
+        },
+        next() {
+            const _state = this.$store.state
+            const playList = _state.playList
+            let index = _state.playListIndex
+
+            if (!playList.length) return
+            if (playList.length == 1) {
+                index = 0
+            } else {
+                index = index >= playList.length - 1 ? 0 : ++index
+            }
+            this.toggle(index)
+        },
+        toggle(index) {
+            const _store = this.$store
+
+            if (_store.state.playStatus) {
+                _store.dispatch("playToggle")
+            }
+            _store.dispatch("setPlayListIndex", index)
+            _store.dispatch("songsInfo", _store.state.playList[index])
+        },
         audioPlayBtn() {
             this.$store.dispatch('playToggle')
         },
@@ -228,6 +311,7 @@ Vue.component('music-box', {
         return {
             playend: false,
             current: '',
+            timerPlay: "",
             timerRotate: '',
             timerScroll: '',
             rotateZ: 0,
@@ -235,6 +319,12 @@ Vue.component('music-box', {
         }
     },
     computed: {
+        condIconIndex() {
+            return this.$store.state.condIconIndex
+        },
+        condIcon() {
+            return this.$store.state.condIcon
+        },
         playStatus() {
             return this.$store.state.playStatus
         },
@@ -292,10 +382,29 @@ Vue.component('music-box', {
             this.$store.dispatch('setAudioCurrentTime', audioBox.currentTime)
         })
         audioBox.addEventListener('ended', () => {
+            const _store = this.$store
+            const type = this.condIcon[this.condIconIndex].type
+            const playList = _stroe.state.playList
+
             this.playend = true
-            this.$store.dispatch('setPlayStatus', false)
+            _store.dispatch('setPlayStatus', false)
             clearTimeout(this.timerScroll)
             clearTimeout(this.timerRotate)
+
+            if (type == "condSingle") {
+                this.toggle()
+            } else if (type == "condRandom") {
+                const rd = Math.floor(Math.random() * playList.length)
+
+                _store.dispatch("songsInfo", playList[rd])
+            } else if (type == "condList") {
+                let index = _store.state.playListIndex
+
+                index = index >= playList.length - 1 ? 0 : ++index
+                _store.dispatch("setPlayListIndex", index)
+                _store.dispatch("songsInfo", playList[index])
+            }
+
         })
     },
     methods: {
@@ -319,17 +428,26 @@ Vue.component('music-box', {
         },
         toggle() {
             const audioBox = this.$refs.audioBox
-            setTimeout(() => {
-                if (!audioBox.currentSrc) return
+            const _store = this.$store
+            const _state = _store.state
+
+            if (!_state.songsInfo.id) {
+                if (!_state.playList.length) {
+                    return
+                } else {
+                    _store.dispatch('songsInfo', _state.playList[0])
+                }
+            } else {
                 if (!this.playStatus) {
                     audioBox.play()
-                    this.$store.dispatch('setPlayStatus', true)
+                    _store.dispatch('setPlayStatus', true)
                 } else {
                     audioBox.pause()
-                    this.$store.dispatch('setPlayStatus', false)
+                    _store.dispatch('setPlayStatus', false)
                 }
                 this.imgRotateFn()
-            }, 100)
+            }
+
         },
         imgRotateFn() {
             this.timerRotate = setTimeout(() => {
@@ -351,7 +469,14 @@ Vue.component('list-box', {
             this.$store.dispatch('addPlayList', item)
         },
         remove(index) {
-            this.$store.dispatch("removePlayList", index)
+            const _store = this.$store
+
+            _store.dispatch("setAlertBoxFn", () => {
+                _store.dispatch("removePlayList", index)
+            })
+            _store.dispatch("setAlertBoxStatus", true)
+            _store.dispatch("setAlertBoxText", "确定删除吗?")
+
         }
     }
 })
@@ -491,6 +616,26 @@ Vue.component('load-box', {
         }
     },
     template: "<div v-show='loadBoxStatue' class='loadBox'></div>"
+})
+
+Vue.component("alert-box", {
+    computed: {
+        alertBoxStatus() {
+            return this.$store.state.alertBoxStatus
+        },
+        alertBoxText() {
+            return this.$store.state.alertBoxText
+        }
+    },
+    template: "<div class='alertBox' v-show='alertBoxStatus' ><div class='alertBoxContent' v-show='alertBoxStatus'><h3>提示<span @click='close'>X</span></h3><div class='alertBoxText'>{{alertBoxText}}</div><div class='alertBoxBtn'><a href='javascript:;' @click='close'>取消</a><a href='javascript:;' @click='sure'>确定</a></div></div></div>",
+    methods: {
+        close() {
+            this.$store.dispatch("setAlertBoxStatus", false)
+        },
+        sure() {
+            this.$store.dispatch("alertBoxSure")
+        }
+    }
 })
 
 const vm = new Vue({
