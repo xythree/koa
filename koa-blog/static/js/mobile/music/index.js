@@ -261,7 +261,7 @@ Vue.component('play-controll-box', {
 
             if (!playList.length) return
             if (playList.length == 1) {
-                index = 0
+                return
             } else {
                 index = index == 0 ? playList.length - 1 : --index
             }
@@ -274,7 +274,7 @@ Vue.component('play-controll-box', {
 
             if (!playList.length) return
             if (playList.length == 1) {
-                index = 0
+                return
             } else {
                 index = index >= playList.length - 1 ? 0 : ++index
             }
@@ -287,17 +287,28 @@ Vue.component('play-controll-box', {
                 _store.dispatch("playToggle")
             }
             _store.dispatch("setPlayListIndex", index)
-            _store.dispatch("songsInfo", _store.state.playList[index])
+            _store.dispatch("getSong", _store.state.playList[index].id)
         },
         audioPlayBtn() {
-            this.$store.dispatch('playToggle')
+            const _store = this.$store
+
+            if (_store.state.playStatus) {
+                _store.dispatch("playToggle")
+            } else {
+                _store.dispatch("getSong", _store.state.playList[this.index].id)
+            }
+        },
+        zerofill(num) {
+            return num < 10 ? "0" + +num : num
         },
         timeFormat(data) {
             if (data) {
                 let time = (data / 60).toFixed(2)
                 let temp = time.split('.')
 
-                temp[0] = temp[0] < 10 ? '0' + temp[0] : temp[0]
+                temp[0] = this.zerofill(temp[0])
+                temp[1] = this.zerofill(Math.ceil(+("0." + temp[1]) * 59))
+
                 return temp.join(':')
             } else {
                 return '00:00'
@@ -384,7 +395,7 @@ Vue.component('music-box', {
         audioBox.addEventListener('ended', () => {
             const _store = this.$store
             const type = this.condIcon[this.condIconIndex].type
-            const playList = _stroe.state.playList
+            const playList = _store.state.playList
 
             this.playend = true
             _store.dispatch('setPlayStatus', false)
@@ -438,14 +449,16 @@ Vue.component('music-box', {
                     _store.dispatch('songsInfo', _state.playList[0])
                 }
             } else {
-                if (!this.playStatus) {
-                    audioBox.play()
-                    _store.dispatch('setPlayStatus', true)
-                } else {
-                    audioBox.pause()
-                    _store.dispatch('setPlayStatus', false)
-                }
-                this.imgRotateFn()
+                setTimeout(() => {
+                    if (!this.playStatus) {
+                        audioBox.play()
+                        _store.dispatch('setPlayStatus', true)
+                    } else {
+                        audioBox.pause()
+                        _store.dispatch('setPlayStatus', false)
+                    }
+                    this.imgRotateFn()
+                }, 100)
             }
 
         },
