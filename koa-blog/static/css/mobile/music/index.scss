@@ -623,6 +623,7 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
+    -webkit-transition: opacity .5s;
     transition: opacity .5s
 }
 
@@ -676,12 +677,16 @@ body {
         }
         .alertBoxBtn {
             $v: 50;
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
             height: v($v);
             line-height: v($v);
             border-top: 1px dotted #ddd;
             text-align: center;
             a {
+                -webkit-box-flex: 1;
+                -ms-flex: 1;
                 flex: 1;
                 color: #333;
             }

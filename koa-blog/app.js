@@ -5,9 +5,7 @@ const views = require("co-views")
 const bodyparser = require("koa-bodyparser")
 const app = new koa()
 const config = require("./config")
-const http = require("http")
-const https = require("https")
-const fs = require("fs")
+
 
 
 const mw_request = require("./middleware/request")({
@@ -45,9 +43,6 @@ router.get("/music", async ctx => {
 require("./service/index")(router)
 
 
-http.createServer(app.callback()).listen(config.port)
-
-https.createServer({
-    key: fs.readFileSync("./ssl/https.key"),
-    cert: fs.readFileSync("./ssl/https.pem")
-}, app.callback()).listen(443)
+app.listen(config.port, () => {
+    console.log(`running port: ${config.port}`)
+})

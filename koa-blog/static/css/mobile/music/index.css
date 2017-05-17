@@ -870,6 +870,7 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
+  -webkit-transition: opacity .5s;
   transition: opacity .5s;
 }
 
@@ -933,6 +934,8 @@ body {
 }
 
 .alertBox .alertBoxContent .alertBoxBtn {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   height: 0.5rem;
   line-height: 0.5rem;
@@ -941,6 +944,8 @@ body {
 }
 
 .alertBox .alertBoxContent .alertBoxBtn a {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
   flex: 1;
   color: #333;
 }

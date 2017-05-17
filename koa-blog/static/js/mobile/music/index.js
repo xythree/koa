@@ -295,7 +295,9 @@ Vue.component('play-controll-box', {
             if (_store.state.playStatus) {
                 _store.dispatch("playToggle")
             } else {
-                _store.dispatch("getSong", _store.state.playList[this.index].id)
+                if (_store.state.playList.length) {
+                    _store.dispatch("getSong", _store.state.playList[this.index].id)
+                }
             }
         },
         zerofill(num) {
@@ -437,8 +439,15 @@ Vue.component('music-box', {
             this.$store.dispatch('setMusicBoxStatus', false)
                 // this.rotateZ = 0
         },
+        play() {
+            this.$refs.audioBox.play()
+            this.$store.dispatch('setPlayStatus', true)
+        },
+        pause() {
+            this.$refs.audioBox.pause()
+            this.$store.dispatch('setPlayStatus', false)
+        },
         toggle() {
-            const audioBox = this.$refs.audioBox
             const _store = this.$store
             const _state = _store.state
 
@@ -451,11 +460,10 @@ Vue.component('music-box', {
             } else {
                 setTimeout(() => {
                     if (!this.playStatus) {
-                        audioBox.play()
-                        _store.dispatch('setPlayStatus', true)
+                        this.play()
+
                     } else {
-                        audioBox.pause()
-                        _store.dispatch('setPlayStatus', false)
+                        this.pause()
                     }
                     this.imgRotateFn()
                 }, 100)
