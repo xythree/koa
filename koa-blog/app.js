@@ -43,6 +43,11 @@ router.get("/music", async ctx => {
 require("./service/index")(router)
 
 
+router.get("/m", async ctx => {
+    ctx.body = "mobile"
+})
+
+
 app.listen(config.port, () => {
     console.log(`running port: ${config.port}`)
 })

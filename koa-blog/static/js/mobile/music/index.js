@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         offset: 0,
         searchVal: '',
         selectVal: 1,
+        total: 0,
         groceryList: [],
         playToggleFn: '',
         playStatus: false,
@@ -25,7 +26,9 @@ const store = new Vuex.Store({
             { text: "单曲循环", type: "condSingle" },
             { text: "随机播放", type: "condRandom" },
             { text: "列表循环", type: "condList" }
-        ]
+        ],
+        pagationCallBack: [],
+        pagationIndex: 1
     },
     mutations: {
 
@@ -75,6 +78,7 @@ const store = new Vuex.Store({
                 if (data.code == 200) {
                     const result = data.result
 
+                    dispatch("setTotal", result.songCount)
                     dispatch('setGroceryList', result.songs)
 
                     if (result.songCount && result.songCount > result.songs.length) {
@@ -87,6 +91,13 @@ const store = new Vuex.Store({
             }, () => {
                 dispatch('setLoadBoxStatue', false)
             })
+        },
+        setPaginationIndex({ state, dispatch }, data) {
+            state.offset = data - 1
+            state.pagationIndex = data
+        },
+        setTotal({ state }, data) {
+            state.total = data
         },
         setOffset({ state }, data) {
             state.offset = data
@@ -164,6 +175,71 @@ const store = new Vuex.Store({
         },
         setAudioDuration({ state }, data) {
             state.audioDuration = data
+        }
+    }
+})
+
+Vue.component("pagination-box", {
+    props: ["colNum", "index", "total"],
+    data() {
+        return {
+            count: 2
+        }
+    },
+    computed: {
+        ind() {
+            return this.index || 1
+        },
+        _colNum() {
+            return this.colNum || 10
+        },
+        _total() {
+            return this.total
+        },
+        arr() {
+            let temp = []
+            for (var i = 0, len = Math.ceil(this._total / this._colNum); i < len; i++) {
+                temp.push(i + 1)
+            }
+            return temp
+        },
+        prevPageArr() {
+            let n = this.ind - this.count - 1
+            return this.arr.slice(n < 0 ? 0 : n, this.ind - 1)
+        },
+        nextPageArr() {
+            return this.arr.slice(this.ind, this.ind + this.count)
+        }
+    },
+    template: `
+    <div>
+        <div class="paginationBox">
+            <span v-if="ind > 1" @click="prev">《</span>
+            <a v-if="ind > count + 2" @click="jump(1)">1</a>
+            <em v-if="ind > count + 1">...</em>
+            <template v-for="item in prevPageArr">
+                <a href="javascript:;" @click="jump(item)">{{item}}</a>
+            </template>
+            <b class="paginationAction" >{{ind}}</b>
+            <template v-for="item in nextPageArr" >
+                <a href="javascript:;" @click="jump(item)" >{{item}}</a>
+            </template>
+            <em v-if="ind + count < arr.length">...</em>
+            <a v-if="arr.length > 1 && ind + count < arr.length" @click="jump(arr.length)" >{{arr.length}}</a>
+            <span v-if="ind != arr.length" @click="next">》</span>
+        </div>
+    </div>`,
+    methods: {
+        jump(ind) {
+            this.ind = ind
+            this.$store.dispatch("setPaginationIndex", ind)
+            this.$store.dispatch("search")
+        },
+        prev() {
+            this.jump(--this.ind)
+        },
+        next() {
+            this.jump(++this.ind)
         }
     }
 })
@@ -591,6 +667,7 @@ Vue.component('search-box', {
         search() {
             const _store = this.$store
 
+            _store.dispatch('setPaginationIndex', 1)
             _store.dispatch('setSearchVal', this.searchVal)
             _store.dispatch('search')
             _store.dispatch('setPlayListStatus', false)
@@ -600,6 +677,12 @@ Vue.component('search-box', {
 
 Vue.component('search-list-box', {
     computed: {
+        index() {
+            return this.$store.state.pagationIndex
+        },
+        total() {
+            return this.$store.state.total
+        },
         showPage() {
             return this.$store.state.showPage
         },
@@ -607,28 +690,14 @@ Vue.component('search-list-box', {
             return this.$store.state.groceryList
         }
     },
-    template: '<div class="searchListBox"><div class="scrollBox" ref="scrollBox"><ol class="listBox"><list-box v-for="item in groceryList" :todo="item"></list-box></ol></div><div class="pageBox" v-show="showPage"><a href="javascript:;" @click="prev">上一页</a><a href="javascript:;" @click="next">下一页</a></div></div>',
+    template: '<div class="searchListBox"><div class="scrollBox" ref="scrollBox"><ol class="listBox"><list-box v-for="item in groceryList" :todo="item"></list-box></ol></div><div class="pageBox" v-show="showPage"><pagination-box :total="total" :index="index" ></pagation-box></div></div>',
     methods: {
         scrollBack() {
             this.$refs.scrollBox.scrollTop = 0
-        },
-        prev() {
-            let offset = this.$store.state.offset
-
-            offset = offset <= 0 ? 0 : --offset
-            this.$store.dispatch('setOffset', offset)
-            this.$store.dispatch('search')
-            this.scrollBack()
-        },
-        next() {
-            let offset = this.$store.state.offset
-
-            this.$store.dispatch('setOffset', ++offset)
-            this.$store.dispatch('search')
-            this.scrollBack()
         }
     }
 })
+
 
 Vue.component('load-box', {
     computed: {
