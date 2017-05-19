@@ -48,6 +48,15 @@ router.get("/m", async ctx => {
 })
 
 
+const sql = require("./service/model")
+
+sql.Users.find({}, (err, data) => {
+    console.log(data)
+})
+
+
+
+
 app.listen(config.port, () => {
     console.log(`running port: ${config.port}`)
 })

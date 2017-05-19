@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "supervisor app.js",
-	"fis3": " fis3 release sass -d .\\"
+    "fis3": " fis3 release sass -d .\\"
   },
   "author": "xythree",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.1.1",
-    "koa-static": "^3.0.0"
+    "koa-static": "^3.0.0",
+    "mongoose": "^4.10.0"
   }
 }
