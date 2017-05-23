@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>register</title>
+</head>
+
+
+<body>
+
+    <div id="register">
+        <p>
+            <a href="/admin/login">login</a>
+        </p>
+        <p>
+            <input type="text" v-model="username">
+        </p>
+        <p>
+            <input type="password" @keyup.enter="submit" v-model="password">
+        </p>
+        <p>
+            <button @click="submit">submit</button>
+        </p>
+
+    </div>
+
+    <% include template/script.ejs %>
+
+        <script>
+            let vm = new Vue({
+                el: "#register",
+                data: {
+                    username: "",
+                    password: ""
+                },
+                methods: {
+                    submit() {
+                        let d = {
+                            username: this.username.trim(),
+                            password: this.password.trim()
+                        }
+
+                        axios.post("/register", d).then(result => {
+                            if (result.status == 200 && result.data == "ok") {
+                                location.href = "/admin/index"
+                            }
+                        })
+                    }
+                }
+            })
+        </script>
+
+</body>
+
+</html>

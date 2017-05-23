@@ -42,17 +42,17 @@ router.get("/music", async ctx => {
 
 require("./service/index")(router)
 
+require("./admin/index")(router, render)
+
 
 router.get("/m", async ctx => {
     ctx.body = "mobile"
 })
 
 
-const sql = require("./service/model")
 
-sql.Users.find({}, (err, data) => {
-    console.log(data)
-})
+
+
 
 
 

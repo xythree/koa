@@ -1,0 +1,259 @@
+@import "public.scss";
+@import "reset.scss";
+input {
+    transition: box-shadow .5s ease-out;
+    &:focus {
+        box-shadow: 0 0 5px rgba(0, 0, 0, .25);
+    }
+}
+
+.article-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 600px;
+    padding: 30px;
+    background: #fff;
+    overflow: auto;
+    h3 {
+        text-align: center;
+        padding: 30px 0;
+        font-size: 14px;
+    }
+    .article-box-edit {
+        $v: 30px;
+        position: absolute;
+        left: $v;
+        top: $v;
+        height: $v;
+        line-height: $v;
+        cursor: pointer;
+    }
+    .article-box-close {
+        $v: 30px;
+        position: absolute;
+        right: $v;
+        top: $v;
+        text-align: center;
+        cursor: pointer;
+        span {
+            display: block;
+            height: $v;
+            line-height: $v;
+        }
+    }
+}
+
+.article-list-box {
+    width: 600px;
+    padding: 30px;
+    .article-list {
+        padding: 30px;
+        li {
+            position: relative;
+            padding: 5px 0;
+            list-style: decimal;
+            cursor: pointer;
+            border-bottom: 1px dotted #eee;
+            @include transition;
+            &:hover {
+                color: #1F85E7;
+                span {
+                    display: inline-block;
+                }
+            }
+            p {
+                padding: 5px 0;
+            }
+            span {
+                position: absolute;
+                right: 0;
+                display: none;
+                &:hover {
+                    color: #f00;
+                }
+            }
+            .article-delete {
+                top: 0;
+            }
+            .article-edit {
+                bottom: 0;
+            }
+        }
+    }
+}
+
+.article-list-control {
+    $v: 25px;
+    padding: 0 30px;
+    height: $v;
+    line-height: $v;
+    li {
+        float: right;
+        margin-left: $v;
+        cursor: pointer;
+    }
+}
+
+.add-edit-article {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 80px 30px;
+    width: 600px;
+    height: 100%;
+    overflow: auto;
+    background: #fff;
+    .add-edit-article-close {
+        $v: 30px;
+        position: absolute;
+        right: $v;
+        top: $v;
+        text-align: center;
+        cursor: pointer;
+        span {
+            display: block;
+            width: $v;
+            height: $v;
+            line-height: $v;
+        }
+    }
+    input,
+    textarea {
+        border: 1px solid #ddd;
+    }
+    .add-edit-article-title {
+        input {
+            width: 590px;
+            padding: 8px 5px;
+            border-radius: 3px;
+        }
+    }
+    .add-edit-article-content {
+        margin: 20px 0;
+        textarea {
+            width: 590px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+    }
+    .add-edit-article-btn {
+        text-align: center;
+        height: 30px;
+        button {
+            float: right;
+            margin-left: 50px;
+            width: 50px;
+            height: 30px;
+            line-height: 28px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            @include transition;
+            &:hover {
+                background: #eee;
+            }
+        }
+    }
+}
+
+.paginationBox {
+    text-align: center;
+    width: 100%;
+    $h: 25px;
+    a {
+        height: $h;
+        line-height: $h;
+        margin: 0 5px;
+        padding: 0 5px;
+        border: 1px solid #ddd;
+        color: #666;
+        font-size: 14px;
+        display: inline-block;
+        border-radius: 3px;
+    }
+    span {
+        position: relative;
+        top: v(-2);
+        height: $h;
+        line-height: $h;
+        border-radius: 3px;
+        padding: 0 12px;
+        cursor: pointer;
+    }
+    b {
+        font-weight: normal;
+    }
+}
+
+.alertBox {
+    @include center_center($pos: fixed);
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 999999;
+    .alertBoxContent {
+        @include center_center($pos: fixed, $top: 35%);
+        width: 450px;
+        background: #fff;
+        border-radius: 5px;
+        $v: 30px;
+        h3 {
+            height: $v;
+            line-height: $v;
+            padding-left: 10px;
+            font-weight: normal;
+            border-bottom: 1px dotted #ddd;
+            background: #eee;
+            border-radius: 5px 5px 0 0;
+            span {
+                float: right;
+                height: $v;
+                line-height: $v;
+                width: $v;
+                text-align: center;
+                cursor: pointer;
+            }
+        }
+        .alertBoxText {
+            min-height: 80px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        .alertBoxBtn {
+            $v: 40px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            height: $v;
+            line-height: $v;
+            border-top: 1px dotted #ddd;
+            text-align: center;
+            a {
+                -webkit-box-flex: 1;
+                -ms-flex: 1;
+                flex: 1;
+                color: #333;
+                @include transition;
+                &:hover {
+                    background: #eee;
+                }
+            }
+            a:last-child {
+                border-left: 1px dotted #ddd;
+            }
+        }
+    }
+}
+
+.loadBox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .15) url(/images/load.gif) no-repeat center;
+    z-index: 99999;
+}

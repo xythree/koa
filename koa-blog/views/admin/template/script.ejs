@@ -1,0 +1,16 @@
+<script src="/js/vue.js"></script>
+<script src="/js/axios.min.js"></script>
+<script>
+    let _xy = {
+        getParams(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
+            var result = window.location.search.substr(1).match(reg)
+
+            if (result != null) {
+                return unescape(result[2])
+            } else {
+                return null
+            }
+        }
+    }
+</script>

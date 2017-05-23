@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+
+    <link rel="stylesheet" href="/css/admin/index.css">
+
+</head>
+
+<body>
+
+    <div id="admin">
+
+        <div class="article-list-box">
+            <ul class="article-list-control">
+                <li @click="articleAdd">添加文章</li>
+                <li @click="changUser">切换用户</li>
+            </ul>
+            <ol class="article-list">
+                <article-list v-for="(item,index) in articleList" :index="index" :list="item"></article-list>
+            </ol>
+
+            <pagination-box :total="total"></pagination-box>
+        </div>
+
+        <add-edit-article></add-edit-article>
+
+        <article-box></article-box>
+
+        <load-box></load-box>
+
+        <alert-box></alert-box>
+
+    </div>
+
+
+    <script src="/js/vue.js"></script>
+    <script src="/js/vuex.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <script src="/js/admin/index.js"></script>
+
+
+</body>
+
+</html>

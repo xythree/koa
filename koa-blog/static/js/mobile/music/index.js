@@ -180,7 +180,7 @@ const store = new Vuex.Store({
 })
 
 Vue.component("pagination-box", {
-    props: ["colNum", "index", "total"],
+    props: ["colnum", "index", "total"],
     data() {
         return {
             count: 2
@@ -190,15 +190,15 @@ Vue.component("pagination-box", {
         ind() {
             return this.index || 1
         },
-        _colNum() {
-            return this.colNum || 10
+        _colnum() {
+            return this.colnum || 10
         },
         _total() {
             return this.total
         },
         arr() {
             let temp = []
-            for (var i = 0, len = Math.ceil(this._total / this._colNum); i < len; i++) {
+            for (var i = 0, len = Math.ceil(this._total / this._colnum); i < len; i++) {
                 temp.push(i + 1)
             }
             return temp

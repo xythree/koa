@@ -24,5 +24,27 @@ module.exports = {
             type: Number,
             require: false
         }
+    },
+    Article: {
+        author: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        },
+        date: {
+            type: Date,
+            required: true
+        },
+        lastDate: {
+            type: Date,
+            required: true
+        }
     }
 }
