@@ -45,6 +45,8 @@
                         axios.post("/register", d).then(result => {
                             if (result.status == 200 && result.data == "ok") {
                                 location.href = "/admin/index"
+                            } else {
+                                alert(result.data)
                             }
                         })
                     }

@@ -8,7 +8,8 @@ module.exports = function(router) {
         const limit = params.limit || 10
 
         await ctx.post({
-            path: "/api/search/get/web",
+            //path: "/api/search/get/web",
+            path: "/api/search/pc",
             s: params.s,
             hlpretag: "",
             hlposttag: "",

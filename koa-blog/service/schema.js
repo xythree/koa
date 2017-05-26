@@ -4,6 +4,14 @@ module.exports = {
             type: String,
             required: true
         },
+        nick: {
+            type: String,
+            required: false
+        },
+        detail_info: {
+            type: String,
+            required: false
+        },
         password: {
             type: String,
             required: true
@@ -19,6 +27,16 @@ module.exports = {
         email: {
             type: String,
             required: false
+        },
+        create_time: {
+            type: Date,
+            required: false,
+            default: Date.now()
+        },
+        level: {
+            type: Number,
+            required: false,
+            default: 0
         },
         phone: {
             type: Number,
@@ -38,11 +56,12 @@ module.exports = {
             type: String,
             required: true
         },
-        date: {
+        create_time: {
             type: Date,
-            required: true
+            required: false,
+            default: Date.now()
         },
-        lastDate: {
+        last_modify_time: {
             type: Date,
             required: true
         }

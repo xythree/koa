@@ -119,7 +119,12 @@ let store = new Vuex.Store({
 
 Vue.component("article-list", {
     props: ["list", "index"],
-    template: `<li><p @click="show(list._id)">{{list.title}}</p><span class="article-delete" @click="remove(list._id, index)">删除</span><span class="article-edit" @click="edit(list._id)">编辑</span></li>`,
+    template: `
+        <li>
+            <p @click="show(list._id)">{{list.title}}</p>
+            <span class="article-delete" @click="remove(list._id, index)">删除</span>
+            <span class="article-edit" @click="edit(list._id)">编辑</span>
+        </li>`,
     methods: {
         show(id) {
             const dispatch = this.$store.dispatch
@@ -130,11 +135,7 @@ Vue.component("article-list", {
                 if (result.status == 200) {
                     dispatch("setArticleBox", {
                         status: true,
-                        info: {
-                            id: result.data._id,
-                            title: result.data.title,
-                            content: result.data.content
-                        }
+                        info: result.data
                     })
                 }
             })
@@ -161,7 +162,7 @@ Vue.component("article-list", {
                     }
                 })
             })
-        },
+        }
     }
 })
 
@@ -232,10 +233,9 @@ Vue.component("pagination-box", {
 
 
 Vue.component("add-edit-article", {
-    props: ["title", "content"],
     data() {
         return {
-
+            ue: ""
         }
     },
     computed: {
@@ -250,10 +250,39 @@ Vue.component("add-edit-article", {
         <div class="add-edit-article" v-show="addEditArtilcleStatus">
             <div class="add-edit-article-close"><span @click="close">关闭</span></div>
             <p class="add-edit-article-title" ><input type="text" v-model="articleInfo.title" /></p>
-            <p class="add-edit-article-content" ><textarea v-model="articleInfo.content" cols="30" rows="10"></textarea></p>
-            <p class="add-edit-article-btn" ><button @click="submit" class="add-edit-article-sure" >确定</button><button class="add-edit-article-empty" @click="empty" >清空</button></p>
+            <div class="add-edit-article-content" >
+                <div class="container-box">
+                    <div id="container" name="content" type="text/plain"></div>
+                </div>
+            </div>
+            <p class="add-edit-article-btn" >
+                <button @click="submit" class="add-edit-article-sure" >确定</button>
+                <button class="add-edit-article-empty" @click="empty" >清空</button>
+            </p>
         </div>
     `,
+    mounted() {
+
+        this.$watch("addEditArtilcleStatus", (newVal, oldVal) => {
+            if (newVal) {
+                if (window.UE) {
+                    if (!this.ue) {
+                        this.ue = window.UE.getEditor('container')
+                        this.ue.ready(() => {
+                            this.ue.setHeight(400)
+                        })
+                    }
+
+                    this.ue.ready(() => {
+                        this.ue.setContent(this.articleInfo.content || "")
+                    })
+                }
+            } else {
+                this.ue.setContent("")
+            }
+        })
+
+    },
     methods: {
         close() {
             const dispatch = this.$store.dispatch
@@ -273,7 +302,8 @@ Vue.component("add-edit-article", {
             this.submitAfter()
         },
         submit() {
-            if (this.articleInfo.title == "" || this.articleInfo.content == "") {
+            this.articleInfo.content = this.ue.getContent()
+            if (!this.articleInfo.title || !this.articleInfo.content) {
                 this.tip("请输入内容!")
             } else {
                 this.addArticle({
@@ -295,11 +325,8 @@ Vue.component("add-edit-article", {
                 const _store = this.$store
 
                 if (result.status == 200) {
-                    if (!_store.state.articleInfo.id) {
-                        _store.dispatch("setArticleContent")
-                    }
                     this.tip("提交成功!")
-                    _store.dispatch("getArticleList", _store.state.pagination.index)
+                    _store.dispatch("getArticleList", _store.state.pagination.index - 1)
                 }
 
             })
@@ -320,12 +347,13 @@ Vue.component("article-box", {
     },
     template: `
         <div class="article-box" v-show="articleBoxStatus">
-            <h3>{{articleBoxInfo.title}}</h3>
-            <div class="article-box-edit" @click="edit(articleBoxInfo.id)">编辑</div>
+            <h3 class="article-box-title">{{articleBoxInfo.title}}</h3>
+            <p class="article-box-time">{{new Date(articleBoxInfo.last_modify_time).toLocaleString()}}</p>
+            <div class="article-box-edit" @click="edit(articleBoxInfo._id)">编辑</div>
             <div class="article-box-close">
-                <span @click="close">关闭</span>   
+                <span @click="close">关闭</span>
             </div>
-            <div class="article-box-content" >{{articleBoxInfo.content}}</div>
+            <div class="article-box-content" v-html="articleBoxInfo.content" ></div>
         </div>
     `,
     methods: {

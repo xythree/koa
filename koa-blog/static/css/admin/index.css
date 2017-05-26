@@ -1,31 +1,90 @@
-html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, hr, p, blockquote, img, a, dl, dt, dd, ul, ol, li, pre, em, strong, b, i, fieldset, form, label, legend, button, input, textarea, table, tbody, tfoot, thead, tr, th, td {
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+img,
+a,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+em,
+strong,
+b,
+i,
+fieldset,
+form,
+label,
+legend,
+button,
+input,
+textarea,
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
   margin: 0;
   padding: 0;
   border: 0;
   outline: 0;
 }
 
-body, button, input, select, textarea {
-  font: 0.22rem/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+body,
+button,
+input,
+select,
+textarea {
+  font: 12px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: 100%;
 }
 
-address, cite, dfn, em, var {
+address,
+cite,
+dfn,
+em,
+var {
   font-style: normal;
 }
 
-code, kbd, pre, samp, tt {
-  font-family: "Courier New",Courier,monospace;
+code,
+kbd,
+pre,
+samp,
+tt {
+  font-family: "Courier New", Courier, monospace;
 }
 
 small {
   font-size: 12px;
 }
 
-ul, ol, li {
+ul,
+ol,
+li {
   list-style: none;
 }
 
@@ -37,11 +96,13 @@ a:hover {
   text-decoration: none;
 }
 
-a, button {
+a,
+button {
   cursor: pointer;
 }
 
-em, i {
+em,
+i {
   font-style: normal;
 }
 
@@ -49,15 +110,21 @@ legend {
   color: #000;
 }
 
-fieldset, img {
+fieldset,
+img {
   border: 0;
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   font-size: 100%;
 }
 
-input, select, img {
+input,
+select,
+img {
   vertical-align: middle;
 }
 
@@ -85,10 +152,15 @@ input:focus {
   overflow: auto;
 }
 
-.article-box h3 {
+.article-box .article-box-title {
   text-align: center;
-  padding: 30px 0;
+  padding: 30px 0 10px;
   font-size: 14px;
+}
+
+.article-box .article-box-time {
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 .article-box .article-box-edit {
@@ -214,12 +286,11 @@ input:focus {
 
 .add-edit-article .add-edit-article-content {
   margin: 20px 0;
+  height: 550px;
 }
 
-.add-edit-article .add-edit-article-content textarea {
-  width: 590px;
-  padding: 5px;
-  border-radius: 3px;
+.add-edit-article .add-edit-article-content .container-box {
+  width: 598px;
 }
 
 .add-edit-article .add-edit-article-btn {

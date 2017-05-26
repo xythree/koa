@@ -1,46 +1,47 @@
 const sql = require("./../service/model")
 const md5 = require("md5")
+const validator = require("validator")
+
+
 
 module.exports = (router, render) => {
 
-    /*
-    const isLogin = async(ctx, next) => {
+
+    const isLogin = async ctx => {
         const username = ctx.cookies.get("username")
+        let result = ""
 
-        if (!username && ctx.params.category != "login") {
-            ctx.redirect("/admin/login")            
+        if (username) {
+            result = await sql.Users.find({ username: username })
+            if (result.length) return true
         }
+        return false
+    }
 
+    router.use(async(ctx, next) => {
+        let is_login = await isLogin(ctx)
+        let _path = ctx.path
+        if (!is_login && _path != "/admin/login" && _path != "/admin/register" && _path != "/login" && _path != "/register") {
+            ctx.redirect("/admin/login")
+        }
         await next()
-    }
-
-    router.get("/admin/:category", isLogin)
-    
-    */
+    })
 
 
-    const isLogin = ctx => {
-        const username = ctx.cookies.get("username")
-        const category = ctx.params.category
-
-        if (!username && (category != "login" || category != "register")) {
-            return false
-        }
-        return true
-    }
+    router.get("/admin/", async ctx => {
+        ctx.redirect("/admin/index")
+    })
 
 
     router.get("/admin/index", async ctx => {
-        if (!isLogin(ctx)) {
-            ctx.redirect("/admin/login")
-        }
-
         ctx.body = await render("/admin/index")
     })
 
 
     router.get("/admin/login", async ctx => {
-        if (ctx.cookies.get("username")) {
+        let is_login = await isLogin(ctx)
+
+        if (is_login) {
             ctx.redirect("/admin/index")
         }
 
@@ -59,26 +60,31 @@ module.exports = (router, render) => {
             })
 
             if (result.length) {
-                ctx.cookies.set("username", params.username)
-                result = await "ok"
+                ctx.cookies.set("username", params.username, {
+                    //expires: new Date(Date.now() + 60 * 60 * 1000)
+                    maxAge: 60 * 60 * 1000
+                })
+
+                result = "ok"
             } else {
-                result = await "用户名或密码不正确"
+                result = "用户名或密码不正确"
             }
         } else {
-            result = await "用户名或密码不能为空"
+            result = "用户名或密码不能为空"
         }
+
         ctx.body = await result
     })
 
 
     router.get("/admin/register", async ctx => {
+        let is_login = await isLogin(ctx)
 
-        if (ctx.cookies.get("username")) {
+        if (is_login) {
             ctx.redirect("/admin/index")
         }
 
         ctx.body = await render("/admin/register")
-
     })
 
 
@@ -90,17 +96,22 @@ module.exports = (router, render) => {
             result = await sql.Users.find({ username: params.username })
 
             if (result.length) {
-                result = await "用户名已经存在"
+                result = "用户名已经存在"
             } else {
                 await sql.Users.create({
                     username: params.username,
                     password: md5(params.password)
                 })
-                ctx.cookies.set("username", params.username)
-                result = await "ok"
+
+                ctx.cookies.set("username", params.username, {
+                    //expires: new Date(Date.now() + 60 * 60 * 1000)
+                    maxAge: 60 * 60 * 1000
+                })
+
+                result = "ok"
             }
         } else {
-            result = await "用户名或密码不能为空"
+            result = "用户名或密码不能为空"
         }
 
         ctx.body = await result
@@ -108,22 +119,29 @@ module.exports = (router, render) => {
 
 
     router.get("/logout", async ctx => {
-        ctx.cookies.set("username", "")
+        ctx.cookies.set("username", "", {
+            //expires: new Date(Date.now() - 1)
+            maxAge: -1
+        })
         ctx.body = await "logout success"
     })
 
 
     router.post("/article/add-edit-article", async ctx => {
         let params = ctx.request.body
-        let result = {}
+        let result = {},
+            time = Date.now()
+
+        params.title = validator.escape(params.title)
+        params.content = validator.escape(params.content)
 
         if (!params.id) {
             result = await sql.Article.create({
                 author: ctx.cookies.get("username"),
                 title: params.title,
                 content: params.content,
-                date: Date.now(),
-                lastDate: Date.now()
+                create_time: time,
+                last_modify_time: time
             })
         } else {
             result = await sql.Article.update({
@@ -132,7 +150,7 @@ module.exports = (router, render) => {
                 $set: {
                     title: params.title,
                     content: params.content,
-                    lastDate: Date.now()
+                    last_modify_time: time
                 }
             })
         }
@@ -147,10 +165,11 @@ module.exports = (router, render) => {
 
         if (params.id) {
             result = await sql.Article.remove({ _id: params.id })
-            ctx.body = await result
         } else {
-            ctx.body = await "id不存在"
+            result = "id不存在"
         }
+
+        ctx.body = await result
     })
 
 
@@ -160,12 +179,18 @@ module.exports = (router, render) => {
 
         if (params.id) {
             result = await sql.Article.find({ _id: params.id })
-            ctx.body = await result[0]
+            if (result.length) {
+                result.forEach(t => {
+                    t.title = validator.unescape(t.title)
+                    t.content = validator.unescape(t.content)
+                })
+            }
+            result = result[0]
         } else {
-            ctx.body = await "id不存在"
+            result = "id不存在"
         }
+        ctx.body = await result
     })
-
 
     router.get("/article/article-list", async ctx => {
         let username = ctx.cookies.get("username")
@@ -178,6 +203,12 @@ module.exports = (router, render) => {
 
         result.count = await sql.Article.find({ author: username }).count()
         result.result = await sql.Article.find({ author: username }).limit(+limit).skip(skip * limit)
+        if (result.result.length) {
+            result.result.forEach(t => {
+                t.title = validator.unescape(t.title)
+                t.content = validator.unescape(t.content)
+            })
+        }
 
         ctx.body = await result
     })

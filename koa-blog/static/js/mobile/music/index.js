@@ -183,7 +183,7 @@ Vue.component("pagination-box", {
     props: ["colnum", "index", "total"],
     data() {
         return {
-            count: 2
+            count: 1
         }
     },
     computed: {
@@ -226,7 +226,7 @@ Vue.component("pagination-box", {
             </template>
             <em v-if="ind + count < arr.length">...</em>
             <a v-if="arr.length > 1 && ind + count < arr.length" @click="jump(arr.length)" >{{arr.length}}</a>
-            <span v-if="ind != arr.length" @click="next">》</span>
+            <span v-if="ind != arr.length && _total > _colnum" @click="next">》</span>
         </div>
     </div>`,
     methods: {
@@ -623,7 +623,7 @@ Vue.component('search-box', {
             return this.$store.state.offset
         }
     },
-    template: '<div class="searchBox" :class="{searchTop: searchTop}"><div @click="showSelectItem" class="selectListBox" :class="{showSelectList: showSelectList}"><span>{{selectList[selectIndex].value}}</span><ul class="selectItem"><li v-for="(item,index) in selectList" v-if="selectIndex != index" @click="selectValFn(item.type, index)">{{item.value}}</li></ul></div><input class="searchInput" type="text" @focus="searchFocus" v-model="searchVal" /><span class="searchBtn" @click="search">搜索</span><div v-show="this.$store.state.playStatus" class="musicPlan" @click="musicPlan"></div></div>',
+    template: '<div class="searchBox" :class="{searchTop: searchTop}"><div @click="showSelectItem" class="selectListBox" :class="{showSelectList: showSelectList}"><span>{{selectList[selectIndex].value}}</span><ul class="selectItem"><li v-for="(item,index) in selectList" v-if="selectIndex != index" @click="selectValFn(item.type, index)">{{item.value}}</li></ul></div><input class="searchInput" @keyup.enter="search" type="text" @focus="searchFocus" v-model="searchVal" /><span class="searchBtn" @click="search">搜索</span><div v-show="this.$store.state.playStatus" class="musicPlan" @click="musicPlan"></div></div>',
     mounted() {
         document.addEventListener('click', (e) => {
             if (this.$el.contains(e.target)) {
