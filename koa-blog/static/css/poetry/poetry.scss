@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+body {
+    background: #fcf8ee;
+}
+
+.poetry-box {
+    overflow: hidden;
+    .poetry-list-box {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 300px;
+        height: 100%;
+        overflow-y: auto;
+        .poetry-search-box {
+            position: relative;
+            padding: 20px 10px 5px;
+            input {
+                width: 100%;
+                height: 25px;
+                line-height: 25px;
+                -webkit-transition: all .5s ease-out;
+                transition: all .5s ease-out;
+                outline: none;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                text-indent: 5px;
+                &:focus {
+                    box-shadow: 0 0 5px rgba(0, 0, 0, .25);
+                }
+            }
+            span {
+                position: absolute;
+                top: 21px;
+                right: 10px;
+                width: 25px;
+                height: 25px;
+                line-height: 25px;
+                text-align: center;
+                cursor: pointer;
+                color: #999;
+            }
+        }
+        .poetry-list {
+            padding-bottom: 50px;
+            cursor: pointer;
+            p {
+                padding-left: 5px;
+                margin-top: 20px;
+                height: 20px;
+                line-height: 20px;
+                color: #f00;
+                border-left: 2px solid #999;
+                font-size: 16px;
+            }
+            li {
+                padding: 5px;
+            }
+            .poetry-list-title {
+                margin: 5px 0;
+                font-size: 14px;
+                -webkit-transition: all .5s ease-out;
+                transition: all .5s ease-out;
+                border-bottom: 1px dotted #eee;
+                &:hover {
+                    padding-left: 15px;
+                }
+                span:last-child {
+                    float: right;
+                    color: #dedddb;
+                }
+            }
+        }
+    }
+    .poerty-info {
+        width: 600px;
+        margin-left: 350px;
+        padding: 30px;
+        text-align: center;
+        font-size: 16px;
+        h3 {
+            margin-top: 50px;
+            font-size: 18px;
+        }
+        h5 {
+            font-weight: normal;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        p {
+            margin: 30px 0;
+            line-height: 24px;
+        }
+        p:last-child {
+            text-align: left;
+        }
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    -webkit-transition: opacity .35s;
+    transition: opacity .35s
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0
+}

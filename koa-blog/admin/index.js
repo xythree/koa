@@ -1,6 +1,7 @@
 const sql = require("./../service/model")
 const md5 = require("md5")
 const validator = require("validator")
+const { uploadFile } = require("./../service/upload")
 
 
 
@@ -18,7 +19,7 @@ module.exports = (router, render) => {
         return false
     }
 
-    router.use(async(ctx, next) => {
+    router.use("/admin/*", async(ctx, next) => {
         let is_login = await isLogin(ctx)
         let _path = ctx.path
         if (!is_login && _path != "/admin/login" && _path != "/admin/register" && _path != "/login" && _path != "/register") {
@@ -124,6 +125,37 @@ module.exports = (router, render) => {
             maxAge: -1
         })
         ctx.body = await "logout success"
+    })
+
+    router.get("/admin/add-editor", async ctx => {
+        ctx.body = await render("/admin/add-editor")
+    })
+
+    router.all("/ueditor/controller", async ctx => {
+        let params = ctx.request.query
+        let config = await fs.readFileSync("./ueditor/config.json")
+        let result = ""
+
+        switch (params.action) {
+            case "config":
+                result = JSON.parse(config.toString().replace(/\/\*[\s\S]+?\*\//g, ""))
+                break
+            case "uploadimage":
+                result = { state: false }
+                let originalPath = "/static/images/upload-files"
+                let serverFilePath = path.join(__dirname, originalPath)
+
+                // 上传文件事件
+                result = await uploadFile(ctx, {
+                    fileType: "common", // common or album
+                    path: serverFilePath,
+                    originalPath: originalPath
+                })
+
+                break
+        }
+
+        ctx.body = result
     })
 
 

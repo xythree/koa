@@ -25,7 +25,6 @@ function uploadFile(ctx, options) {
     let req = ctx.req
     let res = ctx.res
     let busboy = new Busboy({ headers: req.headers })
-
     let fileType = options.fileType || "common"
     let filePath = path.join(options.path, fileType)
     let mkdirResult = mkdirsSync(filePath)
@@ -50,7 +49,14 @@ function uploadFile(ctx, options) {
                 result.original = formData.name
                 result.type = mimetype
                 result.size = formData.size
-
+                    /*
+                        state => "" //上传状态，上传成功时必须返回"SUCCESS"
+                        url => "" //返回的地址
+                        title => "" //新文件名
+                        original => "" //原始文件名
+                        type => "" //文件类型
+                        size => "" //文件大小
+                    */
                 resolve(result)
             })
         })

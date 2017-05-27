@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>文章编辑</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .editor-box {
+            width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            padding: 30px 0;
+        }
+        
+        .title input {
+            height: 35px;
+            line-height: 35px;
+            width: 90%;
+            padding: 0 5%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .add-edit-article-btn {
+            margin-top: 20px;
+            text-align: center;
+            height: 30px;
+        }
+        
+        .add-edit-article-btn button {
+            float: right;
+            margin-left: 50px;
+            width: 50px;
+            height: 30px;
+            line-height: 28px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .add-edit-article-btn button:hover {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="editor-box" class="editor-box">
+        <p class="title">
+            <input type="text" placeholder="标题" v-model="title">
+        </p>
+        <div id="container" name="content" type="text/plain"></div>
+        <p class="add-edit-article-btn">
+            <button @click="submit" class="add-edit-article-sure">确定</button>
+            <button class="add-edit-article-empty" @click="empty">清空</button>
+        </p>
+    </div>
+
+
+    <script src="/js/ueditor/ueditor.config.js"></script>
+    <script src="/js/ueditor/editor_api.js"></script>
+    <% include template/script.ejs %>
+        <script>
+            let ue = UE.getEditor('container')
+
+            ue.ready(() => {
+                ue.setHeight(400)
+                ue.setContent(vm.content)
+            })
+
+            let vm = new Vue({
+                el: "#editor-box",
+                data: {
+                    id: "",
+                    title: "",
+                    content: ""
+                },
+                methods: {
+                    empty() {
+                        let result = confirm("确定清空吗?")
+
+                        if (result) {
+                            this.title = ""
+                            this.content = ""
+                            ue.setContent("")
+                        }
+                    },
+                    submit() {
+                        this.content = ue.getContent()
+                        if (!this.title || !this.content) {
+                            alert("请输入内容!")
+                        } else {
+                            this.addArticle({
+                                id: this.id,
+                                title: this.title,
+                                content: this.content
+                            })
+                        }
+                    },
+                    addArticle(d) {
+                        axios.post("/article/add-edit-article", d).then(result => {
+                            if (result.status == 200) {
+                                alert("提交成功!")
+                            }
+                        })
+                    }
+                },
+                mounted() {
+                    let id = _xy.getParams("id")
+
+                    if (id) {
+                        axios.get("/article/article-info", {
+                            params: {
+                                id
+                            }
+                        }).then(result => {
+                            let data = result.data
+                            if (result.status == 200) {
+                                this.title = data.title
+                                this.content = data.content
+                            }
+                        })
+                    }
+                }
+            })
+        </script>
+</body>
+
+</html>

@@ -1,10 +1,5 @@
 let store = new Vuex.Store({
     state: {
-        articleInfo: {
-            id: "",
-            title: "",
-            content: ""
-        },
         pagination: {
             total: 0, //分页总条数
             index: 1
@@ -20,19 +15,20 @@ let store = new Vuex.Store({
     },
     getter: {},
     actions: {
-        setArticle({ state, dispatch }, data) {
-            state.articleInfo.id = data.id
-            dispatch("setArticleContent", data)
-        },
-        setArticleContent({ state }, data) {
-            state.articleInfo.title = data ? data.title : ""
-            state.articleInfo.content = data ? data.content : ""
+        jumpAddEditor({ state }, data) {
+            let href = "/admin/add-editor"
+
+            if (data) {
+                href += "?id=" + data
+            }
+            window.open(href)
         },
         setTotal({ state }, data) { //设置分页总条数
             state.pagination.total = data
         },
         "pagination-change" ({ state, dispatch }, data) {
             let index = data - 1
+
             dispatch("getArticleList", index)
             state.pagination.index = index
         },
@@ -141,7 +137,7 @@ Vue.component("article-list", {
             })
         },
         edit(id) {
-            this.$store.dispatch("editArticle", id)
+            this.$store.dispatch("jumpAddEditor", id)
         },
         remove(id, index) {
             const _store = this.$store
@@ -232,110 +228,6 @@ Vue.component("pagination-box", {
 
 
 
-Vue.component("add-edit-article", {
-    data() {
-        return {
-            ue: ""
-        }
-    },
-    computed: {
-        articleInfo() {
-            return this.$store.state.articleInfo
-        },
-        addEditArtilcleStatus() {
-            return this.$store.state.addEditArtilcleStatus
-        }
-    },
-    template: `
-        <div class="add-edit-article" v-show="addEditArtilcleStatus">
-            <div class="add-edit-article-close"><span @click="close">关闭</span></div>
-            <p class="add-edit-article-title" ><input type="text" v-model="articleInfo.title" /></p>
-            <div class="add-edit-article-content" >
-                <div class="container-box">
-                    <div id="container" name="content" type="text/plain"></div>
-                </div>
-            </div>
-            <p class="add-edit-article-btn" >
-                <button @click="submit" class="add-edit-article-sure" >确定</button>
-                <button class="add-edit-article-empty" @click="empty" >清空</button>
-            </p>
-        </div>
-    `,
-    mounted() {
-
-        this.$watch("addEditArtilcleStatus", (newVal, oldVal) => {
-            if (newVal) {
-                if (window.UE) {
-                    if (!this.ue) {
-                        this.ue = window.UE.getEditor('container')
-                        this.ue.ready(() => {
-                            this.ue.setHeight(400)
-                        })
-                    }
-
-                    this.ue.ready(() => {
-                        this.ue.setContent(this.articleInfo.content || "")
-                    })
-                }
-            } else {
-                this.ue.setContent("")
-            }
-        })
-
-    },
-    methods: {
-        close() {
-            const dispatch = this.$store.dispatch
-
-            dispatch("setAddEditArtilcleStatus", false)
-            dispatch("setArticle", {})
-        },
-        tip(txt) {
-            const _store = this.$store
-            const dispatch = _store.dispatch
-
-            dispatch("setAlertBoxStatus", true)
-            dispatch("setAlertBoxText", txt)
-        },
-        empty() {
-            this.tip("确定清空吗?")
-            this.submitAfter()
-        },
-        submit() {
-            this.articleInfo.content = this.ue.getContent()
-            if (!this.articleInfo.title || !this.articleInfo.content) {
-                this.tip("请输入内容!")
-            } else {
-                this.addArticle({
-                    id: this.articleInfo.id,
-                    title: this.articleInfo.title,
-                    content: this.articleInfo.content
-                })
-            }
-        },
-        submitAfter() {
-            const dispatch = this.$store.dispatch
-
-            dispatch("setAlertBoxSureCallBack", () => {
-                dispatch("setArticleContent")
-            })
-        },
-        addArticle(d) {
-            axios.post("/article/add-edit-article", d).then(result => {
-                const _store = this.$store
-
-                if (result.status == 200) {
-                    this.tip("提交成功!")
-                    _store.dispatch("getArticleList", _store.state.pagination.index - 1)
-                }
-
-            })
-        }
-    }
-})
-
-
-
 Vue.component("article-box", {
     computed: {
         articleBoxStatus() {
@@ -363,8 +255,7 @@ Vue.component("article-box", {
             })
         },
         edit(id) {
-            this.close()
-            this.$store.dispatch("editArticle", id)
+            this.$store.dispatch("jumpAddEditor", id)
         }
     }
 })
@@ -420,7 +311,7 @@ let vm = new Vue({
     },
     methods: {
         articleAdd() {
-            this.$store.dispatch("setAddEditArtilcleStatus", true)
+            this.$store.dispatch("jumpAddEditor")
         },
         changUser() {
             axios.get("/logout").then(result => {

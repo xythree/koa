@@ -137,7 +137,8 @@ const store = new Vuex.Store({
         setPlayListIndex({ state }, data) {
             state.playListIndex = data
         },
-        getSong({ commit, dispatch }, id) {
+        getSong({ commit, dispatch }, data) {
+            /*
             dispatch('setLoadBoxStatue', true)
             axios.get(`/music/detail?id=${id}`).then(d => {
                 const data = d.data
@@ -146,7 +147,9 @@ const store = new Vuex.Store({
                 }
                 dispatch('setLoadBoxStatue', false)
             })
-            axios.get(`/music/lyric?id=${id}`).then(d => {
+            */
+            dispatch('songsInfo', data)
+            axios.get(`/music/lyric?id=${data.id}`).then(d => {
                 const data = d.data
                 if (data.code == 200) {
                     dispatch('lyric', data)
@@ -271,7 +274,7 @@ Vue.component('play-list', {
     template: '<div class="playListBox" v-show="playListStatus"><h5>播放列表:</h5><div class="scrollBox"><ol class="listBox"><list-box v-for="(item,index) in playList" :index="index" :todo="item"></list-box></ol></div></div>',
     methods: {
         getSong(item) {
-            this.$store.dispatch('getSong', item.id)
+            this.$store.dispatch('getSong', item)
         }
     }
 })
@@ -363,7 +366,7 @@ Vue.component('play-controll-box', {
                 _store.dispatch("playToggle")
             }
             _store.dispatch("setPlayListIndex", index)
-            _store.dispatch("getSong", _store.state.playList[index].id)
+            _store.dispatch("getSong", _store.state.playList[index])
         },
         audioPlayBtn() {
             const _store = this.$store
@@ -372,7 +375,7 @@ Vue.component('play-controll-box', {
                 _store.dispatch("playToggle")
             } else {
                 if (_store.state.playList.length) {
-                    _store.dispatch("getSong", _store.state.playList[this.index].id)
+                    _store.dispatch("getSong", _store.state.playList[this.index])
                 }
             }
         },
@@ -547,6 +550,7 @@ Vue.component('music-box', {
 
         },
         imgRotateFn() {
+            clearTimeout(this.timerRotate)
             this.timerRotate = setTimeout(() => {
                 this.rotateZ += 1
                 if (this.playStatus) {
@@ -562,7 +566,7 @@ Vue.component('list-box', {
     props: ['todo', 'index'],
     methods: {
         getSong(item) {
-            this.$store.dispatch('getSong', item.id)
+            this.$store.dispatch('getSong', item)
             this.$store.dispatch('addPlayList', item)
         },
         remove(index) {
