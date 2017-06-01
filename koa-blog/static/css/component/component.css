@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+body {
+  height: 3000px;
+}
+
+#component {
+  position: fixed;
+  top: 0;
+}
+
+.btn {
+  height: 36px;
+  width: 96px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}

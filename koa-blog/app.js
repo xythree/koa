@@ -45,7 +45,9 @@ router.get("/music", async ctx => {
     ctx.body = await render("/mobile/music/index")
 })
 
-require("./service/index")(router)
+require("./service/music")(router)
+
+require("./service/component")(router, render)
 
 require("./admin/index")(router, render)
 
