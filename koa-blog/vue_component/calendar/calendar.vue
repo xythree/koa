@@ -1,6 +1,6 @@
 
 
-<style lang="sass">
+<style lang="sass" scoped>
 
     .calendar {
         width: 210px;
@@ -46,22 +46,22 @@
 </style>
 
 <template>
-
     <div class="calendar">
         <div class="calendar_header">
-            <a href="javascript:;" @click="prev" class="iprev" >上一月</a>
+            <a href="javascript:;" @click="prev" class="iprev">上一月</a>
             <div class="idate_title">{{dateTitle}}</div>
-            <a href="javascript:;" @click="next" class="inext" >下一月</a>
+            <a href="javascript:;" @click="next" class="inext">下一月</a>
         </div>
-        
-        <ul>
-            <li v-for="item of weeks" class="weeks">{{item}}</li>
-            <li v-for="item of dw"></li>
-            <li v-for="(item, index) of d2.d" @click="getVal(index+1)" :class="{today: date.d == index+1}">{{index + 1}}</li>            
-        </ul>
-        
+    
+        <div class="calendar_list_box">
+            <ul>
+                <li v-for="item of weeks" class="weeks">{{item}}</li>
+                <li v-for="item of dw"></li>
+                <li v-for="(item, index) of d2.d" @click="getVal(index+1)" :class="{today: date.d == index+1}">{{index + 1}}</li>
+            </ul>
+        </div>
+    
     </div>
-
 </template>
 
 
@@ -71,23 +71,20 @@ export default {
     props: ["defaultTime", "calendarCallBack"],
     data() {
         return {
-            weeks: ["日","一","二","三","四","五","六"],
+            weeks: ["日", "一", "二", "三", "四", "五", "六"],
             d: [],
             d2: {},
             dw: []
         }
     },
     computed: {
-       date() {
-           if (this.defaultTime) {
-               let defaultTime = this.defaultTime.split(/[\,,\-,\/]/)
-               return this.getDate(defaultTime[0], defaultTime[1] - 1, defaultTime[2])
-           }
-           return this.getDate() 
-       },
-	   getCalendarVal() {
-		   return this.$store.getters.getCalendarVal
-	   }
+        date() {
+            if (this.defaultTime) {
+                let defaultTime = this.defaultTime.split(/[\,,\-,\/]/)
+                return this.getDate(defaultTime[0], defaultTime[1] - 1, defaultTime[2])
+            }
+            return this.getDate()
+        }
     },
     methods: {
         getD(date) {
@@ -121,7 +118,7 @@ export default {
             this.renderDate()
         },
         getVal(index) {
-			let result = this.resultDate(index).join("-")
+            let result = this.resultDate(index).join("-")
 
             this.calendarCallBack && this.calendarCallBack(result)
         },

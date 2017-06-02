@@ -10,17 +10,29 @@ li {
 }
 
 body {
-  height: 3000px;
+  height: 100%;
 }
 
-#component {
-  position: fixed;
-  top: 0;
+pre {
+  margin: 20px 0;
+  position: relative;
+  margin-bottom: 24px;
+  border-radius: 3px;
+  border: 1px solid #C3CCD0;
+  background: #FFF;
+  overflow: hidden;
 }
 
-.btn {
-  height: 36px;
-  width: 96px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+code {
+  display: block;
+  padding: 12px 24px;
+  overflow-y: auto;
+  font-weight: 300;
+  font-family: Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.hljs ol li {
+  margin-left: 30px;
+  list-style-type: decimal-leading-zero;
 }

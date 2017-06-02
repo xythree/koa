@@ -75,7 +75,7 @@ $c1: #ddd;
         position: absolute;
         top: 24px;
         min-width: 172px;
-        max-height: 200px;
+        max-height: 240px;
         border: 1px solid $c1;
         border-radius: 0 0 3px 3px;
         background: #fff;
@@ -125,15 +125,15 @@ $c1: #ddd;
 </style>
 
 <template>
-    <div class="select_box" :class="{select_show: selectShow}" v-close="closeFn">
+    <div class="select_box" :class="{select_show: selectBoxShow}" v-close="closeFn">
         <div class="select_ipt">
             <input type="text" readonly v-model="value" @click="showSelect" />
             <span @click="showSelect"></span>
             <b v-show="emptyVal" title="清空" @click="clearEmpty">X</b>
         </div>
-        <ul class="select_lists_box">
-            <li v-for="item in selectList" @click="getValue(item)">{{item.name}}</li>
-        </ul>
+        <div class="select_lists_box">
+            <slot></slot>
+        </div>
     </div>
 </template>
 
@@ -141,33 +141,39 @@ $c1: #ddd;
 <script>
 import close from "../close/close.vue"
 export default {
-    props: ["selectList", "selectCallBack"],
+    props: ["selectShow", "value", "selectBoxCallBack"],
     data() {
         return {
-            emptyVal: false,
-            selectShow: false,
-            value: ""
+
+        }
+    },
+    computed: {
+        selectBoxShow() {
+            return this.selectShow
+        },
+        emptyVal() {
+            return this.value
         }
     },
     directives: {
         close
     },
     methods: {
+        setStatus(value, selectShow, clear) {
+            this.selectBoxCallBack && this.selectBoxCallBack({
+                clear,
+                value,
+                selectShow
+            })
+        },
         showSelect() {
-            this.selectShow = !this.selectShow
+            this.setStatus(this.value,!this.selectBoxShow)
         },
         clearEmpty() {
-            this.value = ""
-            this.emptyVal = false
-        },
-        getValue(arg) {
-            this.value = arg.name
-            this.emptyVal = true
-            this.showSelect()
-            this.selectCallBack && this.selectCallBack(arg)
+            this.setStatus("",this.selectBoxShow, true)
         },
         closeFn() {
-            this.selectShow = false
+            this.setStatus(this.value, false)
         }
     }
 }
