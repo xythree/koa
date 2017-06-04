@@ -137,7 +137,7 @@ $c1: #ddd;
 import select_box from "../select_box/select_box.vue"
 
 export default {
-    props: ["selectList", "selectCallBack"],
+    props: ["selectList", "selectListCallBack"],
     data() {
         return {
             selectShow: false,
@@ -151,13 +151,13 @@ export default {
         getValue(arg) {
             this.value = arg.name
             this.selectShow = false
-            this.selectCallBack && this.selectCallBack(arg)
+            this.selectListCallBack && this.selectListCallBack(arg)
         },
         selectBoxCallBack(arg) {
             this.value = arg.value
             this.selectShow = arg.selectShow
             if (arg.clear) {
-                this.selectCallBack && this.selectCallBack()
+                this.selectListCallBack && this.selectListCallBack()
             }
         }
     }

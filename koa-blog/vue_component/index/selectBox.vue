@@ -1,3 +1,59 @@
+<style lang="sass">
+
+</style>
+
+<template>
+    <div class="">
+        <select_box :selectShow="selectShow" :value="value" :selectBoxCallBack="selectBoxCallBack">
+        </select_box>
+        
+        <pre>
+            <code class="html">
+                {{demo}}
+            </code>
+        </pre>
+        <pre>
+            <code class="html">
+                {{code}}
+            </code>
+        </pre>
+    </div>
+</template>
+
+<script>
+
+import select_box from "../select_box/select_box.vue"
+
+export default {
+    methods: {
+        selectListCallBack(arg) {
+            this.demoText = JSON.stringify(arg)
+        }
+    },
+    components: {
+        select_box
+    },
+    data() {
+        return {
+            demoText: "",
+            demo: `
+/*
+*   :props {
+*       @boolean: selectShow
+*       @string: value
+*       @function: selectBoxCallBack(params: object)
+*   }
+*/
+
+<select_box :selectShow="selectShow" :value="value" :selectBoxCallBack="selectBoxCallBack">
+    <!-- 
+        要嵌套的组件或者html,如:
+        <calendar_box :calendarCallBack="callback"></calendar_box>  
+    -->
+</select_box>
+            `,
+            code: `
+
 
 <style lang="sass" scoped>
 
@@ -6,8 +62,9 @@ $c1: #ddd;
 .select_box {
     position: relative;
     width: 175px;
-    display: inline-block;    
+    display: inline-block;
     cursor: pointer;
+    -webkit-tap-highlight-color:transparent;
     
     .select_ipt {
         input {
@@ -72,9 +129,10 @@ $c1: #ddd;
     .select_lists_box {
         display: none;
         position: absolute;
-        top: 22px;
+        top: 24px;
         min-width: 172px;
-        border: 1px solid $c1;      
+        max-height: 240px;
+        border: 1px solid $c1;
         border-radius: 0 0 3px 3px;
         background: #fff;
         overflow: auto;
@@ -82,7 +140,7 @@ $c1: #ddd;
         li {
             padding: 3px 5px;
             border-bottom: 1px dashed #eee;
-            
+            font-size: 12px;
             &:hover {
                 cursor: pointer;
                 background: #eee;
@@ -112,7 +170,7 @@ $c1: #ddd;
 @keyframes show_ani {
     0% {
         opacity: 0;
-        transform: rotateX(45deg);      
+        transform: rotateX(45deg);
     }
     100% {
         opacity: 1;
@@ -123,49 +181,65 @@ $c1: #ddd;
 </style>
 
 <template>
-    <select_box :selectShow="selectShow" :value="value" :selectBoxCallBack="selectBoxCallBack">
-        <calendar_box :defaultTime="defaultTime" :calendarCallBack="callback"></calendar_box>    
-    </select_box>
+    <div class="select_box" :class="{select_show: selectBoxShow}" v-close="closeFn">
+        <div class="select_ipt">
+            <input type="text" readonly v-model="value" @click="showSelect" />
+            <span @click="showSelect"></span>
+            <b v-show="emptyVal" title="清空" @click="clearEmpty">X</b>
+        </div>
+        <div class="select_lists_box">
+            <slot></slot>
+        </div>
+    </div>
 </template>
 
 
-<script>
-
-import select_box from "../select_box/select_box.vue"
-import calendar_box from "../calendar/calendar.vue"
-
+\<script\>
+import close from "../close/close.vue"
 export default {
-    props: ["defaultTime","calendarSelectCallBack"],
+    props: ["selectShow", "value", "selectBoxCallBack"],
     data() {
-        let value = this.defaultTime || ""
-        if (value) {
-            value = value.replace(/[\,\/]/g,"-")
-        }
         return {
-            value,
-            selectShow: false
+
         }
     },
-    components: {
-        select_box,
-        calendar_box
+    computed: {
+        selectBoxShow() {
+            return this.selectShow
+        },
+        emptyVal() {
+            return this.value
+        }
+    },
+    directives: {
+        close
     },
     methods: {
-        callback(arg) {
-            this.value = arg
-            this.selectShow = false
-            this.calendarSelectCallBack && this.calendarSelectCallBack(arg)
+        setStatus(value, selectShow, clear) {
+            this.selectBoxCallBack && this.selectBoxCallBack({
+                clear,
+                value,
+                selectShow
+            })
         },
-        selectBoxCallBack(arg) {
-            this.value = arg.value
-            this.selectShow = arg.selectShow
-            if (arg.clear) {
-                this.calendarSelectCallBack && this.calendarSelectCallBack()
-            }
+        showSelect() {
+            this.setStatus(this.value,!this.selectBoxShow)
+        },
+        clearEmpty() {
+            this.setStatus("",this.selectBoxShow, true)
+        },
+        closeFn() {
+            this.setStatus(this.value, false)
         }
     }
-
 }
 
+\<\/script\>
+
+
+            `
+        }
+    }
+}
 </script>
 

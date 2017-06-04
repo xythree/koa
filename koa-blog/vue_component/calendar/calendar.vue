@@ -104,10 +104,13 @@ export default {
             return {
                 date,
                 y: date.getFullYear(),
-                m: date.getMonth() + 1,
-                d: date.getDate(),
+                m: this.zeroFill(date.getMonth() + 1),
+                d: this.zeroFill(date.getDate()),
                 w: date.getDay()
             }
+        },
+        zeroFill(num) {
+            return num < 10 ? "0" + +num : num
         },
         prev() {
             this.date.m -= 1
@@ -123,7 +126,7 @@ export default {
             this.calendarCallBack && this.calendarCallBack(result)
         },
         resultDate(index) {
-            return [this.d.y, this.d.m, index || this.date.d]
+            return [this.d.y, this.d.m, this.zeroFill(index || this.date.d)]
         },
         renderDate() {
             this.d = this.getD(this.date)

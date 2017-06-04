@@ -1,3 +1,57 @@
+<style lang="sass">
+.pagination {
+    padding-top: 100px;
+}
+</style>
+
+<template>
+    <div class="pagination">
+        <pagination_box :total="total" :paginationCallBack="paginationCallBack"></pagination_box>
+        <p style="margin-bottom: 50px;">{{demoText}}</p>
+        <pre>
+            <code class="html">
+                {{demo}}
+            </code>
+        </pre>
+        <pre>
+            <code class="html">
+                {{code}}
+            </code>
+        </pre>
+    </div>
+</template>
+
+<script>
+
+import pagination_box from "../pagination/pagination.vue"
+
+export default {
+    methods: {
+        paginationCallBack(arg) {
+            this.demoText = "跳转到了第" + arg + "页"
+        }
+    },
+    components: {
+        pagination_box
+    },
+    data() {
+        return {
+            demoText: "",
+            total: 99,
+            demo: `
+/*
+*   :props {
+*       @number: colnum //每页条数,默认15  非必需
+*       @number: index //初始显示到第几页  非必需
+*       @number: total //总条数
+*       @function: calendarSelectCallBack(params: number)
+*   }
+*/
+
+ <pagination_box :total="total" :colnum="colnum" :index="index" :paginationCallBack="paginationCallBack"></pagination_box>
+            `,
+            code: `
+
 <style lang="sass" scoped>
 .paginationBox {    
     width: 100%;
@@ -46,7 +100,7 @@
     </div>
 </template>
 
-<script>
+\<script\>
 export default {
     props: ["colnum", "index", "total", "paginationCallBack"],
     data() {        
@@ -90,4 +144,14 @@ export default {
         }
     }
 }
+\<\/script\>
+
+
+
+
+            `
+        }
+    }
+}
 </script>
+

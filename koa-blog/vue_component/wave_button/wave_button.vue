@@ -1,6 +1,6 @@
 
 <style lang="sass" scoped>
-.wave-button-ripple {
+.wave_button_ripple {
     background: transparent;
     border: none;
     border-radius: 3px;
@@ -16,7 +16,7 @@
     &:hover {
         background-color: hsla(0, 0%, 62%, .15);
     }
-    .wave-ripple {
+    .wave_ripple {
         position: absolute;
         background: hsla(0, 0%, 65%, 0.5);
         border-radius: 100%;
@@ -36,9 +36,9 @@
 </style>
 
 <template>
-    <div @click="reppleClick" ref="button" class="wave-button-ripple">
+    <div @click="reppleClick" ref="button" class="wave_button_ripple">
         <slot></slot>
-        <span class="wave-ripple" ref="repple" :class="{'animate': animate }"></span>
+        <span class="wave_ripple" ref="repple" :class="{'animate': animate }"></span>
     </div>
 </template>
 

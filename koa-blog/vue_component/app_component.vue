@@ -1,6 +1,7 @@
 
 
 <style lang="sass">
+$color: #f92672;
 
 .icontent {
     width: 1100px;
@@ -15,12 +16,32 @@
         border-right: 1px solid #ddd;
 
         li {
-            text-align: right;
-            padding-right: 20px;
-            margin: 5px 0;
+            text-align: right;            
+            padding: 5px 20px 5px 0;
+            margin: 2px 0;
 
             a {
                 text-decoration: none;
+                position: relative;
+                color: #66d9ef;
+                transition: all .5s ease-out;
+                &:after {
+                    position: absolute;
+                    left: 50%;
+                    bottom: -2px;
+                    content: "";
+                    width: 0;
+                    height: 2px;
+                    background: $color;
+                    transform: translateX(-50%);
+                    transition: all .5s ease-out;
+                }
+                &.router-link-exact-active {
+                    color: $color;
+                    &:after {
+                        width: 100%;
+                    }   
+                }
             }
         }
     }
@@ -36,27 +57,34 @@
 <template>
     <div class="icontent">
         <ul class="irouter-list">
-            <li><router-link to="/calendar">calendar</router-link></li>
-            <li><router-link to="/waveButton">waveButton</router-link></li>
+            <li>
+                <router-link to="/">home</router-link>
+            </li>
+            <li>
+                <router-link to="/pagination">pagination</router-link>
+            </li>
+            <li>
+                <router-link to="/selectBox">selectBox</router-link>
+            </li>
+            <li>
+                <router-link to="/selectList">selectList</router-link>
+            </li>
+            <li>
+                <router-link to="/calendar">calendar</router-link>
+            </li>
+            <li>
+                <router-link to="/calendarSelect">calendarSelect</router-link>
+            </li>
+            <li>
+                <router-link to="/waveButton">waveButton</router-link>
+            </li>
         </ul>
-
+    
         <div class="irouter-view">
             <router-view></router-view>
         </div>
-        
     
-        <div>
-            <select_list :selectList="selectList" :selectCallBack="selectCallBack"></select_list>
-        </div>
-        <!--div>            
-            <calender_box :defaultTime="defaultTime" :calendarCallBack="calendarCallBack"></calender_box>
-        </div-->
-        <div>
-            <calendar_select :calendarSelectCallBack="calendarSelectCallBack"></calendar_select>
-        </div>
-        <div>
-            <pagination_box :total="total" :paginationCallBack="paginationCallBack"></pagination_box>
-        </div>
+        
     </div>
 </template>
 
@@ -66,37 +94,25 @@
 
 
 //import wave_button from "./wave_button/wave_button.vue"
-import select_list from "./select_list/select_list.vue"
+//import select_list from "./select_list/select_list.vue"
 //import calender_box from "./calendar/calendar.vue"
-import calendar_select from "./calendar/calendar_select.vue"
-import pagination_box from "./pagination/pagination.vue"
+//import calendar_select from "./calendar/calendar_select.vue"
+//import pagination_box from "./pagination/pagination.vue"
 
 
 
 
 
-export default {    
+export default {
     data() {
         return {
-            total: 90,
-            selectList: [
-                { name: "北京" },
-                { name: "深圳" }
-            ]
+            total: 90
         }
     },
     components: {
-        select_list,        
-        calendar_select,
-        pagination_box
+
     },
     methods: {
-        selectCallBack(arg) {
-            console.log(arg)
-        },
-        calendarCallBack(arg) {
-            console.log("选择了" + arg)
-        },
         calendarSelectCallBack(arg) {
             console.log("选择了" + arg)
         },

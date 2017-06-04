@@ -44,7 +44,7 @@ export default {
             demo: `
 /*
 *   :props {
-*       @string: defaultTime //2017,05,30
+*       @string: defaultTime //2017-05-30  非必需
 *       @function: calendarCallBack(params: string)
 *   }
 */

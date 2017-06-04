@@ -1,3 +1,58 @@
+<style lang="sass">
+
+</style>
+
+<template>
+    <div class="">
+        <select_list :selectList="selectList" :selectListCallBack="selectListCallBack">
+        </select_list>
+        <p>已选: {{demoText}}</p>
+        <pre>
+            <code class="html">
+                {{demo}}
+            </code>
+        </pre>
+        <pre>
+            <code class="html">
+                {{code}}
+            </code>
+        </pre>
+    </div>
+</template>
+
+<script>
+
+import select_list from "../select_list/select_list.vue"
+
+export default {
+    methods: {
+        selectListCallBack(arg) {
+            this.demoText = JSON.stringify(arg)
+        }
+    },
+    components: {
+        select_list
+    },
+    data() {
+        return {
+            demoText: "",
+            selectList: [
+                { name: "北京" },
+                { name: "上海" },
+                { name: "广州" },
+                { name: "深圳" }
+            ],
+            demo: `
+/*
+*   :props {
+*       @array: selectList
+*       @function: selectListCallBack(params: object)
+*   }
+*/
+
+<select_list :selectList="selectList" :selectListCallBack="selectListCallBack"></select_list>
+            `,
+            code: `
 
 <style lang="sass" scoped>
 
@@ -6,8 +61,9 @@ $c1: #ddd;
 .select_box {
     position: relative;
     width: 175px;
-    display: inline-block;    
+    display: inline-block;
     cursor: pointer;
+    -webkit-tap-highlight-color:transparent;
     
     .select_ipt {
         input {
@@ -72,9 +128,10 @@ $c1: #ddd;
     .select_lists_box {
         display: none;
         position: absolute;
-        top: 22px;
+        top: 24px;
         min-width: 172px;
-        border: 1px solid $c1;      
+        max-height: 200px;
+        border: 1px solid $c1;
         border-radius: 0 0 3px 3px;
         background: #fff;
         overflow: auto;
@@ -82,7 +139,7 @@ $c1: #ddd;
         li {
             padding: 3px 5px;
             border-bottom: 1px dashed #eee;
-            
+            font-size: 12px;
             &:hover {
                 cursor: pointer;
                 background: #eee;
@@ -112,7 +169,7 @@ $c1: #ddd;
 @keyframes show_ani {
     0% {
         opacity: 0;
-        transform: rotateX(45deg);      
+        transform: rotateX(45deg);
     }
     100% {
         opacity: 1;
@@ -124,48 +181,49 @@ $c1: #ddd;
 
 <template>
     <select_box :selectShow="selectShow" :value="value" :selectBoxCallBack="selectBoxCallBack">
-        <calendar_box :defaultTime="defaultTime" :calendarCallBack="callback"></calendar_box>    
+        <ul>
+            <li v-for="item in selectList" @click="getValue(item)">{{item.name}}</li>
+        </ul>
     </select_box>
 </template>
 
 
-<script>
-
+\<script\>
 import select_box from "../select_box/select_box.vue"
-import calendar_box from "../calendar/calendar.vue"
 
 export default {
-    props: ["defaultTime","calendarSelectCallBack"],
+    props: ["selectList", "selectCallBack"],
     data() {
-        let value = this.defaultTime || ""
-        if (value) {
-            value = value.replace(/[\,\/]/g,"-")
-        }
         return {
-            value,
-            selectShow: false
+            selectShow: false,
+            value: ""
         }
     },
     components: {
-        select_box,
-        calendar_box
+        select_box
     },
     methods: {
-        callback(arg) {
-            this.value = arg
+        getValue(arg) {
+            this.value = arg.name
             this.selectShow = false
-            this.calendarSelectCallBack && this.calendarSelectCallBack(arg)
+            this.selectCallBack && this.selectCallBack(arg)
         },
         selectBoxCallBack(arg) {
             this.value = arg.value
             this.selectShow = arg.selectShow
             if (arg.clear) {
-                this.calendarSelectCallBack && this.calendarSelectCallBack()
+                this.selectCallBack && this.selectCallBack()
             }
         }
     }
-
 }
 
+\<\/script\>
+
+
+            `
+        }
+    }
+}
 </script>
 
