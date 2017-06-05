@@ -20,7 +20,9 @@ let routes = [{
     }
 }, {
     path: "/pagination",
-    component: pagination
+    components: {
+        default: pagination
+    }
 }, {
     path: "/selectBox",
     component: selectBox
@@ -45,7 +47,6 @@ let router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-    next()
     setTimeout(() => {
         document.querySelectorAll("pre code").forEach(function(t) {
             var texts = t.textContent.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
@@ -60,7 +61,7 @@ router.beforeEach((to, from, next) => {
             hljs.highlightBlock(t)
         })
     }, 1)
-
+    next()
 })
 
 
@@ -70,5 +71,10 @@ router.beforeEach((to, from, next) => {
 let vm = new Vue({
     el: "#component",
     router,
+    /*
+    components: {
+        app
+    }
+    */
     render: h => h(app)
 })

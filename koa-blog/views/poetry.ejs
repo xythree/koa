@@ -25,6 +25,7 @@
             Vue.component("poerty-list-box", {
                 data() {
                     return {
+                        loadingBoxShow: true,
                         search: {
                             timer: "",
                             val: "",
@@ -93,6 +94,7 @@
                                 <p v-html="details.explain"></p>
                             </div>
                         </transition>
+                        <div class="loading-box" v-show="loadingBoxShow" ></div>
                     </div>
                 `,
                 methods: {
@@ -144,7 +146,7 @@
 
                         axios.get("/json/tangInfo.json").then(result => {
                             this.tangInfo = result.data.rows
-
+                            this.loadingBoxShow = false
                             this.tang.forEach(t1 => {
                                 t1[4] = []
                                 this.tangInfo.forEach(t2 => {
@@ -178,16 +180,6 @@
                 el: "#poetry",
                 data: {
                     category: []
-                },
-                computed: {
-
-                },
-                methods: {
-
-                },
-                mounted() {
-
-
                 }
             })
         </script>

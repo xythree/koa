@@ -3,7 +3,8 @@ const path = require("path")
 
 module.exports = {
     entry: {
-        component: "./static/js/component/index.js"
+        component: "./static/js/component/index.js",
+        music: "./static/js/music/index.js"
     },
     output: {
         path: path.resolve(__dirname, 'static/js/dist'),
@@ -16,7 +17,8 @@ module.exports = {
                 options: {
                     postcss: function() {
                         return [require("autoprefixer")({ browsers: ["last 5 versions"] })]
-                    }
+                    },
+                    plugins: ["transform-vue-jsx"]
                 }
             },
             { test: /\.js$/, use: ["babel-loader"], exclude: /mode_modules/ },

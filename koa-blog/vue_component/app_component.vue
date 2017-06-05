@@ -81,44 +81,29 @@ $color: #f92672;
         </ul>
     
         <div class="irouter-view">
-            <router-view></router-view>
+    
+            <transition name="fade">
+                <router-view></router-view>
+            </transition>
+    
         </div>
     
-        
     </div>
 </template>
 
 <script>
 
-
-
-
-//import wave_button from "./wave_button/wave_button.vue"
-//import select_list from "./select_list/select_list.vue"
-//import calender_box from "./calendar/calendar.vue"
-//import calendar_select from "./calendar/calendar_select.vue"
-//import pagination_box from "./pagination/pagination.vue"
-
-
-
-
-
 export default {
     data() {
         return {
-            total: 90
+
         }
     },
     components: {
 
     },
     methods: {
-        calendarSelectCallBack(arg) {
-            console.log("选择了" + arg)
-        },
-        paginationCallBack(arg) {
-            console.log("第" + arg + "页")
-        }
+
     }
 }    
 </script>

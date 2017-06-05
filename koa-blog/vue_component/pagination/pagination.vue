@@ -29,7 +29,7 @@
 </style>
 
 <template>
-    <div class="paginationBox">
+    <div class="paginationBox" v-show="total > 0">
         <em v-if="ind > 1" @click="prev">《</em>
         <span v-if="ind > count + 2" @click="jump(1)">1</span>
         <em v-if="ind > count + 1">...</em>
@@ -51,11 +51,14 @@ export default {
     props: ["colnum", "index", "total", "paginationCallBack"],
     data() {        
         return {
-            ind: this.index || 1,
+            //ind: this.index || 1,
             count: 2
         }
     },
     computed: {
+        ind() {
+            return this.index || 1
+        },
         _colnum() {
             return this.colnum || 15
         },

@@ -8,8 +8,4 @@ module.exports = (router, render) => {
         ctx.body = await render("component")
     })
 
-    router.get("/component/foo", async ctx => {
-        ctx.body = await "foo"
-    })
-
 }
