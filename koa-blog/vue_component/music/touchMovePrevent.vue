@@ -20,7 +20,7 @@ export default {
         }
     },    
     mounted() {
-        document.addEventListener('touchmove', e => {
+        document.addEventListener('touchmove', e => {            
             if (this.$el.contains(e.target)) {
                 e.preventDefault()
             }

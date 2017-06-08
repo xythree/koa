@@ -35,6 +35,7 @@ app.use(router.routes())
 
 
 
+
 router.get("/", async ctx => {
 
     ctx.body = await render("index")
@@ -64,6 +65,10 @@ router.get("/poetry", async ctx => {
     ctx.body = await render("poetry")
 })
 
+
+router.post("/upload", async ctx => {
+    ctx.body = "ok"
+})
 
 
 app.listen(config.port, () => {

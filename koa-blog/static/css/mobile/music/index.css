@@ -75,6 +75,7 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .searchBox {
@@ -644,9 +645,9 @@ body {
 }
 
 .playControllBox .playControllBoxTop {
-  width: 90%;
+  width: 100%;
   height: 20px;
-  margin: 0 5%;
+  padding: 0 5%;
 }
 
 .playControllBox .audioTimeBox {

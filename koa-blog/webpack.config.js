@@ -21,7 +21,11 @@ module.exports = {
                     plugins: ["transform-vue-jsx"]
                 }
             },
-            { test: /\.js$/, use: ["babel-loader"], exclude: /mode_modules/ },
+            {
+                test: /\.js$/,
+                use: ["babel-loader"],
+                exclude: /mode_modules/
+            },
             {
                 test: /\.scss$/,
                 use: [

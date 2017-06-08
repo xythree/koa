@@ -16,11 +16,11 @@ export default {
     props: ['todo', 'index'],
     methods: {
         getSong(item) {
-            //this.$store.dispatch('getSong', item)
-            //this.$store.dispatch('addPlayList', item)
+            this.$store.dispatch('getSong', item)
+            this.$store.dispatch('addPlayList', item)
         },
         remove(index) {
-            /*
+            
             const _store = this.$store
 
             _store.dispatch("setAlertBoxFn", () => {
@@ -28,7 +28,7 @@ export default {
             })
             _store.dispatch("setAlertBoxStatus", true)
             _store.dispatch("setAlertBoxText", "确定删除吗?")
-            */
+            
         }
     }
 }
