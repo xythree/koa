@@ -12,6 +12,8 @@ import selectList from "../../../vue_component/index/selectList.vue"
 import waveButton from "../../../vue_component/index/waveButton.vue"
 import calendar from "../../../vue_component/index/calendar.vue"
 import calendarSelect from "../../../vue_component/index/calendarSelect.vue"
+import alertBox from "../../../vue_component/index/alert.vue"
+import city from "../../../vue_component/index/city.vue"
 
 let routes = [{
     path: "/",
@@ -38,6 +40,12 @@ let routes = [{
 }, {
     path: "/waveButton",
     component: waveButton
+}, {
+    path: "/alert",
+    component: alertBox
+}, {
+    path: "/city",
+    component: city
 }]
 
 

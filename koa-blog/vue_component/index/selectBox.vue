@@ -55,6 +55,7 @@ export default {
             code: `
 
 
+
 <style lang="sass" scoped>
 
 $c1: #ddd;
@@ -132,9 +133,6 @@ $c1: #ddd;
         top: 24px;
         min-width: 172px;
         max-height: 240px;
-        border: 1px solid $c1;
-        border-radius: 0 0 3px 3px;
-        background: #fff;
         overflow: auto;
         
         li {
@@ -235,6 +233,8 @@ export default {
 }
 
 \<\/script\>
+
+
 
 
             `

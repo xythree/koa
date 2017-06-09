@@ -49,16 +49,13 @@
 <script>
 export default {
     props: ["colnum", "index", "total", "paginationCallBack"],
-    data() {        
+    data() {
         return {
-            //ind: this.index || 1,
+            ind: this.index || 1,
             count: 2
         }
     },
     computed: {
-        ind() {
-            return this.index || 1
-        },
         _colnum() {
             return this.colnum || 15
         },

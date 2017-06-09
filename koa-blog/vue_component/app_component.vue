@@ -78,6 +78,12 @@ $color: #f92672;
             <li>
                 <router-link to="/waveButton">waveButton</router-link>
             </li>
+            <li>
+                <router-link to="/alert">alert</router-link>
+            </li>
+            <li>
+                <router-link to="/city">city</router-link>
+            </li>
         </ul>
     
         <div class="irouter-view">
