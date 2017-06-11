@@ -5,6 +5,8 @@
     .calendar {
         width: 210px;
         text-align: center;
+        background: #fff;
+        border: 1px solid #ddd;
         
         .iprev,
         .inext {

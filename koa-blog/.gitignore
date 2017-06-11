@@ -1,3 +1,4 @@
 node_modules
 static\images\upload-files
 static\js\dist
+static\js\dist\*

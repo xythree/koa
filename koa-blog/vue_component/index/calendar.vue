@@ -3,7 +3,7 @@
     height: 100%;
 
     .calendar {
-        height: 240px;
+        max-height: 240px;
     }
 }
 </style>

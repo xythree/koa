@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             demoText: "",
-            total: 99,
+            total: 150,
             demo: `
 /*
 *   :props {

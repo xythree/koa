@@ -18,7 +18,7 @@ import city from "../../../vue_component/index/city.vue"
 let routes = [{
     path: "/",
     component: {
-        template: "<div>空~囧~</div>"
+        template: "<div>随手写的一些Vue2.0组件例子。</div>"
     }
 }, {
     path: "/pagination",
