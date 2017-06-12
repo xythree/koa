@@ -121,7 +121,7 @@ let store = new Vuex.Store({
         setLoadBoxStatue({ state }, data) {
             state.loadBoxStatue = data
         },
-        search({ state, dispatch }) {
+        search2({ state, dispatch }) {
             let searchVal = state.searchVal.trim()
             if (searchVal == '') return
             dispatch('setLoadBoxStatue', true)

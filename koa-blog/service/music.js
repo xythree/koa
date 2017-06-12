@@ -1,5 +1,14 @@
 module.exports = function(router) {
 
+    const config = {
+        hostname: "http://music.163.com",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Cookie": "appver=1.5.0.75771",
+            "Referer": "http://music.163.com"
+        }
+    }
+
     //搜索
 
     router.post("/music/search", async ctx => {
@@ -9,7 +18,7 @@ module.exports = function(router) {
 
         await ctx.post({
             //path: "/api/search/get/web",
-            path: "/api/search/pc",
+            path: config.hostname + "/api/search/pc",
             s: params.s,
             hlpretag: "",
             hlposttag: "",
@@ -17,6 +26,8 @@ module.exports = function(router) {
             offset: (params.offset || 0) * limit,
             total: true,
             limit: limit
+        }, {
+            headers: config.headers,
         }).then(result => {
             ctx.body = result
         }, () => {
@@ -30,9 +41,11 @@ module.exports = function(router) {
         const params = ctx.request.query
 
         await ctx.get({
-            path: "/api/song/detail/",
+            path: config.hostname + "/api/song/detail/",
             id: params.id,
             ids: `[${params.id}]`
+        }, {
+            headers: config.headers,
         }).then(result => {
             ctx.body = result
         }, () => {
@@ -47,11 +60,13 @@ module.exports = function(router) {
         const params = ctx.request.query
 
         await ctx.get({
-            path: "/api/song/lyric",
+            path: config.hostname + "/api/song/lyric",
             id: params.id,
             lv: -1,
             kv: -1,
             tv: -1
+        }, {
+            headers: config.headers,
         }).then(result => {
             ctx.body = result
         }, () => {

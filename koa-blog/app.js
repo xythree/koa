@@ -5,27 +5,21 @@ const views = require("co-views")
 const bodyparser = require("koa-bodyparser")
 const session = require("koa-session2")
 const app = new koa()
-const config = require("./config")
 const fs = require("fs")
 const path = require("path")
 
-
-const mw_request = require("./middleware/request")({
-    hostname: "music.163.com",
-    headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Cookie": "appver=1.5.0.75771",
-        "Referer": "http://music.163.com"
-    }
-})
+const config = require("./config")
+const mw_request = require("./middleware/request")
 
 const render = views("./views", {
     ext: "ejs"
 })
 
-app.use(session())
+app.use(session({
+    key: "SESSIONID" //default "koa:sess" 
+}))
 
-app.use(mw_request)
+app.use(mw_request())
 
 app.use(bodyparser())
 
@@ -51,13 +45,20 @@ require("./service/music")(router)
 
 require("./service/component")(router, render)
 
+require("./service/tools")(router)
+
 require("./admin/index")(router, render)
+
 
 
 router.get("/m", async ctx => {
     ctx.body = "mobile"
 })
 
+
+router.get("/tools", async ctx => {
+    ctx.body = await render("tools")
+})
 
 
 //诗词

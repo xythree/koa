@@ -48,7 +48,7 @@
 
 <script>
 export default {
-    props: ["colnum", "index", "total", "paginationCallBack"],
+    props: ["colnum", "index", "total", "last", "paginationCallBack"],
     data() {
         return {
             ind: this.index || 1,
@@ -76,6 +76,13 @@ export default {
     },
     created() {
         this.ind = Math.min(this.ind, this.arr.length || 1)
+    },
+    mounted() {
+        if (this.last) {
+            this.jump(this.arr.length)
+        } else {
+            this.jump(this.ind)
+        }
     },
     methods: {
         jump(ind) {

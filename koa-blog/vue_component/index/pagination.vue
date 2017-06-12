@@ -44,11 +44,12 @@ export default {
 *       @number: colnum //每页条数,默认15  非必需
 *       @number: index //初始显示到第几页  非必需
 *       @number: total //总条数
+*       @boolean: last //是否加载完直接跳转到最后页  非必需
 *       @function: calendarSelectCallBack(params: number)
 *   }
 */
 
- <pagination_box :total="total" :colnum="colnum" :index="index" :paginationCallBack="paginationCallBack"></pagination_box>
+ <pagination_box :total="total" :colnum="colnum" :last="true" :index="index" :paginationCallBack="paginationCallBack"></pagination_box>
             `,
             code: `
 
@@ -102,7 +103,7 @@ export default {
 
 \<script\>
 export default {
-    props: ["colnum", "index", "total", "paginationCallBack"],
+    props: ["colnum", "index", "total", "last", "paginationCallBack"],
     data() {        
         return {
             ind: this.index || 1,
@@ -130,6 +131,13 @@ export default {
     },
     created() {
         this.ind = Math.min(this.ind, this.arr.length || 1)
+    },
+    mounted() {
+        if (this.last) {
+            this.jump(this.arr.length)
+        } else {
+            this.jump(this.ind)
+        }
     },
     methods: {
         jump(ind) {

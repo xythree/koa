@@ -4,7 +4,8 @@ const path = require("path")
 module.exports = {
     entry: {
         component: "./static/js/component/index.js",
-        music: "./static/js/music/index.js"
+        music: "./static/js/music/index.js",
+        tools: "./static/js/tools/index.js"
     },
     output: {
         path: path.resolve(__dirname, 'static/js/dist'),

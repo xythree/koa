@@ -1,18 +1,17 @@
-
-
 const querystring = require("querystring")
 const http = require("http")
+const url = require("url")
 
-const request = function (params) {
+const request = function(params) {
 
     let options = {
-        hostname: "",
         port: 80
     }
 
     Object.assign(options, params)
 
-    const promise = function (options, data) {
+    const promise = function(options, data) {
+
         return new Promise((resolve, reject) => {
             let body = []
             try {
@@ -34,42 +33,48 @@ const request = function (params) {
     }
 
     return {
-        post(data = {}) {
+        post(data = {}, data2 = {}) {
             const obj = {
-                method: "POST",
-                path: data.path
+                method: "POST"
             }
+            const _url = url.parse(data.path)
+
+            obj.path = _url.pathname
+            obj.hostname = _url.hostname
             delete data.path
 
-            Object.assign(options, obj)
+            Object.assign(options, obj, data2)
 
             data = querystring.stringify(data)
 
             return promise(options, data)
         },
-        get(data) {
+        get(data, data2 = {}) {
             const obj = {
                 method: "GET"
             }
 
             if (typeof data == "string") {
-                obj.path = data
+                const _url = url.parse(data)
+                obj.path = _url.path
             } else {
-                obj.path = data.path
+                const _url = url.parse(data.path)
+                obj.path = _url.pathname
+                obj.hostname = _url.hostname
                 delete data.path
                 obj.path += "?" + querystring.stringify(data)
             }
 
-            Object.assign(options, obj)
+            Object.assign(options, obj, data2)
 
             return promise(options, null)
         }
     }
 }
 
-module.exports = function (params = {}) {
+module.exports = function(params = {}) {
     const req = request(params)
-    return async (ctx, next) => {
+    return async(ctx, next) => {
         ctx.post = req.post
         ctx.get = req.get
         await next()
