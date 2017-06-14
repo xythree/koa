@@ -1,16 +1,7 @@
 import Vue from "vue"
 
 
-
 import axios from "axios"
-
-
-
-
-
-
-
-
 
 
 let vm = new Vue({

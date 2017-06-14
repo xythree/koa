@@ -29,7 +29,7 @@
 </style>
 
 <template>
-    <div class="paginationBox" v-show="total > 0">
+    <div class="paginationBox" v-show="arr.length > 1">
         <em v-if="ind > 1" @click="prev">《</em>
         <span v-if="ind > count + 2" @click="jump(1)">1</span>
         <em v-if="ind > count + 1">...</em>

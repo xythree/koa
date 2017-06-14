@@ -8,6 +8,8 @@ const app = new koa()
 const fs = require("fs")
 const path = require("path")
 
+
+const sql = require("./service/sql")
 const config = require("./config")
 const mw_request = require("./middleware/request")
 
@@ -30,10 +32,33 @@ app.use(router.routes())
 
 
 
+
+
 router.get("/", async ctx => {
 
     ctx.body = await render("index")
+})
 
+router.get("/article", async ctx => {
+    let params = ctx.request.query
+    let result = {},
+        obj = {}
+
+    if (params.id) {
+        obj = { _id: params.id }
+        result.count = await sql.article.count(obj)
+        result.result = await sql.article.find(obj)
+    } else if (params.txt) {
+        obj = { title: { $regex: params.txt, $options: "i" } }
+        result.result = await sql.article.find(obj, params.skip - 1, +params.limit)
+        result.count = await sql.article.count(obj)
+    } else if (params.skip) {
+        result.count = await sql.article.count(obj)
+        result.result = await sql.article.find(obj, params.skip - 1, +params.limit)
+    } else {
+        result.count = await sql.article.count({})
+    }
+    ctx.body = await result
 })
 
 router.get("/music", async ctx => {

@@ -3,6 +3,7 @@ const path = require("path")
 
 module.exports = {
     entry: {
+        index: "./static/js/index.js",
         component: "./static/js/component/index.js",
         music: "./static/js/music/index.js",
         tools: "./static/js/tools/index.js"
