@@ -1,0 +1,485 @@
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+img,
+a,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+em,
+strong,
+b,
+i,
+fieldset,
+form,
+label,
+legend,
+button,
+input,
+textarea,
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 100%;
+}
+
+address,
+cite,
+dfn,
+em,
+var {
+    font-style: normal;
+}
+
+code,
+kbd,
+pre,
+samp,
+tt {
+    font-family: "Courier New", Courier, monospace;
+}
+
+small {
+    font-size: 12px;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+em,
+i {
+    font-style: normal;
+}
+
+legend {
+    color: #000;
+}
+
+fieldset,
+img {
+    border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+}
+
+input,
+select,
+img {
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
+    src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-home:before {
+    content: "\f015";
+}
+
+.fa-music:before {
+    content: "\f001";
+}
+
+.fa-heart:before {
+    content: "\f004";
+}
+
+.fa-tags:before {
+    content: "\f02c";
+}
+
+.fa-user:before {
+    content: "\f007";
+}
+
+.fa-hashtag:before {
+    content: "\f292";
+}
+
+.fa-search:before {
+    content: "\f002";
+}
+
+.icopy {
+    position: absolute;
+    bottom: 10px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.ibody {
+    height: 100%;
+    overflow-y: auto;
+    $mgleft: 250px;
+    .ileft {
+        $c: #fff;
+        position: fixed;
+        width: $mgleft;
+        height: 100%;
+        background: #333;
+        color: $c;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, .5);
+        .ihead {
+            $h: 200px;
+            height: $h;
+            width: $h;
+            margin: 30px auto;
+        }
+        .inav {
+            margin: 20px 30px;
+            $h: 35px;
+            li {
+                height: $h;
+                line-height: $h;
+                text-align: right;
+                a {
+                    display: block;
+                    font-size: 18px;
+                    span {
+                        $v: 10px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: $v;
+                        height: $v;
+                        background: #eee;
+                        border-radius: 50%;
+                        margin-right: $v/2;
+                        opacity: 0;
+                        transition: all .5s ease-out;
+                    }
+                    i {
+                        margin-right: 5px;
+                    }
+                    &:hover {
+                        span {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+        a {
+            color: $c;
+        }
+    }
+    .iright {
+        $c: #333;
+        min-height: 100%;
+        margin-left: $mgleft;
+        position: relative;
+        max-width: 60%;
+        .iarticle_box {
+            margin-bottom: 150px;
+        }
+        .iarticle {
+            padding: 0 30px 30px;
+            li {
+                position: relative;
+                margin-top: 30px;
+                word-wrap: break-word;
+                word-break: normal;
+                i {
+                    margin-right: 5px;
+                }
+                a {
+                    color: $c;
+                }
+                h5 {
+                    font-size: 20px;
+                }
+                border-bottom: 1px dashed #ededed;
+                $delayed: .5s;
+                &:hover {
+                    .ibox_ani_1 {
+                        &:after {
+                            animation: box_height_left_ani 4s $delayed ease-out infinite;
+                        }
+                        &:before {
+                            animation: box_width_bottom_ani 4s $delayed ease-out infinite;
+                        }
+                    }
+                    .ibox_ani_2 {
+                        &:after {
+                            animation: box_height_right_ani 4s $delayed ease-out infinite;
+                        }
+                        &:before {
+                            animation: box_width_top_ani 4s $delayed ease-out infinite;
+                        }
+                    }
+                }
+                p {
+                    padding: 10px 0;
+                }
+                .iread_more {
+                    display: inline-block;
+                    color: #ddd;
+                    transition: all .5s ease-out;
+                    &:hover {
+                        color: $c;
+                    }
+                }
+            }
+            $b: #999;
+            .ibox_ani_1 {
+                padding: 10px;
+                &:after {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    content: "";
+                    height: 0;
+                    width: 1px;
+                    background: $b;
+                }
+                &:before {
+                    position: absolute;
+                    content: "";
+                    left: 0;
+                    bottom: 0;
+                    width: 0;
+                    height: 1px;
+                    background: $b;
+                }
+            }
+            .ibox_ani_2 {
+                &:after {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    content: "";
+                    height: 0;
+                    width: 1px;
+                    background: $b;
+                }
+                &:before {
+                    position: absolute;
+                    content: "";
+                    right: 0;
+                    top: 0;
+                    width: 0;
+                    height: 1px;
+                    background: $b;
+                }
+            }
+        }
+    }
+}
+
+@keyframes box_height_left_ani {
+    0% {
+        height: 100%;
+        opacity: 1;
+    }
+    24% {
+        height: 100%;
+        opacity: 0;
+    }
+    25% {
+        height: 0;
+        opacity: 0;
+    }
+    26% {
+        height: 0;
+        opacity: 1;
+    }
+    75% {
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        height: 100%;
+        opacity: 1;
+    }
+}
+
+@keyframes box_width_bottom_ani {
+    0% {
+        width: 0;
+        opacity: 1;
+    }
+    25% {
+        width: 100%;
+    }
+    26% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        width: 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes box_height_right_ani {
+    25% {
+        height: 0;
+        opacity: 1;
+    }
+    50% {
+        height: 100%;
+    }
+    51% {
+        opacity: 1;
+    }
+    75%,
+    100% {
+        height: 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes box_width_top_ani {
+    50% {
+        width: 0;
+        opacity: 1;
+    }
+    75% {
+        width: 100%;
+        opacity: 1;
+    }
+    76% {
+        opacity: 1;
+    }
+    100% {
+        width: 100%;
+        opacity: 0;
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0
+}
+
+.irouter_view {
+    .article_box {
+        padding: 30px;
+        max-width: 60%;
+    }
+}
+
+.isearch_box {
+    padding: 30px;
+    overflow: hidden;
+    $h: 30px;
+    $v: 5px;
+    $c: #ddd;
+    .isearch_input {
+        float: right;
+        border: 1px solid $c;
+        border-top-left-radius: $v;
+        border-bottom-left-radius: $v;
+        input {
+            height: $h;
+            line-height: $h;
+            width: 150px;
+            padding: 0 10px;
+            transition: all .5s ease-out;
+            border-top-left-radius: $v;
+            border-bottom-left-radius: $v;
+        }
+        .active_ipt {
+            width: 250px;
+        }
+        i {
+            margin: 0 5px;
+            color: #eee;
+        }
+    }
+    .isearch_btn {
+        float: right;
+        height: $h;
+        line-height: $h;
+        width: $h;
+        text-align: center;
+        border: 1px solid $c;
+        border-left: none;
+        border-top-right-radius: $v;
+        border-bottom-right-radius: $v;
+        color: #999;
+        cursor: pointer;
+    }
+}

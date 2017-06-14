@@ -1,0 +1,41 @@
+<div id="ibody" class="ibody">
+
+    <div class="ileft">
+        <div class="ihead">
+
+        </div>
+        <ul class="inav">
+            <li><a href="/"><span></span><i class="fa fa-home"></i>首页</a></li>
+            <li><a href="/"><span></span><i class="fa fa-music"></i>音乐</a></li>
+            <li><a href="/"><span></span><i class="fa fa-heart"></i>诗·词·曲</a></li>
+            <li><a href="/"><span></span><i class="fa fa-tags"></i>标签</a></li>
+            <li><a href="/"><span></span><i class="fa fa-user"></i>关于</a></li>
+        </ul>
+        <div class="icopy">
+            <p>Copyright © 2017-2020 All Rights Reserved!</p>
+            <p>Powered by koa2 & xythree</p>
+        </div>
+    </div>
+    <div class="iright">
+        <div class="irouter_view">
+            <router-view></router-view>
+        </div>
+        <div class="iarticle_box">
+            <ul class="iarticle">
+                <li v-for="item in article">
+                    <div class="ibox_ani_1">
+                        <div class="ibox_ani_2">
+                            <h5>
+                                <router-link :to="item.id | routerId"><i class="fa fa-hashtag"></i>{{item.title}}</router-link>
+                            </h5>
+                            <p>{{item.content.length > 120 ? item.content.substring(0, 120) + "..." : item.content}}</p>
+                            <router-link class="iread_more" :to="item.id | routerId">阅读全文</router-link>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <app></app>
+            <pagination_box :total="total" :colnum="1" :paginationCallBack="paginationCallBack"></pagination_box>
+        </div>
+    </div>
+</div>
