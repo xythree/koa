@@ -1,42 +1,303 @@
+<style lang="sass" scoped>
+.article_box {
+    padding: 0 30px 30px;
+    min-height: 600px;
+    font-size: 16px;
+    margin-bottom: 150px;
+
+    .fa-arrow-circle-left {
+        cursor: pointer;
+        transition: all .5s ease-out;
+
+        &:hover {
+            transform: translateX(-5px);
+        }
+    }
+}
+.iarticle_content {
+    padding: 0 30px 30px;
+
+    $h: 50px;
+    .iarticle_title {
+        height: $h;
+        line-height: $h;
+        font-size: 24px;
+        color: #333;
+    }
+    .iarticle_time_views {
+        height: $h/2;
+        line-height: $h/2;
+        margin: 10px 0 20px;
+        color: #999;
+        font-size: 12px;
+        border-bottom: 1px dotted #ddd;
+
+        .iarticle_views {
+            float: right;
+        }
+    }
+}
+.icomment_box {
+    padding: 30px;
+    $h: 35px;
+    $c: #ddd;
+    $r: 3px;
+    label {
+        margin-top: 10px;
+        display: block;
+        padding: 5px 0;
+    }
+    p {
+        width: 100%;
+        input {
+            width: 98%;
+            height: $h;
+            line-height: $h;
+            padding: 0 1%;
+            border: 1px solid $c;
+            border-radius: $r;
+        }
+        textarea {
+            width: 98%;
+            height: 150px;
+            padding: 1%;
+            border: 1px solid $c;
+            border-radius: $r;
+        }
+    }
+    .icomment_submit {
+        margin-top: 15px;
+        button {
+            display: block;
+            width: 100%;
+            height: $h;
+            line-height: $h;
+            text-align: center;
+            color: #fff;
+            background: #333;
+            border-radius: $r;
+            transition: all .5s ease-out;
+
+            &:hover {
+                opacity: .8;
+            }
+        }
+    }
+}
+.icomment_list {
+    padding: 30px;
+    $h: 60px;
+    $c: #e1e1e1;
+    $c1: #ddd;
+    li {
+        position: relative;
+        margin: 10px 0;
+        border-bottom: 1px solid $c;
+        overflow: hidden;
+
+        .iportrait {
+            position: absolute;
+            width: $h;
+            height: $h;
+            background: $c;
+            border-radius: 5px;
+
+            i {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                color: #fff;
+            }
+        }
+        .icomment_list_box {
+            margin-left: $h + 10px;
+        }
+        .icomment_list_name {
+            padding: 10px 0;
+            border-bottom: 1px dotted $c1;
+            b {
+                font-weight: bold;
+                margin-right: 5px;
+            }
+            span {
+                color: $c1;
+            }
+        }
+        .icomment_list_content {
+            padding: 10px 0;
+        }
+    }
+
+}
+.isource_box {
+    margin: 15px 0;
+    a {
+        color: #999;
+    }
+}
+</style>
 
 <template>
     <div class="article_box">
-        <h3>{{title}}</h3>
-        <div v-html="content"></div>
+        <div class="iarticle_content">
+            <i class="fa fa-arrow-circle-left fa-2x" @click="close"></i>
+            <h3 class="iarticle_title">{{title}}</h3>
+            <div class="iarticle_time_views">
+                <span class="iarticle_time">{{time | getLastTime}}</span>
+                <span class="iarticle_views">{{views}}次浏览</span>
+            </div>
+            <div class="iarticle_content" v-html="content"></div>
+            <div class="isource_box">
+                原文链接:
+                <a :href="href">{{href}}</a>
+            </div>
+            <div class="iarticle_prev_next_link">
+                <template v-if="nextLink.link">
+                    <router-link :to="nextLink.link">
+                        {{nextLink.title}}<i class="fa fa-angle-double-right"></i></router-link>
+                </template>
+            </div>
+        </div>
+        <ul class="icomment_list">
+            <li v-for="item in commentList">
+                <div class="iportrait">
+                    <i class="fa fa-user-o fa-3x"></i>
+                </div>
+                <div class="icomment_list_box">
+                    <div class="icomment_list_name">
+                        <b>{{item.username}}</b>说
+                        <span>{{item.create_time|getLastTime}}</span>
+                    </div>
+                    <div class="icomment_list_content">{{item.content}}</div>
+                </div>
+            </li>
+        </ul>
+        <paginationBox :total="total" :paginationCallBack="paginationCallBack"></paginationBox>
+        <div class="icomment_box">
+            <form ref="icommentForm">
+                <div class="icomment_name">
+                    <label>名称:</label>
+                    <p>
+                        <input type="text" v-model="comment_username" required/>
+                    </p>
+                </div>
+                <div class="icomment_email">
+                    <label>电子邮箱:</label>
+                    <p>
+                        <input type="email" v-model="comment_email" required />
+                    </p>
+                </div>
+                <div class="icomment_content">
+                    <label>评论内容:</label>
+                    <p>
+                        <textarea v-model="comment_content" required></textarea>
+                    </p>
+                </div>
+                <div class="icomment_submit">
+                    <button type="submit">提交</button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
 
 
 <script>
 import axios from "axios"
+import xythree from "./../../static/js/xythree"
+import paginationBox from "./../../vue_component/pagination/pagination.vue"
+
 export default {
     data() {
         return {
+            id: this.$route.query.id,
             title: "",
-            content: ""
+            content: "",
+            commentList: [],
+            comment_username: "",
+            comment_email: "",
+            comment_content: "",
+            total: 0,
+            time: 0,
+            views: 0,
+            href: "",
+            prevLink: {},
+            nextLink: {}
         }
+    },
+    filters: {
+        getLastTime(value) {
+            return xythree.getLastTime(+new Date(value))
+        }
+    },
+    components: {
+        paginationBox
     },
     watch: {
         "$route": "fetchData"
     },
     methods: {
+        close() {
+            this.$router.push("/")
+        },
+        paginationCallBack(ind) {
+            this.getComment({ skip: ind })
+        },
         fetchData() {
-            let id = this.$route.query.id
-
             axios.get("/article", {
                 params: {
-                    id
+                    id: this.$route.query.id
                 }
             }).then(result => {
                 let data = result.data.result[0]
+                let next = result.data.next
 
+                this.time = +new Date(data.create_time)
                 this.title = data.title
                 this.content = data.content
+                this.views = data.views + 1
+                this.href = location.href
+
+                if (next.length) { 
+                    this.nextLink = {
+                        link: "/article?id=" + next[0]._id,
+                        title: next[0].title
+                    }
+                }
+            })
+        },
+        getComment({ skip = "", limit = 15 }) {
+
+            axios.get("/comment", {
+                params: {
+                    aid: this.id,
+                    skip,
+                    limit
+                }
+            }).then(result => {
+                this.total = result.data.count
+                this.commentList = result.data.result
             })
         }
     },
     mounted() {
         this.fetchData()
+
+        this.$refs.icommentForm.addEventListener("submit", e => {
+            e.preventDefault()
+            axios.post("/comment", {
+                id: this.id,
+                username: this.comment_username,
+                email: this.comment_email,
+                content: this.comment_content
+            }).then(result => {
+                if (result.data.result) {
+                    this.getComment()
+                    this.comment_username = this.comment_email = this.comment_content = ""
+                }
+            })
+        })
     }
 }
 </script>

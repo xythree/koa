@@ -32,6 +32,7 @@
                         <i class="fa fa-user"></i>关于</a>
                 </li>
             </ul>
+            <div class="long_white"></div>
             <div class="icopy">
                 <p>Copyright © 2017-2020 All Rights Reserved!</p>
                 <p>Powered by koa2 & xythree</p>
@@ -51,6 +52,7 @@
             </div>
         </div>
         <repload></repload>
+        <backTop></backTop>
     </div>
 </template>
 
@@ -58,11 +60,12 @@
 
 import axios from "axios"
 import repload from "./../../vue_component/repload/repload.vue"
-
+import backTop from "./backTop.vue"
 
 export default {
     components: {
-        repload
+        repload,
+        backTop
     },
     data() {
         return {

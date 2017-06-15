@@ -30,8 +30,7 @@ module.exports = {
         },
         create_time: {
             type: Date,
-            required: false,
-            default: Date.now()
+            required: true
         },
         level: {
             type: Number,
@@ -58,11 +57,49 @@ module.exports = {
         },
         create_time: {
             type: Date,
-            required: false,
-            default: Date.now()
+            required: true
         },
         last_modify_time: {
             type: Date,
+            required: true
+        },
+        views: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        comment_num: {
+            type: Number,
+            required: false
+        },
+        tags: {
+            type: String,
+            required: false
+        }
+    },
+    Comment: {
+        aid: {
+            type: String,
+            requried: true
+        },
+        cid: {
+            type: String,
+            required: false
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        create_time: {
+            type: Date,
+            required: true
+        },
+        content: {
+            type: String,
             required: true
         }
     }

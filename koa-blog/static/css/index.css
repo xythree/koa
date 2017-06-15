@@ -150,6 +150,28 @@ table {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.fa-lg {
+  font-size: 1.33333333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa-3x {
+  font-size: 3em;
+}
+
+.fa-4x {
+  font-size: 4em;
+}
+
+.fa-5x {
+  font-size: 5em;
+}
+
 .fa-home:before {
   content: "\f015";
 }
@@ -178,11 +200,40 @@ table {
   content: "\f002";
 }
 
+.fa-user-o:before {
+  content: "\f2c0";
+}
+
+.fa-angle-double-left:before {
+  content: "\f100";
+}
+
+.fa-angle-double-right:before {
+  content: "\f101";
+}
+
+.fa-times-rectangle:before,
+.fa-window-close:before {
+  content: "\f2d3";
+}
+
+.fa-arrow-circle-left:before {
+  content: "\f0a8";
+}
+
 .icopy {
   position: absolute;
   bottom: 10px;
   font-size: 12px;
   text-align: center;
+}
+
+.long_white {
+  margin: 30px auto 0;
+  width: 219px;
+  height: 300px;
+  background: url(/images/long_white.png) no-repeat center;
+  opacity: .05;
 }
 
 .ibody {
@@ -442,11 +493,6 @@ table {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
-}
-
-.irouter_view .article_box {
-  padding: 30px;
-  max-width: 60%;
 }
 
 .isearch_box {
