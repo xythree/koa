@@ -17,7 +17,7 @@
                         <i class="fa fa-music"></i>音乐</a>
                 </li>
                 <li>
-                    <a href="/poetry">
+                    <a href="/poetry" target="_blank">
                         <span></span>
                         <i class="fa fa-heart"></i>诗·词·曲</a>
                 </li>
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="iright">
-            <div class="isearch_box">                
+            <div class="isearch_box">
                 <div class="isearch_btn" @click="search">
                     <i class="fa fa-search"></i>
                 </div>

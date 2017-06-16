@@ -1,5 +1,5 @@
 import Vue from "vue"
-import app from "../../../vue_component/music/app.vue"
+import app from "./../../../template/vue/music.vue"
 
 
 let vm = new Vue({

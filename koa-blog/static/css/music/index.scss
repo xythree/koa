@@ -1,0 +1,447 @@
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+img,
+a,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+em,
+strong,
+b,
+i,
+fieldset,
+form,
+label,
+legend,
+button,
+input,
+textarea,
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 100%;
+}
+
+address,
+cite,
+dfn,
+em,
+var {
+    font-style: normal;
+}
+
+code,
+kbd,
+pre,
+samp,
+tt {
+    font-family: "Courier New", Courier, monospace;
+}
+
+small {
+    font-size: 12px;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+em,
+i {
+    font-style: normal;
+}
+
+legend {
+    color: #000;
+}
+
+fieldset,
+img {
+    border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+}
+
+input,
+select,
+img {
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix:after {
+    display: block;
+    visibility: hidden;
+    content: "";
+    clear: both;
+    font-size: 0;
+}
+
+body {
+    background: url(/images/music/long_bg.png) no-repeat center;
+    background-size: 110%;
+    overflow: hidden;
+}
+
+$w: 250px;
+.icontent {
+    .ihead {
+        height: 70px;
+        background: #333;
+        border-bottom: 1px solid #000;
+    }
+    .ibody {
+        display: flex;
+        .ileft {
+            width: $w;
+        }
+        .icenter {
+            flex: 1;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+        .iright {
+            width: $w + 50px;
+        }
+    }
+    .ifoot {
+        position: fixed;
+        width: 100%;
+        display: flex;
+        height: 110px;
+        background: #333;
+        border-top: 1px solid #000;
+    }
+}
+
+.ilogo {
+    width: $w;
+    height: 100%;
+    float: left;
+    a {
+        display: block;
+        margin: 0 auto;
+        width: 43px;
+        height: 70px;
+        background: url(/images/music/long_white.png) no-repeat center;
+        background-size: 95%;
+        transition: all .5s ease-out;
+    }
+    .left {
+        transform: translateX(200%);
+    }
+    .right,
+    .bottom {
+        transform: translateX(-200%);
+    }
+}
+
+.isearch_box {
+    float: left;
+    .isearch_input {
+        float: left;
+        margin-top: 20px;
+        margin-left: 30px;
+        padding: 2px 5px;
+        background: #999;
+        border-radius: 15px;
+        span {
+            float: left;
+            margin-top: 2px;
+            width: 20px;
+            height: 20px;
+            background: url(/images/music/icon.png) no-repeat 0 -338px;
+        }
+        input {
+            float: left;
+            width: 180px;
+            background: #999;
+            color: #fff;
+            border-radius: 5px;
+            transition: all .5s ease-out;
+            &:focus {
+                width: 300px;
+            }
+        }
+    }
+}
+
+.icontroll {
+    width: $w;
+    padding-top: 30px;
+    text-align: center;
+    .icontroll_btn {
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+    .iplay,
+    .iprev,
+    .inext {
+        margin: 10px;
+        width: 30px;
+        height: 30px;
+        background: url(/images/music/icon.png) no-repeat 0 0;
+    }
+    .istop {
+        background-position: 0 -30px;
+    }
+    .iprev {
+        background-position: 0 -90px;
+    }
+    .inext {
+        background-position: 0 -60px;
+    }
+    .icondition {
+        margin-left: 20px;
+        width: 20px;
+        height: 18px;
+        background: url(/images/music/icon.png) no-repeat 0 -182px;
+    }
+}
+
+.iprocess {
+    flex: 1;
+    padding: 10px;
+    color: #fff;
+    .isong_title {
+        padding: 0 10px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+    }
+    .isong_process_box {
+        display: flex;
+        margin-top: 5px;
+        .isong_start_time,
+        .isong_end_time {
+            width: 50px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .isong_process {
+            flex: 1;
+            margin-top: 8px;
+            height: 2px;
+            background: #666;
+            em {
+                position: relative;
+                display: block;
+                height: 2px;
+                width: 30%;
+                background: #fff;
+            }
+            b {
+                position: absolute;
+                top: 50%;
+                right: -5px;
+                width: 10px;
+                height: 10px;
+                transform: translateY(-50%);
+                border-radius: 50%;
+                background: #fff;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.ivolume {
+    position: relative;
+    width: $w;
+    .ivolume_controll {
+        display: flex;
+        width: 50%;
+        margin: 45px auto;
+        .ivolume_btn {
+            margin: 0 5px;
+            width: 20px;
+            height: 16px;
+            background: url(/images/music/icon.png) no-repeat 0 -296px;
+            cursor: pointer;
+        }
+        .muted {
+            background-position: 0 -314px;
+        }
+        .ivolume_process {
+            flex: 1;
+            margin-top: 8px;
+            height: 2px;
+            background: #666;
+            em {
+                position: relative;
+                display: block;
+                height: 2px;
+                width: 50%;
+                background: #fff;
+            }
+            b {
+                position: absolute;
+                top: 50%;
+                right: -5px;
+                width: 10px;
+                height: 10px;
+                transform: translateY(-50%);
+                border-radius: 50%;
+                background: #fff;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.isong_list_box {
+    padding: 50px 0 50px;
+    .isong_list_content {
+        padding-left: 50px;
+        padding-right: 30px;
+        margin-bottom: 15px;
+        overflow-y: auto;
+    }
+    .isong_title {
+        li {
+            display: inline-block;
+            width: 28%;
+            text-align: center;
+            background: #eee;
+            border: 1px solid #ddd;
+            &:nth-child(2) {
+                margin: 0 30px;
+            }
+        }
+    }
+    .isong_list {
+        margin-bottom: 30px;
+        li {
+            height: 35px;
+            line-height: 35px;
+            border-bottom: 1px solid #eee;
+            transition: all .5s ease-out;
+            &:hover {
+                color: #f00;
+                border-bottom-color: #999;
+                a {
+                    color: #f00;
+                }
+            }
+            p {
+                display: inline-block;
+                vertical-align: middle;
+                width: 28%;
+                white-space: nowrap;
+                word-break: keep-all;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                &:nth-child(2) {
+                    margin: 0 30px;
+                }
+                a {
+                    color: #333;
+                    transition: all .5s ease-out;
+                    &:hover {
+                        color: #999;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ilyric_box {
+    margin: 30px auto;
+    width: 250px;
+    img {
+        width: 250px;
+        height: 250px;
+    }
+    .ilyric {
+        margin-top: 10px;
+        text-align: center;
+        overflow-y: auto;
+        .lyricCurrent {
+            color: #f00;
+        }
+    }
+}
+
+.iplayListIcon {
+    position: absolute;
+    top: 43px;
+    left: 12px;
+    width: 25px;
+    cursor: pointer;
+    span {
+        display: block;
+        height: 1px;
+        background: #fff;
+        margin: 5px 0;
+    }
+}

@@ -18,7 +18,7 @@ module.exports = (router, render) => {
     router.post("/music/search", async ctx => {
 
         const params = ctx.request.body
-        const limit = params.limit || 10
+        const limit = params.limit || 15
 
         await ctx.post({
             //path: "/api/search/get/web",
