@@ -1,4 +1,4 @@
-module.exports = function(router) {
+module.exports = (router, render) => {
 
     const config = {
         hostname: "http://music.163.com",
@@ -9,8 +9,12 @@ module.exports = function(router) {
         }
     }
 
-    //搜索
+    router.get("/music", async ctx => {
+        //ctx.body = await render("/mobile/music/index")
+        ctx.body = await render("/music/index")
+    })
 
+    //搜索
     router.post("/music/search", async ctx => {
 
         const params = ctx.request.body

@@ -22,8 +22,7 @@ exports.getLastTime = (creatTime) => {
         }
     } else {
         if (month > 12) {
-            let date = new Date(creatTime)
-            str = date.getFullYear() + "年" + date.getMonth() + 1 + "月" + date.getDate() + "日"
+            str = oldTime.getFullYear() + "年" + oldTime.getMonth() + 1 + "月" + oldTime.getDate() + "日"
         } else {
             str = month + "月前"
         }

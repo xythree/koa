@@ -14,13 +14,13 @@
         }
     }
 }
-.iarticle_content {
+.iarticle_content_box {
     padding: 0 30px 30px;
-
+    word-wrap: break-word; 
+    word-break: normal; 
     $h: 50px;
     .iarticle_title {
-        height: $h;
-        line-height: $h;
+        padding: 5px 0;
         font-size: 24px;
         color: #333;
     }
@@ -38,7 +38,7 @@
     }
 }
 .icomment_box {
-    padding: 30px;
+    padding: 30px 0;
     $h: 35px;
     $c: #ddd;
     $r: 3px;
@@ -131,31 +131,96 @@
 
 }
 .isource_box {
-    margin: 15px 0;
+    margin: 30px 0 15px;
+    font-size: 12px;
     a {
         color: #999;
+    }
+}
+.iarticle_prev_next_link {
+    margin: 15px 0;
+    padding: 15px 0;
+    overflow: hidden;
+    border-top: 1px dotted #ddd;
+    border-bottom: 1px dotted #ddd;
+
+    .iarticle_prev_link {
+        float: left;
+    }
+    .iarticle_next_link {
+        float: right;
+        i {
+            margin-left: 5px;
+        }
+    }
+    .iarticle_prev_link,
+    .iarticle_next_link {
+        max-width: 45%;
+    }
+    a {
+        display: inline-block;
+        vertical-align: top;
+        color: #333;
+        max-width: 88%;
+        white-space: nowrap; 
+        word-break: keep-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all .5s ease-out;
+
+        &:hover {
+            color: #999;
+        }
+    }
+    
+}
+.iarticle {
+    position: relative;
+
+    .loading_box {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff url(/images/load.gif) no-repeat center;
     }
 }
 </style>
 
 <template>
     <div class="article_box">
-        <div class="iarticle_content">
+        <div class="iarticle_content_box">
             <i class="fa fa-arrow-circle-left fa-2x" @click="close"></i>
-            <h3 class="iarticle_title">{{title}}</h3>
-            <div class="iarticle_time_views">
-                <span class="iarticle_time">{{time | getLastTime}}</span>
-                <span class="iarticle_views">{{views}}次浏览</span>
-            </div>
-            <div class="iarticle_content" v-html="content"></div>
-            <div class="isource_box">
-                原文链接:
-                <a :href="href">{{href}}</a>
+            <div class="iarticle">
+                <h3 class="iarticle_title">{{title}}</h3>
+                <div class="iarticle_time_views">
+                    <span class="iarticle_time">{{time | getLastTime}}</span>
+                    <span class="iarticle_views">{{views}}次浏览</span>
+                </div>
+                <div class="iarticle_content" v-html="content"></div>
+                <div class="isource_box">
+                    原文链接:
+                    <a :href="href">{{href}}</a>
+                </div>    
+                <div class="loading_box" v-show="loading_box"></div>    
             </div>
             <div class="iarticle_prev_next_link">
+                <template v-if="prevLink.link">
+                    <div class="iarticle_prev_link">
+                        <i class="fa fa-angle-double-left"></i>
+                        <router-link :to="prevLink.link">
+                            {{prevLink.title}}
+                        </router-link>
+                    </div>
+                </template>
                 <template v-if="nextLink.link">
-                    <router-link :to="nextLink.link">
-                        {{nextLink.title}}<i class="fa fa-angle-double-right"></i></router-link>
+                    <div class="iarticle_next_link">
+                        <router-link :to="nextLink.link">
+                            {{nextLink.title}}
+                        </router-link>
+                        <i class="fa fa-angle-double-right"></i>
+                    </div>
                 </template>
             </div>
         </div>
@@ -221,9 +286,11 @@ export default {
             total: 0,
             time: 0,
             views: 0,
+            index: 1,
             href: "",
             prevLink: {},
-            nextLink: {}
+            nextLink: {},
+            loading_box: false
         }
     },
     filters: {
@@ -242,33 +309,48 @@ export default {
             this.$router.push("/")
         },
         paginationCallBack(ind) {
+            this.index = ind
             this.getComment({ skip: ind })
         },
         fetchData() {
+            this.loading_box = true
+
             axios.get("/article", {
                 params: {
                     id: this.$route.query.id
                 }
             }).then(result => {
                 let data = result.data.result[0]
+                let prev = result.data.prev
                 let next = result.data.next
 
+                this.loading_box = false
                 this.time = +new Date(data.create_time)
                 this.title = data.title
                 this.content = data.content
                 this.views = data.views + 1
                 this.href = location.href
 
-                if (next.length) { 
+                if (next.length) {
                     this.nextLink = {
                         link: "/article?id=" + next[0]._id,
                         title: next[0].title
                     }
+                } else {
+                    this.nextLink = {}
                 }
+                if (prev.length) {
+                    this.prevLink = {
+                        link: "/article?id=" + prev[0]._id,
+                        title: prev[0].title
+                    }
+                } else {
+                    this.prevLink = {}
+                }
+                document.body.scrollTop = 0
             })
         },
-        getComment({ skip = "", limit = 15 }) {
-
+        getComment({ skip, limit = 15 }) {
             axios.get("/comment", {
                 params: {
                     aid: this.id,
@@ -293,7 +375,7 @@ export default {
                 content: this.comment_content
             }).then(result => {
                 if (result.data.result) {
-                    this.getComment()
+                    this.getComment({ skip: this.index })
                     this.comment_username = this.comment_email = this.comment_content = ""
                 }
             })
