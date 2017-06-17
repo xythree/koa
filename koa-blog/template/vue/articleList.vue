@@ -2,7 +2,7 @@
     <div class="iarticle_box">
         <ul class="iarticle">
             <template v-if="articleList.length == 0">
-                <li>查找无结果~
+                <li>什么也没有~
                     <br />
                     <br />
                     <br />

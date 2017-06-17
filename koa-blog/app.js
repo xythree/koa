@@ -26,8 +26,16 @@ app.use(serve("./static"))
 
 app.use(router.routes())
 
+app.use(async(ctx, next) => {
+    if (ctx.response.status == 404) {
+        ctx.redirect("/404")
+    }
+    next()
+})
 
-
+router.get("/404", async ctx => {
+    ctx.body = await render("404")
+})
 
 require("./service/index")(router, render)
 
@@ -38,7 +46,6 @@ require("./service/component")(router, render)
 require("./service/tools")(router, render)
 
 require("./admin/index")(router, render)
-
 
 
 router.get("/m", async ctx => {

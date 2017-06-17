@@ -42,7 +42,7 @@ export default {
     data() {
         return {
             demoText: "",
-            defaultValue: "广东/广州/白云区",
+            defaultValue: "广东/深圳/宝安区",
             cityList:  [
                 {name: "广东", child: [
                     {name: "广州", child: [

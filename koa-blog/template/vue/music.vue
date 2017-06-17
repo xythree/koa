@@ -7,7 +7,7 @@
             </div>
             <div class="isearch_box">
                 <div class="isearch_input">
-                    <span></span>
+                    <span @click="getSongList"></span>
                     <input type="text" @keyup.enter="getSongList" v-model="searchVal" />
                 </div>
             </div>
@@ -163,12 +163,13 @@ export default {
             refs.ibody.style.height = Math.max(h, 600) + "px"
         },
         getSongList() {
+            if (this.searchVal == "") return
             axios.post("/music/search", {
                 s: this.searchVal,
                 offset: this.offset
             }).then(result => {
                 this.total = result.data.result.songCount
-                this.songList = result.data.result.songs
+                this.songList = result.data.result.songs || []
             })
         },
         getLyric() {

@@ -58,7 +58,10 @@ $color: #f92672;
     <div class="icontent">
         <ul class="irouter-list">
             <li>
-                <router-link to="/">home</router-link>
+                <a href="/">home</a>
+            </li>
+            <li>
+                <router-link to="/">index</router-link>
             </li>
             <li>
                 <router-link to="/pagination">pagination</router-link>

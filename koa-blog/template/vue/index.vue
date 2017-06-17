@@ -22,6 +22,11 @@
                         <i class="fa fa-heart"></i>诗·词·曲</a>
                 </li>
                 <li>
+                    <a href="/component/">
+                        <span></span>
+                        <i class="fa fa-heart"></i>vue2.0组件</a>
+                </li>
+                <li>
                     <a href="javascript:;">
                         <span></span>
                         <i class="fa fa-tags"></i>标签</a>

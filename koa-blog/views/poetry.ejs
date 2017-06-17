@@ -104,7 +104,7 @@
                     },
                     searchFn(e) {
                         let disabledArr = [37, 38, 39, 40]
-                        if (disabledArr.indexOf(e.keyCode) != -1) return
+                        if (e && disabledArr.indexOf(e.keyCode) != -1) return
                         this.search.status = true
                         if (!this.search.val) {
                             this.search.status = false
