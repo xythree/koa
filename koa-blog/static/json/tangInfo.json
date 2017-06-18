@@ -4,8 +4,7 @@
     "name": "T_SHI",
     "withoutRowId": true,
     "ddl": "CREATE TABLE 'T_SHI' ('D_SHI' TEXT, 'D_INTROSHI' TEXT, 'D_AUTHOR' TEXT, 'D_KIND' TEXT, 'D_ID' INTEGER, 'D_TITLE' TEXT);",
-    "columns": [
-        {
+    "columns": [{
             "name": "D_SHI",
             "type": "TEXT"
         },
@@ -1717,7 +1716,7 @@
             "李商隐",
             "七言律诗",
             237,
-            "无题211无题·其二"
+            "无题·其二"
         ],
         [
             "澹然空水对斜晖。曲岛苍茫接翠微。\r\n波上马嘶看棹去，柳边人歇待船归。\r\n数丛沙草群鸥散，万顷江田一鹭飞。\r\n谁解乘舟寻范蠡，五湖烟水独忘机。\r\n",

@@ -3,7 +3,7 @@
     
         <div class="ileft">
             <div class="ihead">
-    
+                <img src="/images/qq.jpg" />
             </div>
             <ul class="inav">
                 <li>
@@ -24,7 +24,7 @@
                 <li>
                     <a href="/component/">
                         <span></span>
-                        <i class="fa fa-heart"></i>vue2.0组件</a>
+                        <i class="fa fa-navicon"></i>vue2.0组件</a>
                 </li>
                 <li>
                     <a href="javascript:;">
@@ -98,7 +98,7 @@ export default {
         },
     },
     mounted() {
-        axios.get("http://gank.io/api/data/%E7%A6%8F%E5%88%A9/10/1")
+        //axios.get("http://gank.io/api/data/%E7%A6%8F%E5%88%A9/10/1")
     }
 }
 </script>

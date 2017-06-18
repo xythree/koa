@@ -36,6 +36,9 @@
             float: right;
         }
     }
+    .iarticle_content {
+        min-height: 350px;
+    }
 }
 .icomment_box {
     padding: 30px 0;
@@ -239,7 +242,7 @@
             </li>
         </ul>
         <paginationBox :total="total" :paginationCallBack="paginationCallBack"></paginationBox>
-        <div class="icomment_box">
+        <div class="icomment_box" v-show="false">
             <form ref="icommentForm">
                 <div class="icomment_name">
                     <label>名称:</label>

@@ -34,15 +34,16 @@ const request = function(params) {
 
     return {
         post(data = {}, data2 = {}) {
+            console.log(data)
             const obj = {
                 method: "POST"
             }
-            const _url = url.parse(data.path)
-
-            obj.path = _url.pathname
-            obj.hostname = _url.hostname
-            delete data.path
-
+            if (data.path) {
+                const _url = url.parse(data.path)
+                obj.path = _url.pathname
+                obj.hostname = _url.hostname
+                delete data.path
+            }
             Object.assign(options, obj, data2)
 
             data = querystring.stringify(data)
@@ -53,20 +54,20 @@ const request = function(params) {
             const obj = {
                 method: "GET"
             }
+            let _url = ""
 
             if (typeof data == "string") {
-                const _url = url.parse(data)
-                obj.path = _url.path
-            } else {
-                const _url = url.parse(data.path)
+                _url = url.parse(data)
                 obj.path = _url.pathname
-                obj.hostname = _url.hostname
+            } else {
+                _url = url.parse(data.path)
+                obj.path = _url.pathname
                 delete data.path
                 obj.path += "?" + querystring.stringify(data)
             }
+            obj.hostname = _url.hostname
 
             Object.assign(options, obj, data2)
-
             return promise(options, null)
         }
     }

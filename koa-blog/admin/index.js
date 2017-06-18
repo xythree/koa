@@ -42,11 +42,15 @@ module.exports = (router, render) => {
     router.get("/admin/login", async ctx => {
         let is_login = await isLogin(ctx)
 
-        if (is_login) {
-            ctx.redirect("/admin/index")
-        }
+        if (ctx.request.query.haha == "911") {
+            if (is_login) {
+                ctx.redirect("/admin/index")
+            }
 
-        ctx.body = await render("/admin/login")
+            ctx.body = await render("/admin/login")
+        } else {
+            ctx.redirect("/404")
+        }
     })
 
 
@@ -81,11 +85,15 @@ module.exports = (router, render) => {
     router.get("/admin/register", async ctx => {
         let is_login = await isLogin(ctx)
 
-        if (is_login) {
-            ctx.redirect("/admin/index")
-        }
+        if (ctx.request.query.haha == "911") {
+            if (is_login) {
+                ctx.redirect("/admin/index")
+            }
 
-        ctx.body = await render("/admin/register")
+            ctx.body = await render("/admin/register")
+        } else {
+            ctx.redirect("/404")
+        }
     })
 
 
@@ -94,14 +102,17 @@ module.exports = (router, render) => {
         let result = ""
 
         if (params.username && params.password) {
+
             result = await sql.Users.find({ username: params.username })
 
             if (result.length) {
                 result = "用户名已经存在"
             } else {
+
                 await sql.Users.create({
                     username: params.username,
-                    password: md5(params.password)
+                    password: md5(params.password),
+                    create_time: Date.now()
                 })
 
                 ctx.cookies.set("username", params.username, {

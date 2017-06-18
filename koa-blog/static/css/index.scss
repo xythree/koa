@@ -221,6 +221,12 @@ table {
     content: "\f0a8";
 }
 
+.fa-navicon:before,
+.fa-reorder:before,
+.fa-bars:before {
+    content: "\f0c9";
+}
+
 .icopy {
     position: absolute;
     bottom: 10px;
@@ -249,10 +255,18 @@ table {
         color: $c;
         box-shadow: 10px 0 30px rgba(0, 0, 0, .5);
         .ihead {
-            $h: 200px;
+            $h: 150px;
             height: $h;
             width: $h;
             margin: 30px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            img {
+                display: block;
+                width: 100%;
+                opacity: .85;
+                border-radius: 50%;
+            }
         }
         .inav {
             margin: 20px 30px;

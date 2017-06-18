@@ -31,7 +31,7 @@
 <template>
     <div class="paginationBox" v-show="arr.length > 1">
         <em v-if="ind > 1" @click="prev">《</em>
-        <span v-if="ind > count + 2" @click="jump(1)">1</span>
+        <span v-if="ind >= count + 2" @click="jump(1)">1</span>
         <em v-if="ind > count + 1">...</em>
         <template v-for="item in prevPageArr">
             <span @click="jump(item)">{{item}}</span>
@@ -43,7 +43,7 @@
         <em v-if="ind + count < arr.length">...</em>
         <span v-if="arr.length > 1 && ind + count < arr.length" @click="jump(arr.length)">{{arr.length}}</span>
         <em v-if="ind != arr.length && total > _colnum" @click="next">》</em>
-    </div>
+    </div>  
 </template>
 
 <script>
@@ -64,6 +64,7 @@ export default {
             for (var i = 0, len = Math.ceil(this.total / this._colnum); i < len; i++) {
                 temp.push(i + 1)
             }
+            this.ind = this.index || 1
             return temp
         },
         prevPageArr() {

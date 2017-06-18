@@ -221,6 +221,12 @@ table {
   content: "\f0a8";
 }
 
+.fa-navicon:before,
+.fa-reorder:before,
+.fa-bars:before {
+  content: "\f0c9";
+}
+
 .icopy {
   position: absolute;
   bottom: 10px;
@@ -251,9 +257,18 @@ table {
 }
 
 .ibody .ileft .ihead {
-  height: 200px;
-  width: 200px;
+  height: 150px;
+  width: 150px;
   margin: 30px auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ibody .ileft .ihead img {
+  display: block;
+  width: 100%;
+  opacity: .85;
+  border-radius: 50%;
 }
 
 .ibody .ileft .inav {
