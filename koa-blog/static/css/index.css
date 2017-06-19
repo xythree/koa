@@ -249,11 +249,15 @@ table {
 
 .ibody .ileft {
   position: fixed;
+  left: 0;
+  top: 0;
   width: 250px;
   height: 100%;
   background: #333;
   color: #fff;
   box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  -webkit-transition: all .5s;
+  transition: all .5s;
 }
 
 .ibody .ileft .ihead {
@@ -316,6 +320,9 @@ table {
   margin-left: 250px;
   position: relative;
   max-width: 60%;
+  min-height: 300px;
+  -webkit-transition: all .5s;
+  transition: all .5s;
 }
 
 .ibody .iright .iarticle_box {
@@ -622,7 +629,7 @@ table {
 }
 
 .isearch_box .isearch_input .active_ipt {
-  width: 250px;
+  width: 200px;
 }
 
 .isearch_box .isearch_input i {
@@ -642,4 +649,101 @@ table {
   border-bottom-right-radius: 5px;
   color: #999;
   cursor: pointer;
+}
+
+.imenu {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 25px;
+  cursor: pointer;
+  display: none;
+}
+
+.imenu span {
+  display: block;
+  height: 1px;
+  background: #000;
+  margin: 5px 0;
+  -webkit-transition: all .5s;
+  transition: all .5s;
+}
+
+@media screen and (max-width: 1000px) {
+  .imenu {
+    display: block;
+  }
+  .ibody .ileft {
+    left: -250px;
+    box-shadow: none;
+  }
+  .ibody .iright {
+    margin-left: 0;
+    max-width: 100%;
+  }
+  .ibody .imenuBg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    height: 3000px;
+    -webkit-transition: all .5s;
+    transition: all .5s;
+    z-index: 99;
+  }
+  .showMenu .ileft {
+    left: 0;
+  }
+  .showMenu .iright {
+    margin-left: 250px;
+  }
+  .showMenu .irouter_view,
+  .showMenu .isearch_box {
+    display: none;
+    -webkit-animation: opacity_zero .5s both;
+    animation: opacity_zero .5s both;
+  }
+  .showMenu .imenuBg {
+    display: block;
+    left: 250px;
+    -webkit-animation: imenuAni .5s .25s both;
+    animation: imenuAni .5s .25s both;
+  }
+}
+
+@-webkit-keyframes opacity_zero {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes opacity_zero {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes imenuAni {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes imenuAni {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

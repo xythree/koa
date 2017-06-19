@@ -17,9 +17,10 @@
                 <ul class="ileft_list">
                     <li class="irecord" :class="{'action': playListShow}" @click="showRecord">
                         <span></span>播放记录</li>
-                </ul>                
+                </ul>
                 <div class="ps">
-                    数据来源:<br />
+                    数据来源:
+                    <br />
                     <a target="_blank" href="https://api.imjad.cn/cloudmusic/index.html">https://api.imjad.cn/cloudmusic/index.html</a>
                 </div>
                 <div class="isentence">{{sentence}}</div>
@@ -66,14 +67,25 @@
                     <pagination_box :total="total" :paginationCallBack="paginationCallBack"></pagination_box>
                 </div>
             </div>
-            <div class="iright">
+            <div class="iright" :class="{'action': showPlateStatus}">
+                <div class="iclose" @click="showPlate">X</div>
+                <img class="irightBg" :src="playSong.al && playSong.al.picUrl" />
                 <div class="ilyric_box">
-                    <img v-show="playSong.al && playSong.al.picUrl" :src="playSong.al && playSong.al.picUrl" />
+                    <div class="playBtnBox" v-show="mobile || (playSong.al && playSong.al.picUrl)">
+                        <div :class="{playStatus: playStatus}" class="disc">
+                            <div class="musicBoxImg">
+                                <img :style="imgRotate" :src="playSong.al && playSong.al.picUrl" />
+                            </div>
+                            <div class="needle"></div>
+                            <div class="playBtn" @click='toggle'></div>
+                        </div>
+                    </div>
                     <div class="ilyric" ref="ilyric" v-html="lyricHtml"></div>
                 </div>
             </div>
         </div>
         <div class="ifoot" ref="ifoot">
+            <div class="iplate" @click="showPlate"></div>
             <div class="imgBg" v-show="playSong.al && playSong.al.picUrl">
                 <img :src="playSong.al && playSong.al.picUrl" />
             </div>
@@ -119,6 +131,8 @@
 <script>
 import axios from "axios"
 import pagination_box from "./../../vue_component/pagination/pagination.vue"
+import { ua } from "./../../static/js/xythree"
+
 export default {
     data() {
         let temp = ["遇见", "没那么简单", "情非得已", "回梦游仙"]
@@ -152,14 +166,24 @@ export default {
                 { text: "随机播放", type: "icondRandom" },
                 { text: "列表循环", type: "icondList" }
             ],
-            sentence: ""
+            sentence: "",
+            rotateZ: 0,
+            timerRotate: "",
+            showPlateStatus: false
         }
     },
     components: {
         pagination_box
     },
     computed: {
-
+        mobile() {
+            return ua().mobile
+        },
+        imgRotate() {
+            return {
+                transform: `rotateZ(${this.rotateZ}deg)`
+            }
+        }
     },
     filters: {
         timeFormat(data) {
@@ -180,6 +204,11 @@ export default {
         }
     },
     methods: {
+        showPlate() {
+            if (ua().mobile) {
+                this.showPlateStatus = !this.showPlateStatus
+            }
+        },
         showRecord() {
             this.playListShow = !this.playListShow
             this.songListShow = !this.songListShow
@@ -226,7 +255,11 @@ export default {
             let refs = this.$refs
             let h = window.innerHeight - refs.ihead.offsetHeight - refs.ifoot.offsetHeight
 
-            refs.ilyric.style.height = h - 290 + "px"
+            if (ua().mobile) {
+                refs.ilyric.style.height = h - 130 + "px"
+            } else {
+                refs.ilyric.style.height = h - 290 + "px"
+            }
             refs.isong_list_content.style.maxHeight = h - 100 + "px"
             refs.iplay_list_content.style.maxHeight = h - 100 + "px"
             refs.ibody.style.height = Math.max(h, 600) + "px"
@@ -276,29 +309,49 @@ export default {
             }
             return lyric
         },
+        imgRotateFn() {
+            clearTimeout(this.timerRotate)
+            this.timerRotate = setTimeout(() => {
+                this.rotateZ += 1
+                if (this.playStatus) {
+                    this.imgRotateFn()
+                }
+            }, 19)
+        },
         play(obj) {
-            this.playStatus = true
-            this.playSong = obj
-            this.playList.push(obj)
-            this.playList = [...new Set([...this.playList])]
-            this.playList.forEach((t, i) => {
-                if (t.id == obj.id) {
-                    this.playListIndex = i
-                }
-            })
+            if (this.playSong && obj.id != this.playSong.id) {
+                this.playSong = obj
+                this.playList.push(obj)
+                this.playList = [...new Set([...this.playList])]
+                this.playList.forEach((t, i) => {
+                    if (t.id == obj.id) {
+                        this.playListIndex = i
+                    }
+                })
 
-            localStorage.playList = JSON.stringify(this.playList)
+                localStorage.playList = JSON.stringify(this.playList)
 
-            axios.get(this.hostname, {
-                params: {
-                    type: "id",
-                    id: this.playSong.id
-                }
-            }).then(result => {
-                this.song = result.data.data[0]
-                this.getLyric()
-            })
-
+                axios.get(this.hostname, {
+                    params: {
+                        type: "id",
+                        id: this.playSong.id
+                    }
+                }).then(result => {
+                    this.song = result.data.data[0]
+                    this.getLyric()
+                    this.imgRotateFn()
+                    
+                    this.toggle()
+                    if (this.mobile) {
+                        setTimeout(() => {
+                            this.toggle()
+                        }, 300)
+                    }
+                    
+                })
+            } else {
+                this.toggle()
+            }
         },
         toggle() {
             if (this.song.url) {
@@ -312,6 +365,7 @@ export default {
             } else if (this.playList.length) {
                 this.randomPlay()
             }
+            this.imgRotateFn()
         },
         prev() {
             if (!this.playList.length) return
@@ -327,7 +381,7 @@ export default {
             this.play(this.playList[this.playListIndex])
         },
         randomPlay() {
-            this.playListIndex = Math.round(Math.random() * (this.playList.length - 1))            
+            this.playListIndex = Math.round(Math.random() * (this.playList.length - 1))
             this.prevNext()
         },
         scrollAni(obj, val, time = 10) {
@@ -369,7 +423,8 @@ export default {
                         const t = document.querySelector('.lyricCurrent')
                         t && t.classList.remove('lyricCurrent')
                         this.current.classList.add('lyricCurrent')
-                        this.scrollAni(ilyric, this.current.offsetTop - 570)
+                        let v = ua().mobile ? 344 : 570
+                        this.scrollAni(ilyric, this.current.offsetTop - v)
                     }
                     break
                 }
@@ -382,7 +437,7 @@ export default {
             this.playend = true
 
             let condIcon = this.condIcon[this.condIconIndex]
-            
+
             if (condIcon.type == "icondRandom") {
                 this.randomPlay()
             } else if (condIcon.type == "icondList") {

@@ -115,11 +115,11 @@ export default {
             return num < 10 ? "0" + +num : num
         },
         prev() {
-            this.date.m -= 1
+            this.date.m += this.date.m
             this.renderDate()
         },
         next() {
-            this.date.m += 1
+            this.date.m -= this.date.m
             this.renderDate()
         },
         getVal(index) {

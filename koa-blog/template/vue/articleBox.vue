@@ -189,6 +189,20 @@
         background: #fff url(/images/load.gif) no-repeat center;
     }
 }
+@media screen and (max-width: 1000px) {
+    
+    .article_box {
+        padding: 0 0 30px;
+        
+        .fa-arrow-circle-left {
+            margin-left: 30px;
+        }
+
+    }
+    .iarticle_content_box {
+        padding: 0;
+    }
+}
 </style>
 
 <template>

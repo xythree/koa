@@ -1,5 +1,5 @@
 <template>
-    <div id="ibody" class="ibody">
+    <div id="ibody" class="ibody" :class="{'showMenu': showMenu}">
     
         <div class="ileft">
             <div class="ihead">
@@ -44,6 +44,13 @@
             </div>
         </div>
         <div class="iright">
+            <div class="imenuBg" v-show="showMenu" @click="menuFn(1)"></div>
+            <div class="imenu" @click="menuFn">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <div class="isearch_box">
                 <div class="isearch_btn" @click="search">
                     <i class="fa fa-search"></i>
@@ -75,18 +82,25 @@ export default {
     data() {
         return {
             searchVal: this.$store.state.searchVal,
-            active_ipt: false
+            active_ipt: false,
+            showMenu: false
         }
     },
     computed: {
-        
+
     },
     methods: {
+        menuFn(time) {
+            setTimeout(() => {
+                this.showMenu = !this.showMenu
+            }, time)
+        },
         search() {
             const dispatch = this.$store.dispatch
 
             dispatch("setSearchVal", this.searchVal)
             dispatch("search", { skip: 1 })
+            this.$router.push("/")
         },
         focusFn() {
             this.active_ipt = true

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html,
 body,
 div,
@@ -180,6 +181,11 @@ body {
   width: 300px;
 }
 
+.icontent .ibody .iright .iclose,
+.icontent .ibody .iright .irightBg {
+  display: none;
+}
+
 .icontent .ifoot {
   position: fixed;
   bottom: 0;
@@ -190,6 +196,10 @@ body {
   height: 110px;
   background-color: rgba(3, 3, 3, 0.85);
   border-top: 1px solid #000;
+}
+
+.icontent .ifoot .iplate {
+  display: none;
 }
 
 .icontent .ifoot .imgBg {
@@ -272,7 +282,7 @@ body {
 }
 
 .isearch_box .isearch_input input:focus {
-  width: 300px;
+  width: 280px;
 }
 
 .ileft_list {
@@ -572,8 +582,9 @@ body {
 }
 
 .ilyric_box {
-  margin: 30px auto;
+  padding: 30px 25px;
   width: 250px;
+  overflow: hidden;
 }
 
 .ilyric_box img {
@@ -590,6 +601,124 @@ body {
 
 .ilyric_box .ilyric .lyricCurrent {
   color: #f00;
+}
+
+.playBtnBox {
+  position: relative;
+  left: 50%;
+  top: 0;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  width: 250px;
+  height: 250px;
+}
+
+.playBtnBox .disc {
+  position: relative;
+  left: 50%;
+  top: v(140);
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  width: 100%;
+  height: 100%;
+  background: url(/images/mobile/music/disc.png) no-repeat center;
+  background-size: cover;
+}
+
+.playBtnBox .disc:before {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  content: "";
+  width: 100%;
+  height: 100%;
+  background: url(/images/mobile/music/disc_light.png) no-repeat center;
+  background-size: cover;
+}
+
+.playBtnBox .disc .musicBoxImg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.playBtnBox .disc .musicBoxImg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.playBtnBox .disc .needle {
+  position: absolute;
+  left: 60%;
+  top: -35px;
+  -webkit-transform: translate(-50%, 0) rotateZ(-25deg);
+  transform: translate(-50%, 0) rotateZ(-25deg);
+  width: 56px;
+  height: 82px;
+  background: url(/images/mobile/music/needle.png) no-repeat center;
+  background-size: cover;
+  -webkit-transform-origin: 20px top;
+  transform-origin: 20px top;
+  -webkit-transition: all .5s linear;
+  transition: all .5s linear;
+}
+
+.playBtnBox .disc .playBtn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+}
+
+.playBtnBox .disc .playBtn:after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  content: "〓";
+  display: none;
+}
+
+.playBtnBox .disc .playBtn:before {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%) rotateZ(90deg);
+  transform: translate(-50%, -50%) rotateZ(90deg);
+  content: "▲";
+}
+
+.playBtnBox .playStatus .needle {
+  position: absolute;
+  left: 60%;
+  top: -30px;
+  -webkit-transform: translate(-50%, 0) rotateZ(0);
+  transform: translate(-50%, 0) rotateZ(0);
+}
+
+.playBtnBox .playStatus .playBtn:after {
+  display: block;
+}
+
+.playBtnBox .playStatus .playBtn:before {
+  display: none;
 }
 
 .iplayListIcon {
@@ -628,4 +757,162 @@ body {
   -webkit-transform-origin: center;
   transform-origin: center;
   width: 28px;
+}
+
+@media screen and (max-width: 1000px) {
+  .icontent .ilogo {
+    width: 60px;
+  }
+  .icontent .isearch_box .isearch_input {
+    margin-left: 5px;
+  }
+  .icontent .isearch_box .isearch_input input:focus {
+    width: 200px;
+  }
+  .icontent .ibody {
+    display: block;
+  }
+  .icontent .ibody .ileft {
+    display: none;
+  }
+  .icontent .ibody .iright {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 11;
+    overflow: hidden;
+    -webkit-transition: all .5s;
+    transition: all .5s;
+  }
+  .icontent .ibody .iright.action {
+    top: 0;
+  }
+  .icontent .ibody .iright .iclose {
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    right: 10px;
+    top: 10px;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    z-index: 999;
+  }
+  .icontent .ibody .iright .irightBg {
+    position: absolute;
+    top: 100%;
+    display: block;
+    -webkit-transform: scale(3);
+    transform: scale(3);
+    opacity: .5;
+    -webkit-filter: blur(10px);
+    filter: blur(10px);
+    z-index: -1;
+  }
+  .icontent .ibody .iright .ilyric_box {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .icontent .ibody .iright .ilyric_box .ilyric {
+    color: #eee;
+  }
+  .icontent .isong_list_box {
+    padding: 10px 0;
+  }
+  .icontent .isong_list_box .isong_list_content {
+    padding-left: 10px;
+  }
+  .icontent .isong_list_box .isong_title li:nth-child(2) {
+    margin: 0 5px;
+  }
+  .icontent .isong_list_box .isong_list li p:nth-child(2) {
+    margin: 0 5px;
+  }
+  .icontent .ifoot {
+    display: block;
+  }
+  .icontent .ifoot .iplate {
+    display: block;
+    position: absolute;
+    left: 5px;
+    top: -23px;
+    width: 18px;
+    height: 18px;
+    background: url(/images/music/icon.png) no-repeat 0 -358px;
+    -webkit-animation: iplateAni 2s infinite;
+    animation: iplateAni 2s infinite;
+  }
+  .icontent .ifoot .icontroll {
+    width: 100%;
+    padding-top: 10px;
+    text-align: left;
+  }
+  .icontent .ifoot .iprocess {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    padding: 5px;
+  }
+  .icontent .ifoot .iprocess .isong_title {
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    text-align: center;
+  }
+  .icontent .ifoot .ivolume {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+  }
+  .icontent .ifoot .ivolume .ivolume_controll {
+    position: absolute;
+    top: 28px;
+    right: 10px;
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    width: auto;
+    margin: 0;
+  }
+  .icontent .ifoot .ivolume .iplayListIcon {
+    top: 20px;
+  }
+  .icontent .ifoot .ivolume .ivolume_process {
+    display: none;
+  }
+  @-webkit-keyframes iplateAni {
+    0% {
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+    }
+    50% {
+      -webkit-transform: translateY(5px);
+      transform: translateY(5px);
+    }
+    100% {
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+    }
+  }
+  @keyframes iplateAni {
+    0% {
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+    }
+    50% {
+      -webkit-transform: translateY(5px);
+      transform: translateY(5px);
+    }
+    100% {
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+    }
+  }
 }

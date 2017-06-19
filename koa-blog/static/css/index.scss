@@ -249,11 +249,15 @@ table {
     .ileft {
         $c: #fff;
         position: fixed;
+        left: 0;
+        top: 0;
         width: $mgleft;
         height: 100%;
         background: #333;
         color: $c;
         box-shadow: 10px 0 30px rgba(0, 0, 0, .5);
+        -webkit-transition: all .5s;
+        transition: all .5s;
         .ihead {
             $h: 150px;
             height: $h;
@@ -312,6 +316,9 @@ table {
         margin-left: $mgleft;
         position: relative;
         max-width: 60%;
+        min-height: 300px;
+        -webkit-transition: all .5s;
+        transition: all .5s;
         .iarticle_box {
             margin-bottom: 150px;
         }
@@ -587,8 +594,6 @@ table {
     opacity: 0
 }
 
-.irouter_view {}
-
 .isearch_box {
     padding: 30px;
     overflow: hidden;
@@ -611,7 +616,7 @@ table {
             border-bottom-left-radius: $v;
         }
         .active_ipt {
-            width: 250px;
+            width: 200px;
         }
         i {
             margin: 0 5px;
@@ -630,5 +635,106 @@ table {
         border-bottom-right-radius: $v;
         color: #999;
         cursor: pointer;
+    }
+}
+
+.imenu {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    width: 25px;
+    cursor: pointer;
+    display: none;
+    span {
+        display: block;
+        height: 1px;
+        background: #000;
+        margin: 5px 0;
+        -webkit-transition: all .5s;
+        transition: all .5s;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .imenu {
+        display: block;
+    }
+    $v: 250px;
+    .ibody {
+        .ileft {
+            left: -$v;
+            box-shadow: none;
+        }
+        .iright {
+            margin-left: 0;
+            max-width: 100%;
+        }
+        .imenuBg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, .5);
+            height: 3000px;
+            -webkit-transition: all .5s;
+            transition: all .5s;
+            z-index: 99;
+        }
+    }
+    .showMenu {
+        .ileft {
+            left: 0;
+        }
+        .iright {
+            margin-left: $v;
+        }
+        .irouter_view,
+        .isearch_box {
+            display: none;
+            -webkit-animation: opacity_zero .5s both;
+            animation: opacity_zero .5s both;
+        }
+        .imenuBg {
+            display: block;
+            left: $v;
+            -webkit-animation: imenuAni .5s .25s both;
+            animation: imenuAni .5s .25s both;
+        }
+    }
+}
+
+@-webkit-keyframes opacity_zero {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes opacity_zero {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes imenuAni {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes imenuAni {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }

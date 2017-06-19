@@ -23,6 +23,8 @@ body {
   left: 0;
   width: 300px;
   height: 100%;
+  -webkit-transition: all .5s;
+  transition: all .5s;
   overflow-y: auto;
 }
 
@@ -98,7 +100,7 @@ body {
 .poetry-box .poerty-info {
   width: 600px;
   margin-left: 350px;
-  padding: 30px;
+  padding: 5%;
   text-align: center;
   font-size: 16px;
 }
@@ -141,4 +143,78 @@ body {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
+}
+
+.imenu {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 25px;
+  cursor: pointer;
+  display: none;
+}
+
+.imenu span {
+  display: block;
+  height: 1px;
+  background: #000;
+  margin: 5px 0;
+  -webkit-transition: all .5s;
+  transition: all .5s;
+}
+
+@media screen and (max-width: 1000px) {
+  .poetry-box .poetry-list-box {
+    left: -300px;
+  }
+  .poetry-box .poerty-info {
+    position: relative;
+    margin-left: 0;
+    width: 90%;
+    -webkit-transition: all .5s;
+    transition: all .5s;
+  }
+  .poetry-box .imenu {
+    display: block;
+  }
+  .poetry-box .imenuBg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    height: 3000px;
+    -webkit-transition: all .5s;
+    transition: all .5s;
+  }
+  .showMenu .poetry-list-box {
+    left: 0;
+  }
+  .showMenu .poerty-info {
+    margin-left: 300px;
+  }
+  .showMenu .imenuBg {
+    display: block;
+    left: 300px;
+    -webkit-animation: imenuAni .5s .25s both;
+    animation: imenuAni .5s .25s both;
+  }
+}
+
+@-webkit-keyframes imenuAni {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes imenuAni {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

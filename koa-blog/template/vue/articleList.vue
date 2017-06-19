@@ -17,7 +17,7 @@
                                     <i class="fa fa-hashtag"></i>{{item.title}}
                                 </router-link>
                             </h5>
-                            <p>{{item.content.length > 120 ? item.content.substring(0, 120) + "..." : item.content}}</p>
+                            <p>{{item.content|formatHtml}}</p>
                             <router-link class="iread_more" :to="item._id | routerId">阅读全文</router-link>
                         </div>
                     </div>
@@ -35,9 +35,9 @@ import pagination_box from "./../../vue_component/pagination/pagination.vue"
 
 export default {
     data() {
-        
+
         return {
-            
+
         }
     },
     computed: {
@@ -51,6 +51,15 @@ export default {
     filters: {
         routerId(value) {
             return "/article?id=" + value
+        },
+        formatHtml(value) {
+            let val = ""
+            let div = document.createElement("div")
+
+            div.innerHTML = value
+            val = div.textContent
+
+            return val.length > 120 ? val.substring(0, 120) + "..." : val
         }
     },
     components: {

@@ -6,6 +6,7 @@ module.exports = {
         index: "./static/js/index.js",
         component: "./static/js/component/index.js",
         music: "./static/js/music/index.js",
+        poetry: "./static/js/poetry/index.js",
         tools: "./static/js/tools/index.js"
     },
     output: {

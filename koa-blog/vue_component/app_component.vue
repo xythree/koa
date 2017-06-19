@@ -4,19 +4,20 @@
 $color: #f92672;
 
 .icontent {
-    width: 1100px;
     margin: 0 auto;
     overflow: hidden;
 
     .irouter-list {
         position: fixed;
         padding-top: 100px;
+        left: 0;
         width: 180px;
         height: 100%;
         border-right: 1px solid #ddd;
+        transition: all .5s;
 
         li {
-            text-align: right;            
+            text-align: right;
             padding: 5px 20px 5px 0;
             margin: 2px 0;
 
@@ -46,16 +47,82 @@ $color: #f92672;
         }
     }
     .irouter-view {
-        padding: 30px;
+        padding: 50px 30px;
         height: 80%;
         margin-left: 200px;
+        transition: all .5s;
+    }
+}
+.imenu {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 25px;
+    cursor: pointer;
+    display: none;
+    span {
+        display: block;
+        height: 1px;
+        background: #000;
+        margin: 5px 0;
+        -webkit-transition: all .5s;
+        transition: all .5s;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .imenu {
+        display: block;
+    }
+    $v: 180px;
+    .icontent {
+        .irouter-list { 
+            left: -$v;
+        }
+         .irouter-view { 
+            position: relative;
+            margin-left: 0;
+         }
+         .imenuBg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, .5);
+            height: 3000px;
+            -webkit-transition: all .5s;
+            transition: all .5s;
+            z-index: 99;
+        }
+    }
+    .showMenu {
+        .irouter-list { 
+            left: 0;
+        }
+        .irouter-view { 
+            margin-left: $v;
+        }
+        .imenuBg {
+            display: block;
+            left: $v;
+            -webkit-animation: imenuAni .5s .25s both;
+            animation: imenuAni .5s .25s both;
+        }
+    }
+    @keyframes imenuAni {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
     }
 }
 
 </style>
 
 <template>
-    <div class="icontent">
+    <div class="icontent" :class="{'showMenu': showMenu}">
         <ul class="irouter-list">
             <li>
                 <a href="/">home</a>
@@ -90,7 +157,13 @@ $color: #f92672;
         </ul>
     
         <div class="irouter-view">
-    
+            <div class="imenuBg" v-show="showMenu" @click="menuFn(1)"></div>
+            <div class="imenu" @click="menuFn">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <transition name="fade">
                 <router-view></router-view>
             </transition>
@@ -105,14 +178,23 @@ $color: #f92672;
 export default {
     data() {
         return {
-
+            showMenu: false
         }
     },
     components: {
 
     },
     methods: {
-
+        menuFn(time) {
+            setTimeout(() => {
+                this.showMenu = !this.showMenu
+            }, time)
+        }
+    },
+    watch: {
+        $route() {
+            this.showMenu = false
+        }
     }
 }    
 </script>
