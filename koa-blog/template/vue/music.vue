@@ -7,7 +7,7 @@
             </div>
             <div class="isearch_box">
                 <div class="isearch_input">
-                    <span @click="getSongList"></span>
+                    <span @click="search"></span>
                     <input type="text" @keyup.enter="search" v-model="searchVal" />
                 </div>
             </div>
@@ -205,9 +205,7 @@ export default {
     },
     methods: {
         showPlate() {
-            if (ua().mobile) {
-                this.showPlateStatus = !this.showPlateStatus
-            }
+            this.showPlateStatus = !this.showPlateStatus
         },
         showRecord() {
             this.playListShow = !this.playListShow
@@ -320,6 +318,7 @@ export default {
         },
         play(obj) {
             if (this.playSong && obj.id != this.playSong.id) {
+                this.playStatus = false
                 this.playSong = obj
                 this.playList.push(obj)
                 this.playList = [...new Set([...this.playList])]
@@ -339,15 +338,8 @@ export default {
                 }).then(result => {
                     this.song = result.data.data[0]
                     this.getLyric()
-                    this.imgRotateFn()
-                    
                     this.toggle()
-                    if (this.mobile) {
-                        setTimeout(() => {
-                            this.toggle()
-                        }, 300)
-                    }
-                    
+
                 })
             } else {
                 this.toggle()
