@@ -63,6 +63,31 @@ router.post("/upload", async ctx => {
     ctx.body = "ok"
 })
 
+const sql = require("./service/model")
+
+router.get("/demo", async ctx => {
+
+    ctx.body = await render("demo")
+})
+
+router.post("/demo", async ctx => {
+    let params = ctx.request.body
+
+    let result = await sql.words.aggregate([{
+        $lookup: {
+            from: "Means",
+            localField: "id",
+            foreignField: "wordId",
+            as: "docs"
+        }
+    }, {
+        $match: {
+            word: params.value
+        }
+    }])
+
+    ctx.body = await result
+})
 
 app.listen(config.port, () => {
     console.log(`running port: ${config.port}`)

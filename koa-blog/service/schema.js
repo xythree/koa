@@ -102,5 +102,65 @@ module.exports = {
             type: String,
             required: true
         }
+    },
+    missing: {
+        id: {
+            type: Number,
+            required: false
+        },
+        word: {
+            type: String,
+            required: false
+        }
+    },
+    pos: {
+        id: {
+            type: Number,
+            required: false
+        },
+        name: {
+            type: String,
+            required: false
+        },
+        means: {
+            type: String,
+            required: false
+        }
+    },
+    means: {
+        wordId: {
+            type: Number,
+            required: false
+        },
+        posId: {
+            type: String,
+            required: false
+        },
+        means: {
+            type: String,
+            required: false
+        }
+    },
+    words: {
+        id: {
+            type: Number,
+            required: false
+        },
+        word: {
+            type: String,
+            required: false
+        },
+        exchange: {
+            type: String,
+            required: false
+        },
+        voice: {
+            type: String,
+            required: false
+        },
+        times: {
+            type: String,
+            required: false
+        }
     }
 }

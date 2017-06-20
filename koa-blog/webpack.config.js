@@ -7,7 +7,8 @@ module.exports = {
         component: "./static/js/component/index.js",
         music: "./static/js/music/index.js",
         poetry: "./static/js/poetry/index.js",
-        tools: "./static/js/tools/index.js"
+        tools: "./static/js/tools/index.js",
+        demo: "./static/js/demo/index.js"
     },
     output: {
         path: path.resolve(__dirname, 'static/js/dist'),
