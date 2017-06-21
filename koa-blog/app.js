@@ -43,6 +43,8 @@ require("./service/music")(router, render)
 
 require("./service/component")(router, render)
 
+require("./service/word")(router, render)
+
 require("./service/tools")(router, render)
 
 require("./admin/index")(router, render)
@@ -53,7 +55,6 @@ router.get("/m", async ctx => {
 })
 
 
-//诗词
 router.get("/poetry", async ctx => {
     ctx.body = await render("poetry")
 })
@@ -63,7 +64,6 @@ router.post("/upload", async ctx => {
     ctx.body = "ok"
 })
 
-const sql = require("./service/model")
 
 router.get("/demo", async ctx => {
 
@@ -71,22 +71,7 @@ router.get("/demo", async ctx => {
 })
 
 router.post("/demo", async ctx => {
-    let params = ctx.request.body
-
-    let result = await sql.words.aggregate([{
-        $lookup: {
-            from: "Means",
-            localField: "id",
-            foreignField: "wordId",
-            as: "docs"
-        }
-    }, {
-        $match: {
-            word: params.value
-        }
-    }])
-
-    ctx.body = await result
+    ctx.body = await "ok"
 })
 
 app.listen(config.port, () => {

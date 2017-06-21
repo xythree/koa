@@ -20,7 +20,7 @@ module.exports = {
             var date = new Date()
             var domain = typeof domain === 'boolean' ? this.getDomain() : (domain ? domain : '')
             key = this.conts + key
-            expires = (expires || 365) * 24 * 3600
+            expires = (expires || 365) * 24 * 3600 * 1000
             date.setTime(date.getTime() + expires)
             ep = date.toGMTString()
             domain = domain ? (';domain=' + domain) : ''

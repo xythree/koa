@@ -8,6 +8,7 @@ module.exports = {
         music: "./static/js/music/index.js",
         poetry: "./static/js/poetry/index.js",
         tools: "./static/js/tools/index.js",
+        word: "./static/js/word/index.js",
         demo: "./static/js/demo/index.js"
     },
     output: {

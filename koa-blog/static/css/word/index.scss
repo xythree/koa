@@ -1,0 +1,232 @@
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+img,
+a,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+em,
+strong,
+b,
+i,
+fieldset,
+form,
+label,
+legend,
+button,
+input,
+textarea,
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 100%;
+}
+
+address,
+cite,
+dfn,
+em,
+var {
+    font-style: normal;
+}
+
+code,
+kbd,
+pre,
+samp,
+tt {
+    font-family: "Courier New", Courier, monospace;
+}
+
+small {
+    font-size: 12px;
+}
+
+ul,
+ol,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+em,
+i {
+    font-style: normal;
+}
+
+legend {
+    color: #000;
+}
+
+fieldset,
+img {
+    border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+}
+
+input,
+select,
+img {
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+body {
+    background-color: #d4efff;
+}
+
+.itip {
+    position: relative;
+    padding: 20px;
+    background: #fff;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    a {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        color: #000;
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.iword {
+    padding: 30px;
+    margin: 0 auto;
+    width: 1000px;
+    .value {
+        $h: 20px;
+        height: $h;
+        line-height: $h;
+        padding: 5px;
+        width: 200px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+}
+
+.ibox {
+    padding: 10px 0;
+    h5 {
+        padding: 5px 0;
+    }
+    .iphonogram {
+        padding: 15px 0 5px;
+        display: inline-block;
+        height: 42px;
+        vertical-align: top;
+        margin-right: 40px;
+        .iauido_controls {
+            $h: 16px;
+            width: $h;
+            height: $h;
+            display: inline-block;
+            vertical-align: middle;
+            background: url(/images/word/play.png) no-repeat center;
+            border: 1px solid #333;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .istop {
+            background: url(/images/word/stop.png) no-repeat center;
+        }
+        p {
+            color: #f00;
+        }
+    }
+    ul {
+        margin-bottom: 20px;
+        padding: 5px 0 10px;
+        border-bottom: 1px dotted #ddd;
+        li {
+            padding: 5px 0;
+            span {
+                float: left;
+                width: 100px;
+                text-align: right;
+                color: #888;
+            }
+            p {
+                margin-left: 110px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .iword {
+        width: auto;
+    }
+}
