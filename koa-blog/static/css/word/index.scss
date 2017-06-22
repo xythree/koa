@@ -154,6 +154,7 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
+    -webkit-transition: all .5s;
     transition: all .5s;
 }
 
@@ -187,7 +188,7 @@ body {
         display: inline-block;
         height: 42px;
         vertical-align: top;
-        margin-right: 40px;
+        margin-right: 35px;
         .iauido_controls {
             $h: 16px;
             width: $h;
@@ -214,12 +215,12 @@ body {
             padding: 5px 0;
             span {
                 float: left;
-                width: 100px;
+                width: 110px;
                 text-align: right;
                 color: #888;
             }
             p {
-                margin-left: 110px;
+                margin-left: 115px;
             }
         }
     }

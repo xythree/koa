@@ -9,14 +9,14 @@
             </div>
         </transition>
     
-        <input type="text" class="value" ref="refValue" placeholder="输入要查询的英文单词" @keyup.enter="search" @focus="focusFn" @blur="search" v-model="value" />
+        <input type="text" class="value" ref="refValue" placeholder="输入要查询的英文单词" @keyup.enter="search" @focus="focusFn" @blur="blurFn" v-model="value" />
     
         <div class="ibox">
             {{empty}}
             <transition name="fade">
                 <div v-show="docs.length">
                     <div class="iphonogram">
-                        英:[{{(this.voice && this.voice.ph_en)|wordFormat}}]
+                        英:[{{(this.voice && this.voice.ph_en)}}]
                         <audio preload ref="audio_en" :src="this.voice && this.voice.ph_en_mp3"></audio>
                         <span v-show="this.voice && this.voice.ph_en_mp3" @click="playFn('en')" class="iauido_controls" :class="{'istop': enStatus}"></span>
                         <div v-show="!ua.mobile">
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="iphonogram">
-                        美:[{{(this.voice && this.voice.ph_am)|wordFormat}}]
+                        美:[{{(this.voice && this.voice.ph_am)}}]
                         <audio preload ref="audio_am" :src="this.voice && this.voice.ph_am_mp3"></audio>
                         <span v-show="this.voice && this.voice.ph_am_mp3" @click="playFn('am')" class="iauido_controls" :class="{'istop': amStatus}"></span>
                         <div v-show="!ua.mobile">
@@ -37,7 +37,7 @@
                     <ul>
                         <li v-for="item in docs">
                             <span>{{item.posId|getPos}}</span>
-                            <p>{{item.means|wordFormat}}</p>
+                            <p>{{item.means}}</p>
                         </li>
                     </ul>
                     <h5>其它形态:</h5>
@@ -83,9 +83,6 @@ export default {
                 }
             })
             return result
-        },
-        wordFormat(value) {
-            return value && unescape(value.replace(/\u/g, "%u").replace(/\"/g, ""))
         }
     },
     methods: {
@@ -93,6 +90,11 @@ export default {
             try {
                 this.$refs.refValue.select()
             } catch(e) {}
+        },
+        blurFn() {
+            if (this.ua.mobile) {
+                this.search()
+            }
         },
         playFn(str) {
             let refs = this.$refs
@@ -110,14 +112,14 @@ export default {
             if (this.value == "") return
 
             axios.post("/word", {
-                value: this.value
+                value: this.value.trim()
             }).then(data => {
                 let d = data.data
                 if (d.length) {
                     d = d[0]
                     this.docs = d.docs
-                    this.exchange = JSON.parse(d.exchange)
-                    this.voice = JSON.parse(d.voice)
+                    this.exchange = d.exchange
+                    this.voice = d.voice
                     this.empty = ""
                 } else {
                     this.docs = []

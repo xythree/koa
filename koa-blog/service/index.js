@@ -1,5 +1,5 @@
 const sql = require("./sql")
-
+const mon = require("./model")
 module.exports = (router, render) => {
 
     router.get("/", async ctx => {
@@ -13,10 +13,15 @@ module.exports = (router, render) => {
 
         if (params.id) {
             obj = { _id: params.id }
+            sql.article.update(obj, {
+                $inc: {
+                    "views": 1
+                }
+            })
             result.result = await sql.article.find(obj)
             result.prev = await sql.article.prev(params.id)
             result.next = await sql.article.next(params.id)
-            sql.article.update(obj, { views: result.result[0].views + 1 })
+
         } else if (params.txt) {
             obj = { title: { $regex: params.txt, $options: "i" } }
             result.result = await sql.article.find(obj, params.skip - 1, +params.limit)
@@ -27,6 +32,7 @@ module.exports = (router, render) => {
         } else {
             result.count = await sql.article.count({})
         }
+
         ctx.body = await result
     })
 

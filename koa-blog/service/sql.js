@@ -4,12 +4,10 @@ const validator = require("validator")
 
 module.exports = {
     article: {
-        async update(obj1, obj2) {
+        async update(obj1, obj2 = {}) {
             let result = ""
 
-            result = await sql.Article.update(obj1, {
-                $set: obj2
-            })
+            result = await sql.Article.update(obj1, obj2)
 
             return result
         },

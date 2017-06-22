@@ -161,11 +161,11 @@ export default {
                 }
             },
             prev() {
-                this.date.m -= 1
+                --this.date.m
                 this.renderDate()
             },
             next() {
-                this.date.m += 1
+                ++this.date.m
                 this.renderDate()
             },
             getVal(index) {

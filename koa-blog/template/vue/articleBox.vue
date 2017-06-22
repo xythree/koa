@@ -345,7 +345,7 @@ export default {
                 this.time = +new Date(data.create_time)
                 this.title = data.title
                 this.content = data.content
-                this.views = data.views + 1
+                this.views = data.views
                 this.href = location.href
 
                 if (next.length) {

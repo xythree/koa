@@ -27,6 +27,17 @@
                         <i class="fa fa-navicon"></i>vue2.0组件</a>
                 </li>
                 <li>
+                    <a href="/word" target="_blank">
+                        <span></span>
+                        <i class="fa fa-file-word-o"></i>单词</a>
+                </li>
+                <li>
+                    <a href="/tools">
+                        <span></span>
+                        <i class="fa fa-wrench"></i>工具</a>
+                </li>
+                <!--
+                <li>
                     <a href="javascript:;">
                         <span></span>
                         <i class="fa fa-tags"></i>标签</a>
@@ -36,6 +47,7 @@
                         <span></span>
                         <i class="fa fa-user"></i>关于</a>
                 </li>
+                -->
             </ul>
             <div class="long_white"></div>
             <div class="icopy">

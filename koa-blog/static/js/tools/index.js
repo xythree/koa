@@ -10,7 +10,9 @@ let vm = new Vue({
         src: ""
     },
     components: {
-
+        app: {
+            template: "<div></div>"
+        }
     },
     mounted() {
 

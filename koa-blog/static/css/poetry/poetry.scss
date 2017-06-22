@@ -24,6 +24,7 @@ body {
         -webkit-transition: all .5s;
         transition: all .5s;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         .poetry-search-box {
             position: relative;
             padding: 20px 10px 5px;
@@ -127,6 +128,16 @@ body {
 .fade-enter,
 .fade-leave-active {
     opacity: 0
+}
+
+.imenuBox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    background: #fcf8ee;
+    border-bottom: 1px solid #ddd;
 }
 
 .imenu {

@@ -1,6 +1,6 @@
 
 
-<style lang="sass">
+<style lang="sass" scpoed>
 $color: #f92672;
 
 .icontent {
@@ -65,7 +65,6 @@ $color: #f92672;
         height: 1px;
         background: #000;
         margin: 5px 0;
-        -webkit-transition: all .5s;
         transition: all .5s;
     }
 }
@@ -89,8 +88,7 @@ $color: #f92672;
             left: 0;
             width: 100%;
             background: rgba(0, 0, 0, .5);
-            height: 3000px;
-            -webkit-transition: all .5s;
+            height: 3000px;            
             transition: all .5s;
             z-index: 99;
         }
@@ -105,7 +103,6 @@ $color: #f92672;
         .imenuBg {
             display: block;
             left: $v;
-            -webkit-animation: imenuAni .5s .25s both;
             animation: imenuAni .5s .25s both;
         }
     }

@@ -35,7 +35,6 @@
         
         li {
             float: left;
-            display: inline;
             width: 30px;
             height: 30px;
             line-height: 30px;
@@ -115,11 +114,11 @@ export default {
             return num < 10 ? "0" + +num : num
         },
         prev() {
-            this.date.m += this.date.m
+            --this.date.m
             this.renderDate()
         },
         next() {
-            this.date.m -= this.date.m
+            ++this.date.m
             this.renderDate()
         },
         getVal(index) {

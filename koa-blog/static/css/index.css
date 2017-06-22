@@ -227,6 +227,14 @@ table {
   content: "\f0c9";
 }
 
+.fa-file-word-o:before {
+  content: "\f1c2";
+}
+
+.fa-wrench:before {
+  content: "\f0ad";
+}
+
 .icopy {
   position: absolute;
   bottom: 10px;
@@ -626,10 +634,6 @@ table {
   transition: all .5s ease-out;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-}
-
-.isearch_box .isearch_input .active_ipt {
-  width: 200px;
 }
 
 .isearch_box .isearch_input i {

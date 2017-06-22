@@ -155,6 +155,7 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
+  -webkit-transition: all .5s;
   transition: all .5s;
 }
 
@@ -191,7 +192,7 @@ body {
   display: inline-block;
   height: 42px;
   vertical-align: top;
-  margin-right: 40px;
+  margin-right: 35px;
 }
 
 .ibox .iphonogram .iauido_controls {
@@ -225,13 +226,13 @@ body {
 
 .ibox ul li span {
   float: left;
-  width: 100px;
+  width: 110px;
   text-align: right;
   color: #888;
 }
 
 .ibox ul li p {
-  margin-left: 110px;
+  margin-left: 115px;
 }
 
 @media screen and (max-width: 1000px) {
