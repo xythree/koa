@@ -1,5 +1,6 @@
 const sql = require("./sql")
 const mon = require("./model")
+
 module.exports = (router, render) => {
 
     router.get("/", async ctx => {
@@ -13,22 +14,82 @@ module.exports = (router, render) => {
 
         if (params.id) {
             obj = { _id: params.id }
-            sql.article.update(obj, {
+                /*
+                sql.article.update(obj, {
+                    $inc: {
+                        "views": 1
+                    }
+                })
+                */
+                //result.result = await sql.article.find(obj)
+
+            /*
+            await mon.Article.update(obj, {
                 $inc: {
-                    "views": 1
+                    views: 1
                 }
             })
-            result.result = await sql.article.find(obj)
-            result.prev = await sql.article.prev(params.id)
-            result.next = await sql.article.next(params.id)
+            */
+
+            result = await mon.Article.aggregate([{
+                $match: {
+                    _id: params.id
+                }
+            }, {
+                $project: {
+                    author: 1,
+                    title: 1,
+                    content: 1,
+                    create_time: 1,
+                    views: 1
+                }
+            }, {
+                $group: {
+                    _id: "$_id",
+                    count: {
+                        $sum: 1
+                    }
+                }
+            }])
+
+            //result.prev = await sql.article.prev(params.id)
+            //result.next = await sql.article.next(params.id)
 
         } else if (params.txt) {
             obj = { title: { $regex: params.txt, $options: "i" } }
             result.result = await sql.article.find(obj, params.skip - 1, +params.limit)
             result.count = await sql.article.count(obj)
         } else if (params.skip) {
-            result.count = await sql.article.count(obj)
-            result.result = await sql.article.find(obj, params.skip - 1, +params.limit)
+            //result.count = await sql.article.count(obj)
+            //result.result = await sql.article.find(obj, params.skip - 1, +params.limit)
+
+            result = await mon.Article.aggregate([{
+                $match: obj
+            }, {
+                $project: {
+                    _id: 1,
+                    title: 1,
+                    content: 1,
+                    create_time: 1,
+                    views: 1
+                }
+            }, {
+                $group: {
+                    _id: null,
+                    result: {
+                        $addToSet: {
+                            _id: "$_id",
+                            title: "$title",
+                            content: "$content",
+                            create_time: "$create_time"
+                        }
+                    },
+                    count: {
+                        $sum: 1
+                    }
+                }
+            }])
+            result = result.length ? result[0] : {}
         } else {
             result.count = await sql.article.count({})
         }

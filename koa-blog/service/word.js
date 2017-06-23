@@ -62,7 +62,7 @@ module.exports = (router, render) => {
     })
 
     function wordFormat(value) {
-        return value && unescape(value.replace(/\u/g, "%u").replace(/\"/g, ""))
+        return value && unescape(value.replace(/(\u)([\d,\w+\d])/g, "%$1$2").replace(/\"/g, ""))
     }
 
 }

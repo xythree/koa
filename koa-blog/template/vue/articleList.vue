@@ -55,7 +55,7 @@ export default {
         formatHtml(value) {
             let val = ""
             let div = document.createElement("div")
-
+            
             div.innerHTML = value
             val = div.textContent
 
