@@ -1,5 +1,6 @@
 const sql = require("./sql")
 const mon = require("./model")
+const validator = require("validator")
 
 module.exports = (router, render) => {
 
@@ -13,47 +14,65 @@ module.exports = (router, render) => {
             obj = {}
 
         if (params.id) {
-            obj = { _id: params.id }
-                /*
-                sql.article.update(obj, {
-                    $inc: {
-                        "views": 1
-                    }
-                })
-                */
-                //result.result = await sql.article.find(obj)
+            //obj = { _id: params.id }
+            obj = { aid: global.MgTypes.ObjectId(params.id) }
 
-            /*
             await mon.Article.update(obj, {
                 $inc: {
                     views: 1
                 }
             })
-            */
 
-            result = await mon.Article.aggregate([{
-                $match: {
-                    _id: params.id
-                }
-            }, {
-                $project: {
+            let _result = await mon.Comment.aggregate().match(obj).lookup({
+                from: "articles",
+                localField: "flag",
+                foreignField: "flag",
+                as: "article"
+            }).project({
+                aid: 1,
+                cid: 1,
+                title: 1,
+                username: 1,
+                content: 1,
+                flag: 1,
+                show: 1,
+                article: {
                     author: 1,
                     title: 1,
                     content: 1,
                     create_time: 1,
-                    views: 1
+                    views: 1,
+                    flag: 1
                 }
-            }, {
-                $group: {
-                    _id: "$_id",
-                    count: {
-                        $sum: 1
-                    }
-                }
-            }])
+            })
 
-            //result.prev = await sql.article.prev(params.id)
-            //result.next = await sql.article.next(params.id)
+            if (!_result.length) {
+                _result = await mon.Article.aggregate().match({
+                    _id: global.MgTypes.ObjectId(params.id)
+                }).project({
+                    author: 1,
+                    title: 1,
+                    content: 1,
+                    create_time: 1,
+                    views: 1,
+                    flag: 1,
+                    show: 1
+                })
+            }
+
+            if (_result.length) {
+                _result.forEach(t => {
+                    t.title = validator.unescape(t.title)
+                    t.content = validator.unescape(t.content)
+                })
+            }
+
+            //result.comment_list = _result[0].comment_list
+            //result.result = _result[0].result
+            result.result = _result
+                //result.result.push(_result[0])
+            result.prev = await sql.article.prev(params.id)
+            result.next = await sql.article.next(params.id)
 
         } else if (params.txt) {
             obj = { title: { $regex: params.txt, $options: "i" } }
@@ -89,6 +108,12 @@ module.exports = (router, render) => {
                     }
                 }
             }])
+            if (result[0].result.length) {
+                result[0].result.forEach(t => {
+                    t.title = validator.unescape(t.title)
+                    t.content = validator.unescape(t.content)
+                })
+            }
             result = result.length ? result[0] : {}
         } else {
             result.count = await sql.article.count({})
@@ -102,11 +127,13 @@ module.exports = (router, render) => {
         let result = {}
 
         result.result = await sql.comment.create({
-            aid: params.id,
+            aid: params.flag,
             cid: params.cid || "",
             username: params.username,
             email: params.email,
-            content: params.content
+            content: params.content,
+            flag: "flag" + Date.now() + Math.round(Math.random() * 9999),
+            show: 1
         })
 
         ctx.body = await result
@@ -117,9 +144,8 @@ module.exports = (router, render) => {
         let result = {},
             obj = {}
 
-
-        if (params.aid) {
-            obj = { aid: params.aid }
+        if (params.flag) {
+            obj = { aid: params.flag }
 
             if (params.skip) {
                 result.result = await sql.comment.find(obj, params.skip - 1, +params.limit)
@@ -128,7 +154,6 @@ module.exports = (router, render) => {
             }
             result.count = await sql.comment.count(obj)
         }
-
 
         ctx.body = await result
     })

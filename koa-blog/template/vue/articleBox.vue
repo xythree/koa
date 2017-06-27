@@ -202,6 +202,11 @@
     .iarticle_content_box {
         padding: 0;
     }
+
+    .iarticle_prev_next_link,
+    .icomment_box {
+        margin: 0 30px;
+    }
 }
 </style>
 
@@ -256,7 +261,7 @@
             </li>
         </ul>
         <paginationBox :total="total" :paginationCallBack="paginationCallBack"></paginationBox>
-        <div class="icomment_box" v-show="false">
+        <div class="icomment_box">
             <form ref="icommentForm">
                 <div class="icomment_name">
                     <label>名称:</label>
@@ -294,6 +299,7 @@ export default {
     data() {
         return {
             id: this.$route.query.id,
+            flag: "",
             title: "",
             content: "",
             commentList: [],
@@ -346,6 +352,7 @@ export default {
                 this.title = data.title
                 this.content = data.content
                 this.views = data.views
+                this.flag = data.flag
                 this.href = location.href
 
                 if (next.length) {
@@ -370,7 +377,7 @@ export default {
         getComment({ skip, limit = 15 }) {
             axios.get("/comment", {
                 params: {
-                    aid: this.id,
+                    flag: this.flag,
                     skip,
                     limit
                 }
@@ -386,7 +393,7 @@ export default {
         this.$refs.icommentForm.addEventListener("submit", e => {
             e.preventDefault()
             axios.post("/comment", {
-                id: this.id,
+                flag: this.flag,
                 username: this.comment_username,
                 email: this.comment_email,
                 content: this.comment_content

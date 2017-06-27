@@ -43,10 +43,17 @@
                         }
 
                         axios.post("/register", d).then(result => {
-                            if (result.status == 200 && result.data == "ok") {
-                                location.href = "/admin/index"
+                            if (result.status == 200 && result.data.code == 1) {
+                                let url = ""
+
+                                if (document.referrer) {
+                                    url = document.referrer
+                                } else {
+                                    url = location.search.replace(/^\?url\=/, "")
+                                }
+                                location.href = url
                             } else {
-                                alert(result.data)
+                                alert(result.data.msg)
                             }
                         })
                     }

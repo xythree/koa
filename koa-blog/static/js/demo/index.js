@@ -1,12 +1,11 @@
 import Vue from "vue"
-import axios from "axios"
-import word from "./../../../template/vue/word.vue"
+import scroll_box from "./../../../vue_component/scroll_box/scroll_box.vue"
 
 
 let vm = new Vue({
     el: "#word",
     //render: h => h(word)
     components: {
-        word
+        scroll_box
     }
 })

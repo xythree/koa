@@ -75,6 +75,14 @@ module.exports = {
         tags: {
             type: String,
             required: false
+        },
+        flag: {
+            type: String,
+            required: true
+        },
+        show: {
+            type: Boolean,
+            required: false
         }
     },
     Comment: {
@@ -101,6 +109,34 @@ module.exports = {
         content: {
             type: String,
             required: true
+        },
+        flag: {
+            type: String,
+            required: true
+        },
+        show: {
+            type: Boolean,
+            required: true
+        }
+    },
+    recite: {
+        uid: {
+            type: String,
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        limit: {
+            type: Number,
+            required: false,
+            default: 10
+        },
+        skip: {
+            type: Number,
+            required: false,
+            default: 0
         }
     },
     missing: {

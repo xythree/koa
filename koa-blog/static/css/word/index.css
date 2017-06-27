@@ -137,6 +137,18 @@ body {
   background-color: #d4efff;
 }
 
+::-webkit-input-placeholder {
+  color: #ccc;
+}
+
+::-moz-placeholder {
+  color: #ccc;
+}
+
+:-moz-placeholder {
+  color: #ccc;
+}
+
 .itip {
   position: relative;
   padding: 20px;
@@ -177,6 +189,27 @@ body {
   width: 200px;
   border: 1px solid #ddd;
   border-radius: 5px;
+}
+
+.iwords_box .itab_nav {
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+}
+
+.iwords_box .itab_nav a {
+  display: inline-block;
+  padding: 0 10px;
+  color: #333;
+}
+
+.iwords_box .itab_nav .showStatus {
+  background: #fff;
+  border-radius: 5px;
+}
+
+.iwords_box dd {
+  padding-top: 30px;
 }
 
 .ibox {
@@ -235,8 +268,102 @@ body {
   margin-left: 115px;
 }
 
+.irecite_box .inums label {
+  display: inline-block;
+  margin-right: 15px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.irecite_box .inums label input {
+  vertical-align: middle;
+}
+
+.irecite_box .irecite_word_list_box {
+  padding-top: 10px;
+  overflow: hidden;
+}
+
+.irecite_box .irecite_word_list_box .irecite_word_list {
+  float: left;
+  width: 160px;
+  padding: 5px;
+  background: #fff;
+  border-radius: 5px;
+  max-height: 540px;
+  overflow-y: auto;
+}
+
+.irecite_box .irecite_word_list_box .irecite_word_list li {
+  padding: 3px 0;
+  cursor: pointer;
+  -webkit-transition: all .5s;
+  transition: all .5s;
+  border-bottom: 1px solid #fff;
+}
+
+.irecite_box .irecite_word_list_box .irecite_word_list li.active, .irecite_box .irecite_word_list_box .irecite_word_list li:hover {
+  color: #f00;
+  border-bottom-color: #f00;
+}
+
+.irecite_box .irecite_word_list_box .irecite_word_list li:first-child {
+  display: flex;
+  margin-bottom: 10px;
+  text-align: center;
+  border: none;
+}
+
+.irecite_box .irecite_word_list_box .irecite_word_list li:first-child:hover {
+  border: none;
+  color: #333;
+}
+
+.irecite_box .irecite_word_list_box .irecite_word_list li:first-child span {
+  flex: 1;
+  margin: 0 3px;
+  background: #eee;
+  border-radius: 5px;
+}
+
+.irecite_box .irecite_word_list_box .irecite_word_list li:first-child span:hover {
+  color: #f00;
+}
+
+.irecite_box .irecite_word_list_box .irecite_wor_right {
+  margin-left: 180px;
+}
+
+.irecite_box .irecite_word_list_box .itext p {
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.irecite_box .irecite_word_list_box .itext input {
+  padding: 0 5px;
+  width: 250px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 5px;
+}
+
+.irecite_box .irecite_word_list_box .itext a {
+  margin: 0 10px;
+  color: #666;
+}
+
 @media screen and (max-width: 1000px) {
   .iword {
     width: auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .irecite_box .irecite_word_list_box .irecite_word_list {
+    float: none;
+    width: auto;
+  }
+  .irecite_box .irecite_word_list_box .irecite_wor_right {
+    margin-left: 0;
   }
 }

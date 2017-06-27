@@ -151,6 +151,9 @@ $color: #f92672;
             <li>
                 <router-link to="/city">city</router-link>
             </li>
+            <li>
+                <router-link to="/scroll">scroll</router-link>
+            </li>
         </ul>
     
         <div class="irouter-view">

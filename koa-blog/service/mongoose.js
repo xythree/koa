@@ -9,6 +9,7 @@ const db = mongoose.createConnection("localhost", "koa_blog")
 
 //const db = mongoose.connect("mongoodb://localhost/test")
 
+global.MgTypes = mongoose.Types
 
 module.exports = {
     mongoose,

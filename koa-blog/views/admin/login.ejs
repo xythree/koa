@@ -46,7 +46,14 @@
                             params: d
                         }).then(result => {
                             if (result.status == 200 && result.data == "ok") {
-                                location.href = "/admin/index"
+                                let url = ""
+
+                                if (document.referrer) {
+                                    url = document.referrer
+                                } else {
+                                    url = location.search.replace(/^\?url\=/, "")
+                                }
+                                location.href = url
                             } else {
                                 alert(result.data)
                             }
