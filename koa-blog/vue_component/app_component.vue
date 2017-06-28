@@ -152,7 +152,7 @@ $color: #f92672;
                 <router-link to="/city">city</router-link>
             </li>
             <li>
-                <router-link to="/scroll">scroll</router-link>
+                <router-link to="/scrollBox">scrollBox</router-link>
             </li>
         </ul>
     

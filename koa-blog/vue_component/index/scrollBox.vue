@@ -1,3 +1,107 @@
+<style lang="sass">
+
+.scrollDemo {
+    padding: 30px;
+    .iscroll_box {
+        background:#efe;
+    }
+}
+
+</style>
+
+<template>
+    <div class="scrollDemo">
+        <p>自定义滚动条,无限加载</p>
+        <br />
+        <scroll_box :value="value" :config="config" :scrollCallBack="scrollCallBack">
+            <p v-for="item in arr">{{item}}</p>
+        </scroll_box>
+        <br />
+        <p v-for="item in aa">
+            <a href="javascript:;" @click="jump(item)">跳转到{{item}}</a>
+        </p>
+        <br />
+        <pre>
+            <code class="html">
+                {{demo}}
+            </code>
+        </pre>
+        <pre>
+            <code class="html">
+                {{code}}
+            </code>
+        </pre>
+    </div>
+</template>
+
+<script>
+import scroll_box from "../scroll_box/scroll_box.vue"
+
+export default {
+    mounted() {
+       
+    },
+    components: {
+        scroll_box
+    },
+    methods: {
+        jump(n) {
+            this.v = n
+        },
+        scrollCallBack(obj) {
+            if (obj.type == "bottom") {
+                let p = document.createElement("p")
+
+                this.arr.push(this.arr.length)
+                p.innerHTML = this.arr.length
+                obj.box.appendChild(p)
+            }
+        }
+    },
+    computed: {
+        arr() {
+            let temp = []
+            for (let i = 0; i < 50; i++) {
+                temp.push(i)
+            }
+            return temp
+        },
+        value() {
+            return this.v
+        }
+    },
+    data() {
+        return {
+            aa: [0, 100, 300, 600],
+            v: "",
+            config: {
+                width: 200,
+                height: 200,
+                unit: "px",
+                hoverStatus: false
+            },
+            demo: `
+/*
+*   :props {
+*       @number: value //定义滚动条的位置，非必需
+*       @object: config: {
+*                   width: 盒子的宽度，默认200
+*                   height: 盒子的高度，默认200
+*                   unit: 单位，默认px
+*                   hoverStatus: 是否鼠标离开盒子后隐藏滚动条，默认false
+*               }
+*
+*       @function: scrollCallBack(params: object) {box: "盒子容器的节点",type: "top|middle|bottom",val: "已滚动到的值"}
+*   }
+*/
+    <scroll_box :value="value" :config="config" :scrollCallBack="scrollCallBack">
+        <!--
+            要嵌套的组件或者html
+        -->
+    </scroll_box>
+
+            `,
+            code: `
 <style lang="sass" scoped>
 .iscroll_box {
     position: relative;    
@@ -56,7 +160,7 @@
     </div>
 </template>
 
-<script>
+\<script\>
 
 export default {
     props: ["config", "scrollCallBack", "value"],
@@ -251,5 +355,9 @@ export default {
         }
     }
 }
-
+\<\/script\>
+            `
+        }
+    }
+}
 </script>

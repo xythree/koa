@@ -14,6 +14,7 @@ import calendar from "../../../vue_component/index/calendar.vue"
 import calendarSelect from "../../../vue_component/index/calendarSelect.vue"
 import alertBox from "../../../vue_component/index/alert.vue"
 import city from "../../../vue_component/index/city.vue"
+import scrollBox from "../../../vue_component/index/scrollBox.vue"
 
 let routes = [{
     path: "/",
@@ -46,6 +47,9 @@ let routes = [{
 }, {
     path: "/city",
     component: city
+}, {
+    path: "/scrollBox",
+    component: scrollBox
 }]
 
 
@@ -68,7 +72,7 @@ router.beforeEach((to, from, next) => {
             t.innerHTML = "<ol>" + code + "</ol>"
             hljs.highlightBlock(t)
         })
-    }, 1)
+    }, 10)
     next()
 })
 
