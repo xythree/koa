@@ -17,7 +17,7 @@ module.exports = (router, render) => {
             //obj = { _id: params.id }
             obj = { aid: global.MgTypes.ObjectId(params.id) }
 
-            await mon.Article.update(obj, {
+            await mon.Article.update({ _id: params.id }, {
                 $inc: {
                     views: 1
                 }
@@ -108,13 +108,13 @@ module.exports = (router, render) => {
                     }
                 }
             }])
-            if (result[0].result.length) {
+            if (result && result[0].result.length) {
                 result[0].result.forEach(t => {
                     t.title = validator.unescape(t.title)
                     t.content = validator.unescape(t.content)
                 })
             }
-            result = result.length ? result[0] : {}
+            result = (result && result.length) ? result[0] : {}
         } else {
             result.count = await sql.article.count({})
         }

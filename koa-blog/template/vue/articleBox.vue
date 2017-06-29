@@ -217,8 +217,8 @@
             <div class="iarticle">
                 <h3 class="iarticle_title">{{title}}</h3>
                 <div class="iarticle_time_views">
-                    <span class="iarticle_time">{{time | getLastTime}}</span>
-                    <span class="iarticle_views">{{views}}次浏览</span>
+                    <span class="iarticle_time" v-if="false">{{time | getLastTime}}</span>
+                    <span class="iarticle_views" v-if="false">{{views}}次浏览</span>
                 </div>
                 <div class="iarticle_content" v-html="content"></div>
                 <div class="isource_box">
@@ -262,7 +262,7 @@
         </ul>
         <paginationBox :total="total" :paginationCallBack="paginationCallBack"></paginationBox>
         <div class="icomment_box">
-            <form ref="icommentForm">
+            <form ref="icommentForm" @submit="submitFn">
                 <div class="icomment_name">
                     <label>名称:</label>
                     <p>
@@ -385,12 +385,8 @@ export default {
                 this.total = result.data.count
                 this.commentList = result.data.result
             })
-        }
-    },
-    mounted() {
-        this.fetchData()
-
-        this.$refs.icommentForm.addEventListener("submit", e => {
+        },
+        submitFn(e) {
             e.preventDefault()
             axios.post("/comment", {
                 flag: this.flag,
@@ -403,7 +399,14 @@ export default {
                     this.comment_username = this.comment_email = this.comment_content = ""
                 }
             })
-        })
+        }
+    },
+    mounted() {
+        this.fetchData()
+
+        //this.$refs.icommentForm.addEventListener("submit", e => {
+            
+        //})
     }
 }
 </script>

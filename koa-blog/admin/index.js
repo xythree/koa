@@ -89,7 +89,7 @@ module.exports = (router, render) => {
 
             result.result = await sql.Users.findOne({ username: params.username })
 
-            if (result.result.length) {
+            if (result.result && result.result.length) {
                 result.code = 2
                 result.msg = "用户名已经存在"
             } else {

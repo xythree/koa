@@ -1,20 +1,12 @@
 import Vue from "vue"
 
 
-import axios from "axios"
+import app from "./../../../template/vue/tools/tools.vue"
 
 
 let vm = new Vue({
     el: "#tools",
-    data: {
-        src: ""
-    },
     components: {
-        app: {
-            template: "<div></div>"
-        }
-    },
-    mounted() {
-
+        app
     }
 })

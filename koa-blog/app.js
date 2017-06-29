@@ -6,6 +6,7 @@ const bodyparser = require("koa-bodyparser")
 const session = require("koa-session2")
 const app = new koa()
 const path = require("path")
+const fs = require("fs")
 
 const config = require("./config")
 const mw_request = require("./middleware/request")
@@ -50,6 +51,26 @@ require("./service/tools")(router, render)
 
 require("./admin/index")(router, render)
 
+let qrcode = require("./service/qrcode")()
+
+router.post("/qrcode", async ctx => {
+    let params = ctx.request.body
+    let result = {}
+
+    if (params.text == "") {
+        result.code = 0
+        result.msg = "内容不能为空"
+    } else {
+        result.result = await qrcode({
+            text: params.text,
+            type: params.type || "png",
+            size: params.size || 6,
+            margin: params.margin || 1
+        })
+    }
+
+    ctx.body = await result
+})
 
 router.get("/m", async ctx => {
     ctx.body = "mobile"
@@ -74,6 +95,7 @@ router.get("/demo", async ctx => {
 router.post("/demo", async ctx => {
     ctx.body = await "ok"
 })
+
 
 app.listen(config.port, () => {
     console.log(`running port: ${config.port}`)
