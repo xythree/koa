@@ -2,12 +2,12 @@
 .iscroll_box {
     position: relative;    
     overflow: hidden;
-
+    user-select: none;
     .iscroll_box_content {
         position: relative;
         top: 0;
         left: 0;
-        transition: top .5s;
+        transition: top .25s;
     }
     .iscroll_box_bar {
         position: absolute;
@@ -17,18 +17,21 @@
         height: 100%;
         border-radius: 5px;
         background-color: #eee;
-        user-select: none;
 
         span {
             position: absolute;
             width: 100%;
             height: 20px;
             border-radius: 5px;
-            transition: top .5s;
             background-color:#333;
+            transition: top .25s;
+        }
+        .active {
+            transition: none;
         }
     }
 }
+
 
 .fade-enter-active,
 .fade-leave-active {
@@ -50,7 +53,7 @@
     
         <transition name="fade">
             <div class="iscroll_box_bar" @mousedown="iscrollBoxBarDown" v-show="navStatus" :style="{'background-color': config.c1}" ref="iscroll_box_bar">
-                <span :style="spanStyle" @mousedown="iscrollBoxBarSpanDown" ref="iscroll_box_bar_span"></span>
+                <span :style="spanStyle" :class="{'active': status}" @mousedown="iscrollBoxBarSpanDown" ref="iscroll_box_bar_span"></span>
             </div>
         </transition>
     </div>
@@ -205,7 +208,7 @@ export default {
             this.hv = false
         },
         iscrollBoxBarSpanDown(e) {
-            this.y = e.y
+            this.y = e.y - this.$refs.iscroll_box_bar_span.offsetTop
             this.status = true
         },
         iscrollBoxBarDown(e) {
@@ -241,8 +244,8 @@ export default {
         document.addEventListener("mousemove", e => {
             if (!this.status) return
             let ny = e.y - this.y
-            
-            this.val = (-ny - this.$refs.iscroll_box_bar_span.offsetTop) / this.coe
+
+            this.val = -ny / this.coe
             this.delatFn(-ny)
         }, false)
 

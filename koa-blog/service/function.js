@@ -1,8 +1,9 @@
 const fs = require("fs")
+const path = require("path")
 
 module.exports = sql => {
 
-    return {
+    const obj = {
         async isLogin(ctx) {
             const username = ctx.cookies.get("username")
             let result = []
@@ -23,10 +24,22 @@ module.exports = sql => {
 
             return result
         },
-        async base64(filepath, type) {
+        async base64(filepath) {
             let img = await fs.readFileSync(filepath)
 
-            return "data:image/" + type + ";base64," + img.toString("base64")
+            return "data:image/" + path.extname(filepath).substr(1) + ";base64," + img.toString("base64")
+        },
+        async mkdirsSync(dirname) {
+            if (fs.existsSync(dirname)) {
+                return true
+            } else {
+                if (obj.mkdirsSync(path.dirname(dirname))) {
+                    fs.mkdirSync(dirname)
+                    return true
+                }
+            }
         }
     }
+
+    return obj
 }

@@ -42,19 +42,11 @@ module.exports = (router, render) => {
         })
 
         if (result.state == "SUCCESS") {
-            result = await new Promise((resolve, reject) => {
-                let type = result.type
-                let _url = "./static" + result.url
+            let _url = "./static" + result.url
 
-                setTimeout(() => {
-                    result = base64(_url, type)
-                    resolve(result)
-                }, 500)
+            result = base64(_url)
+            fs.unlink(_url)
 
-                setTimeout(() => {
-                    fs.unlink(_url)
-                }, 5000)
-            })
         }
 
         ctx.body = await result

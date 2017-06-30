@@ -34,7 +34,7 @@ const request = function(params) {
 
     return {
         post(data = {}, data2 = {}) {
-            console.log(data)
+
             const obj = {
                 method: "POST"
             }

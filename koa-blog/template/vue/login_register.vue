@@ -79,6 +79,8 @@ export default {
                 location.href = url
             } else if (document.referrer) {
                 location.href = document.referrer
+            } else {
+                location.href = "/admin/index"
             }
         },
         submit() {

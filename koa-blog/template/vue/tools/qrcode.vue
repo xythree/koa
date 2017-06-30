@@ -93,7 +93,7 @@
             <div class="iqrcode_text">
                 <p>
                     上传图片:
-                    <input type="file" name="file" @change="imgChangeFn" />
+                    <input type="file" name="file" ref="file" @change="imgChangeFn" />
                 </p>
                 <p>
                     <textarea @focus="selectFn" ref="img_textarea" v-model="img_text"></textarea>
@@ -154,6 +154,7 @@ export default {
         emptygetimg() {
             this.img_text = ""
             this.img_src = ""
+            this.$refs.file.value = ""
         },
         imgChangeFn(e) {
             this.img_src = e.target.files || e.dataTransfer.files
@@ -165,7 +166,7 @@ export default {
                 ele.select()
             } catch (e) { }
         },
-        getimg() {            
+        getimg() {
             if (this.img_src) {
                 let files = this.img_src[0]
                 let formdata = new FormData()
@@ -174,12 +175,10 @@ export default {
                     alert("仅支持图片转换")
                     return
                 }
-                /*
                 if (files.size/1024 > 1024) {
                     alert("文件太大了,仅支持小于等于1M")
                     return
                 }
-                */
                 formdata.append('file', files)
 
                 axios({

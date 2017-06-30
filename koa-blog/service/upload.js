@@ -2,19 +2,7 @@ const inspect = require("util").inspect
 const path = require("path")
 const fs = require("fs")
 const Busboy = require("busboy")
-
-
-function mkdirsSync(dirname) {
-
-    if (fs.existsSync(dirname)) {
-        return true
-    } else {
-        if (mkdirsSync(path.dirname(dirname))) {
-            fs.mkdirSync(dirname)
-            return true
-        }
-    }
-}
+const { mkdirsSync } = require("./function")()
 
 function uploadFile(ctx, options) {
     let req = ctx.req

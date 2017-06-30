@@ -1,10 +1,12 @@
 const fs = require("fs")
 const qr = require('qr-image')
-const { base64 } = require("./function")()
+const { base64, mkdirsSync } = require("./function")()
 
 module.exports = () => {
 
     return async({ text, size = 6, type = "png", margin = 1, path = "./static/qrcode/" }) => {
+
+        mkdirsSync(path)
 
         return new Promise((resolve, reject) => {
             let _qr = qr.image(text, {
@@ -25,7 +27,9 @@ module.exports = () => {
             })
 
             qr_pipe.on('finish', function() {
-                let str = base64(imgName, type)
+                let str = ""
+
+                str = base64(imgName)
 
                 fs.unlinkSync(imgName)
                 resolve(str)
