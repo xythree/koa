@@ -1,6 +1,6 @@
-let fs = require("fs")
-let qr = require('qr-image')
-
+const fs = require("fs")
+const qr = require('qr-image')
+const { base64 } = require("./function")()
 
 module.exports = () => {
 
@@ -25,10 +25,10 @@ module.exports = () => {
             })
 
             qr_pipe.on('finish', function() {
-                let img = fs.readFileSync(imgName)
+                let str = base64(imgName, type)
 
                 fs.unlinkSync(imgName)
-                resolve("data:image/" + type + ";base64," + img.toString("base64"))
+                resolve(str)
             })
         })
     }

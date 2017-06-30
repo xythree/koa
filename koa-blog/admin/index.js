@@ -1,17 +1,19 @@
 const sql = require("./../service/model")
 const md5 = require("md5")
 const validator = require("validator")
+const fs = require("fs")
+const path = require("path")
 const { uploadFile } = require("./../service/upload")
 const { isLogin } = require("./../service/function")(sql)
-
 
 module.exports = (router, render) => {
 
     router.use("/admin/*", async(ctx, next) => {
         let is_login = await isLogin(ctx)
         let _path = ctx.path
-        if (!is_login.length && _path != "/admin/login" && _path != "/admin/register" && _path != "/login" && _path != "/register") {
-            ctx.redirect("/admin/login")
+        if (!is_login.length && _path != "/admin/login_register" && _path != "/login" && _path != "/register") {
+            ctx.redirect("/admin/login_register")
+            return
         }
         ctx.session.usernameInfo = is_login[0]
         await next()
@@ -26,20 +28,34 @@ module.exports = (router, render) => {
     router.get("/admin/index", async ctx => {
         if (ctx.session.usernameInfo && ctx.session.usernameInfo.level != 9) {
             ctx.redirect("/")
+            return
         }
         ctx.body = await render("/admin/index")
     })
 
+    router.get("/admin/login_register", async ctx => {
+        let is_login = await isLogin(ctx)
 
+        if (is_login.length) {
+            ctx.redirect("/admin/index")
+            return
+        }
+
+        ctx.body = await render("/admin/login_register")
+    })
+
+    /*
     router.get("/admin/login", async ctx => {
         let is_login = await isLogin(ctx)
 
         if (is_login.length) {
             ctx.redirect("/admin/index")
+            return
         }
 
         ctx.body = await render("/admin/login")
     })
+    */
 
 
     router.get("/login", async ctx => {
@@ -70,15 +86,18 @@ module.exports = (router, render) => {
     })
 
 
+    /*
     router.get("/admin/register", async ctx => {
         let is_login = await isLogin(ctx)
 
         if (is_login.length) {
             ctx.redirect("/admin/index")
+            return
         }
 
         ctx.body = await render("/admin/register")
     })
+    */
 
 
     router.post("/register", async ctx => {
@@ -147,7 +166,7 @@ module.exports = (router, render) => {
                 break
             case "uploadimage":
                 result = { state: false }
-                let originalPath = "/static/images/upload-files"
+                let originalPath = "/static/images/upload"
                 let serverFilePath = path.join(__dirname, originalPath)
 
                 // 上传文件事件

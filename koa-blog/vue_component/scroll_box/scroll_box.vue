@@ -43,13 +43,13 @@
 </style>
 
 <template>
-    <div class="iscroll_box" @mouseup="iscrollBoxUp" @mousemove="iscrollBoxMove" @mouseover="iscrollBoxOver" @mouseout="iscrollBoxOut" ref="iscroll_box" :style="objStyle">
+    <div class="iscroll_box" @mouseover="iscrollBoxOver" @mouseout="iscrollBoxOut" ref="iscroll_box" :style="objStyle">
         <div class="iscroll_box_content" ref="iscroll_box_content" :style="topVal">
             <slot></slot>
         </div>
     
         <transition name="fade">
-            <div class="iscroll_box_bar" @mouseout="iscrollBoxBarOut" @mousedown="iscrollBoxBarDown" v-show="navStatus" :style="{'background-color': config.c1}" ref="iscroll_box_bar">
+            <div class="iscroll_box_bar" @mousedown="iscrollBoxBarDown" v-show="navStatus" :style="{'background-color': config.c1}" ref="iscroll_box_bar">
                 <span :style="spanStyle" @mousedown="iscrollBoxBarSpanDown" ref="iscroll_box_bar_span"></span>
             </div>
         </transition>
@@ -201,19 +201,11 @@ export default {
         iscrollBoxOut() {
             if (this.config.hoverStatus) {
                 this.navStatus = false
-                this.status = false
             }
             this.hv = false
         },
-        iscrollBoxMove(e) {
-            if (!this.status) return
-            let ny = e.offsetY - this.y
-
-            this.val = (-ny - this.$refs.iscroll_box_bar_span.offsetTop) / this.coe
-            this.delatFn(-ny)
-        },
         iscrollBoxBarSpanDown(e) {
-            this.y = e.offsetY
+            this.y = e.y
             this.status = true
         },
         iscrollBoxBarDown(e) {
@@ -224,15 +216,11 @@ export default {
             } else {
                 this.val = -e.offsetY / this.coe
             }
-        },
-        iscrollBoxBarOut() {
-            this.status = false
-        },
-        iscrollBoxUp() {
-            this.status = false
+
         }
     },
     mounted() {
+
         this.calculation()
 
         this.wheelEvent(this.$refs.iscroll_box, delta => {
@@ -249,6 +237,18 @@ export default {
             this.val = -this.value
             this.changeVal()
         }
+
+        document.addEventListener("mousemove", e => {
+            if (!this.status) return
+            let ny = e.y - this.y
+            
+            this.val = (-ny - this.$refs.iscroll_box_bar_span.offsetTop) / this.coe
+            this.delatFn(-ny)
+        }, false)
+
+        document.addEventListener("mouseup", e => {
+            this.status = false
+        }, false)
     }
 }
 

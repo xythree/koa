@@ -4,7 +4,6 @@ const fs = require("fs")
 const Busboy = require("busboy")
 
 
-
 function mkdirsSync(dirname) {
 
     if (fs.existsSync(dirname)) {
@@ -14,28 +13,30 @@ function mkdirsSync(dirname) {
             fs.mkdirSync(dirname)
             return true
         }
-
     }
-
 }
-
-
 
 function uploadFile(ctx, options) {
     let req = ctx.req
     let res = ctx.res
     let busboy = new Busboy({ headers: req.headers })
     let fileType = options.fileType || "common"
-    let filePath = path.join(options.path, fileType)
+    let filePath = path.join("./", options.originalPath, fileType)
     let mkdirResult = mkdirsSync(filePath)
 
     return new Promise((resolve, reject) => {
         let result = {
             state: false
         }
-        let formData = {}
 
         busboy.on("file", function(filedname, file, filename, encoding, mimetype) {
+            if (!/image/.test(mimetype)) {
+                result.code = 0
+                result.state = "filetype error"
+                resolve(result)
+                return
+            }
+
             let fileName = Math.random().toString(16).substr(2) + path.extname(filename)
             let _uploadFilePath = path.join(filePath, fileName)
             let saveTo = path.join(_uploadFilePath)
@@ -44,11 +45,9 @@ function uploadFile(ctx, options) {
 
             file.on("end", function() {
                 result.state = "SUCCESS"
-                result.url = options.originalPath.replace("/static", "") + "/" + fileType + "/" + fileName
+                result.url = saveTo.replace("static", "")
                 result.title = fileName
-                result.original = formData.name
                 result.type = mimetype
-                result.size = formData.size
                     /*
                         state => "" //上传状态，上传成功时必须返回"SUCCESS"
                         url => "" //返回的地址
@@ -61,9 +60,6 @@ function uploadFile(ctx, options) {
             })
         })
 
-        busboy.on("field", function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
-            formData[fieldname] = inspect(val)
-        })
 
         busboy.on("finish", () => {
             resolve(result)

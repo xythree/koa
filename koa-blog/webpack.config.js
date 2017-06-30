@@ -9,6 +9,7 @@ module.exports = {
         poetry: "./static/js/poetry/index.js",
         tools: "./static/js/tools/index.js",
         word: "./static/js/word/index.js",
+        login_register: "./static/js/login_register/index.js",
         demo: "./static/js/demo/index.js"
     },
     output: {

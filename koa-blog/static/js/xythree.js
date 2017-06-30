@@ -51,3 +51,14 @@ exports.ua = () => {
         ali: u.indexOf('AliApp') > -1
     }
 }
+
+exports.getParams = name => {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
+    let result = window.location.search.substr(1).match(reg)
+
+    if (result != null) {
+        return unescape(result[2])
+    } else {
+        return null
+    }
+}

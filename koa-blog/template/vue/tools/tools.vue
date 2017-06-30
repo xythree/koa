@@ -18,9 +18,6 @@ import qrcode_box from "./qrcode.vue"
 export default {
     components: {
         qrcode_box
-    },
-    mounted() {
-        
     }
 }
 </script>

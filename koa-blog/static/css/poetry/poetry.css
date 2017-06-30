@@ -154,6 +154,7 @@ body {
   width: 100%;
   background: #fcf8ee;
   border-bottom: 1px solid #ddd;
+  display: none;
 }
 
 .imenu {
@@ -162,7 +163,6 @@ body {
   left: 12px;
   width: 25px;
   cursor: pointer;
-  display: none;
 }
 
 .imenu span {
@@ -185,7 +185,7 @@ body {
     -webkit-transition: all .5s;
     transition: all .5s;
   }
-  .poetry-box .imenu {
+  .poetry-box .imenuBox {
     display: block;
   }
   .poetry-box .imenuBg {

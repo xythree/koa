@@ -316,7 +316,7 @@ let vm = new Vue({
         changUser() {
             axios.get("/logout").then(result => {
                 if (result.status == 200 && result.data == "logout success") {
-                    location.href = "/admin/login"
+                    location.href = "/admin/login_register"
                 }
             })
         }

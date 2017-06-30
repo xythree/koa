@@ -241,7 +241,7 @@ export default {
         },
         alertBoxCallBack(bool) {
             if (bool) {
-                location.href = "/admin/login?url=" + location.href
+                location.href = "/admin/login_register?url=" + location.href
             } else {
                 this.alertBoxStatus = false
                 this.alertBoxText = ""

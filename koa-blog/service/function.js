@@ -1,3 +1,5 @@
+const fs = require("fs")
+
 module.exports = sql => {
 
     return {
@@ -18,7 +20,13 @@ module.exports = sql => {
                     phone: 1
                 })
             }
+
             return result
+        },
+        async base64(filepath, type) {
+            let img = await fs.readFileSync(filepath)
+
+            return "data:image/" + type + ";base64," + img.toString("base64")
         }
     }
 }

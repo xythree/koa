@@ -15,10 +15,13 @@ const render = views("./views", {
     ext: "ejs"
 })
 
+
 app.use(session({
     maxAge: 1000 * 60 * 60 * 24,
     key: "SESSIONID" //default "koa:sess" 
 }))
+
+
 
 app.use(mw_request())
 
@@ -51,27 +54,6 @@ require("./service/tools")(router, render)
 
 require("./admin/index")(router, render)
 
-let qrcode = require("./service/qrcode")()
-
-router.post("/qrcode", async ctx => {
-    let params = ctx.request.body
-    let result = {}
-
-    if (params.text == "") {
-        result.code = 0
-        result.msg = "内容不能为空"
-    } else {
-        result.result = await qrcode({
-            text: params.text,
-            type: params.type || "png",
-            size: params.size || 6,
-            margin: params.margin || 1
-        })
-    }
-
-    ctx.body = await result
-})
-
 router.get("/m", async ctx => {
     ctx.body = "mobile"
 })
@@ -79,11 +61,6 @@ router.get("/m", async ctx => {
 
 router.get("/poetry", async ctx => {
     ctx.body = await render("poetry")
-})
-
-
-router.post("/upload", async ctx => {
-    ctx.body = "ok"
 })
 
 

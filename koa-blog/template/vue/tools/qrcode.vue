@@ -29,8 +29,7 @@
             border-radius: 5px;
             text-decoration: none;
         }
-    }
-    
+    }    
     .img {
         float: left;
         margin-left: 50px;
@@ -45,13 +44,13 @@
             <h5>二维码生成</h5>
             <div class="iqrcode_text">
                 <p>
-                    <textarea v-model="text"></textarea>
+                    <textarea @focus="selectFn" v-model="text"></textarea>
                 </p>
                 <p>
                     <span>
                         尺寸:
                         <select v-model="size">
-                            <option v-for="(item,index) in options" :value="index+1">{{index+1}}</option>
+                            <option v-for="(item,index) in options" :value="index+1">{{(index+1)*num}}px</option>
                         </select>
                     </span>
                     <span>
@@ -74,29 +73,30 @@
             </div>
             <img class="img" :src="src" />
         </div>
+
         <div class="iqrcode_box">
             <h5>base64转图片</h5>
             <div class="iqrcode_text">
                 <p>
-                    <textarea v-model="base64_text"></textarea>
+                    <textarea @focus="selectFn" v-model="base64_text"></textarea>
                 </p>
                 <p>
                     <a href="javascript:;" class="btn" @click="getbase64">生成</a>
                     <a href="javascript:;" class="btn" @click="emptygetbase64">清空</a>
                 </p>
             </div>
-            <img class="img" :src="base64_src" />
+            <img class="img" style="border: none;" :src="base64_src" />
         </div>
-    
+
         <div class="iqrcode_box">
             <h5>图片转base64</h5>
             <div class="iqrcode_text">
                 <p>
                     上传图片:
-                    <input type="file" :value="img_src" />
+                    <input type="file" name="file" @change="imgChangeFn" />
                 </p>
                 <p>
-                    <textarea @focus="imgtextareafn" ref="img_textarea" v-model="img_text"></textarea>
+                    <textarea @focus="selectFn" ref="img_textarea" v-model="img_text"></textarea>
                 </p>
                 <p>
                     <a href="javascript:;" class="btn" @click="getimg">生成</a>
@@ -115,8 +115,8 @@ export default {
         return {
             text: "",
             src: "",
-            num: 27,
-            size: 6,
+            num: 23,
+            size: 10,
             options: Array(40),
             type: "png",
             imgType: ["png", "jpg", "gif"],
@@ -155,11 +155,44 @@ export default {
             this.img_text = ""
             this.img_src = ""
         },
-        getimg() {
-
+        imgChangeFn(e) {
+            this.img_src = e.target.files || e.dataTransfer.files
         },
-        imgtextareafn() {
+        selectFn(e) {
+            let ele = e.target
+            if (ele.value == "") return
+            try {
+                ele.select()
+            } catch (e) { }
+        },
+        getimg() {            
+            if (this.img_src) {
+                let files = this.img_src[0]
+                let formdata = new FormData()
+                
+                if (!/^image/.test(files.type)) {
+                    alert("仅支持图片转换")
+                    return
+                }
+                /*
+                if (files.size/1024 > 1024) {
+                    alert("文件太大了,仅支持小于等于1M")
+                    return
+                }
+                */
+                formdata.append('file', files)
 
+                axios({
+                    url: "/base64",
+                    method: "post",
+                    data: formdata,
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }).then(result => {
+                    this.img_text = result.data
+                })
+            }
         }
     },
     mounted() {
