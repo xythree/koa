@@ -101,9 +101,12 @@
                 <div class="isong_process_box">
                     <div class="isong_start_time">{{audioCurrentTime|timeFormat}}</div>
                     <div class="isong_process" ref="isong_process">
-                        <em :style="{'width': setSongProcess}">
-                            <b></b>
-                        </em>
+                        <!--
+                            <em :style="{'width': setSongProcess}">
+                                <b></b>
+                            </em>
+                            -->
+                        <process_box :drag="process_drag" :value="process_value" :config="process_config" :processCallBack="processCallBack"></process_box>
                     </div>
                     <div class="isong_end_time">{{audioDuration|timeFormat}}</div>
                 </div>
@@ -118,9 +121,12 @@
                 <div class="ivolume_controll">
                     <div @click="setVolume" class="ivolume_btn" :class="{'muted': muted}"></div>
                     <div class="ivolume_process">
-                        <em :style="{'width': volumeVal}">
-                            <b></b>
-                        </em>
+                        <!--
+                            <em :style="{'width': volumeVal}">
+                                <b></b>
+                            </em>
+                            -->
+                        <process_box :drag="true" :value="process_volume_value" :config="process_config" :processCallBack="processVolumeCallBack"></process_box>
                     </div>
                 </div>
             </div>
@@ -132,6 +138,7 @@
 import axios from "axios"
 import pagination_box from "./../../vue_component/pagination/pagination.vue"
 import { ua } from "./../../static/js/xythree"
+import process_box from "./../../vue_component/process_box/process_box.vue"
 
 export default {
     data() {
@@ -169,11 +176,19 @@ export default {
             sentence: "",
             rotateZ: 0,
             timerRotate: "",
-            showPlateStatus: false
+            showPlateStatus: false,
+            process_config: {
+                c1: "#666",
+                c2: "#fff",
+                c3: "#fff"
+            },
+            process_drag: false,
+            process_volume_value: 1
         }
     },
     components: {
-        pagination_box
+        pagination_box,
+        process_box
     },
     computed: {
         mobile() {
@@ -183,6 +198,9 @@ export default {
             return {
                 transform: `rotateZ(${this.rotateZ}deg)`
             }
+        },
+        process_value() {
+            return this.audioCurrentTime / this.audioDuration || 0
         }
     },
     filters: {
@@ -204,6 +222,17 @@ export default {
         }
     },
     methods: {
+        processVolumeCallBack(n) {
+            if (n <= 0) {
+                this.muted = true
+            } else {
+                this.muted = false
+            }
+            this.$refs.audio.volume = n
+        },
+        processCallBack(n) {
+            this.$refs.audio.currentTime = n * this.audioDuration
+        },
         showPlate() {
             this.showPlateStatus = !this.showPlateStatus
         },
@@ -225,11 +254,13 @@ export default {
 
             if (this.muted) {
                 audio.volume = this.tempVolume
+                this.process_volume_value = this.tempVolume
                 this.tempVolume = 0
                 this.muted = false
             } else {
                 this.tempVolume = audio.volume
                 audio.volume = 0
+                this.process_volume_value = 0
                 this.muted = true
             }
             this.setVolumeVal(audio.volume)
@@ -400,6 +431,7 @@ export default {
             ilyric = refs.ilyric
 
         audioBox.addEventListener('play', e => {
+            this.process_drag = true
             this.playStatus = true
             this.playend = false
             this.audioCurrentTime = refs.audio.currentTime
@@ -427,6 +459,7 @@ export default {
         audioBox.addEventListener('ended', () => {
             this.playStatus = false
             this.playend = true
+            this.process_drag = false
 
             let condIcon = this.condIcon[this.condIconIndex]
 

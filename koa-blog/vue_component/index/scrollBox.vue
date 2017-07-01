@@ -5,6 +5,9 @@
     .iscroll_box {
         background:#efe;
     }
+    .loading {
+        text-align: center;
+    }
 }
 
 </style>
@@ -13,8 +16,9 @@
     <div class="scrollDemo">
         <p>自定义滚动条,无限加载</p>
         <br />
-        <scroll_box :value="value" :config="config" :scrollCallBack="scrollCallBack">
+        <scroll_box :value="value" :v="400" :config="config" :scrollCallBack="scrollCallBack">
             <p v-for="item in arr">{{item}}</p>
+            <div class="loading" v-show="loading">loading...</div>
         </scroll_box>
         <br />
         <p v-for="item in aa">
@@ -22,15 +26,15 @@
         </p>
         <br />
         <pre>
-            <code class="html">
-                {{demo}}
-            </code>
-        </pre>
+                    <code class="html">
+                        {{demo}}
+                    </code>
+                </pre>
         <pre>
-            <code class="html">
-                {{code}}
-            </code>
-        </pre>
+                    <code class="html">
+                        {{code}}
+                    </code>
+                </pre>
     </div>
 </template>
 
@@ -38,9 +42,7 @@
 import scroll_box from "../scroll_box/scroll_box.vue"
 
 export default {
-    mounted() {
-       
-    },
+
     components: {
         scroll_box
     },
@@ -50,11 +52,15 @@ export default {
         },
         scrollCallBack(obj) {
             if (obj.type == "bottom") {
-                let p = document.createElement("p")
-
-                this.arr.push(this.arr.length)
-                p.innerHTML = this.arr.length
-                obj.box.appendChild(p)
+                this.loading = true
+                clearTimeout(this.timer)
+                this.timer = setTimeout(() => {
+                    for (let i = 0; i < 15; i++) {
+                        this.arr.push(this.arr.length)
+                    }
+                    this.loading = false
+                    obj.render()
+                }, 300)
             }
         }
     },
@@ -72,6 +78,8 @@ export default {
     },
     data() {
         return {
+            loading: false,
+            timer: "",
             aa: [0, 100, 300, 600],
             v: "",
             config: {
@@ -83,12 +91,15 @@ export default {
             demo: `
 /*
 *   :props {
+*       @number: v //滚动到距离底部多少是触发type为bottom,默认为0
 *       @number: value //定义滚动条的位置，非必需
 *       @object: config: {
 *                   width: 盒子的宽度，默认200
 *                   height: 盒子的高度，默认200
 *                   unit: 单位，默认px
 *                   hoverStatus: 是否鼠标离开盒子后隐藏滚动条，默认false
+*                   c1: 滚动柄的背景颜色，默认#eee
+*                   c2: 滚动条的背景颜色, 默认#333
 *               }
 *
 *       @function: scrollCallBack(params: object) {box: "盒子容器的节点",type: "top|middle|bottom",val: "已滚动到的值"}
@@ -106,12 +117,12 @@ export default {
 .iscroll_box {
     position: relative;    
     overflow: hidden;
-
+    user-select: none;
     .iscroll_box_content {
         position: relative;
         top: 0;
         left: 0;
-        transition: top .5s;
+        transition: top .25s;
     }
     .iscroll_box_bar {
         position: absolute;
@@ -121,18 +132,21 @@ export default {
         height: 100%;
         border-radius: 5px;
         background-color: #eee;
-        user-select: none;
 
         span {
             position: absolute;
             width: 100%;
             height: 20px;
             border-radius: 5px;
-            transition: top .5s;
             background-color:#333;
+            transition: top .25s;
+        }
+        .active {
+            transition: none;
         }
     }
 }
+
 
 .fade-enter-active,
 .fade-leave-active {
@@ -154,7 +168,7 @@ export default {
     
         <transition name="fade">
             <div class="iscroll_box_bar" @mousedown="iscrollBoxBarDown" v-show="navStatus" :style="{'background-color': config.c1}" ref="iscroll_box_bar">
-                <span :style="spanStyle" @mousedown="iscrollBoxBarSpanDown" ref="iscroll_box_bar_span"></span>
+                <span :style="spanStyle" :class="{'active': status}" @mousedown="iscrollBoxBarSpanDown" ref="iscroll_box_bar_span"></span>
             </div>
         </transition>
     </div>
@@ -163,11 +177,12 @@ export default {
 \<script\>
 
 export default {
-    props: ["config", "scrollCallBack", "value"],
+    props: ["config", "scrollCallBack", "value", "v"],
     data() {
         return {
             navStatus: false,
             val: 0,
+            vv: this.v || 0,
             num: 20,
             coe: 1,
             minVal: 0,
@@ -255,27 +270,29 @@ export default {
         },
         delatFn(delta) {
             let obj = {
-                box: this.$refs.iscroll_box_content
+                box: this.$refs.iscroll_box_content,
+                type: "middle"
             }
+            this.val -= this.num
+
             if (delta < 0) {
-                if (this.val <= -this.maxVal) {
-                    this.val = -this.maxVal
+                if (this.val - this.vv <= -this.maxVal) {
+                    if (!this.vv) {
+                        this.val = -this.maxVal
+                    }
                     obj.type = "bottom"
+                    obj.render = () => {
+                        return this.delatFn(-1)
+                    }
                     clearTimeout(this.timer)
                     this.timer = setTimeout(() => {
                         this.calculation()
                     }, 150)
-                } else {
-                    this.val -= this.num
-                    obj.type = "middle"
                 }
             } else {
                 if (this.val >= 0) {
                     this.val = 0
                     obj.type = "top"
-                } else {
-                    this.val += this.num
-                    obj.type = "middle"
                 }
             }
             obj.val = -this.val
@@ -309,7 +326,7 @@ export default {
             this.hv = false
         },
         iscrollBoxBarSpanDown(e) {
-            this.y = e.y
+            this.y = e.y - this.$refs.iscroll_box_bar_span.offsetTop
             this.status = true
         },
         iscrollBoxBarDown(e) {
@@ -345,8 +362,8 @@ export default {
         document.addEventListener("mousemove", e => {
             if (!this.status) return
             let ny = e.y - this.y
-            
-            this.val = (-ny - this.$refs.iscroll_box_bar_span.offsetTop) / this.coe
+
+            this.val = -ny / this.coe
             this.delatFn(-ny)
         }, false)
 

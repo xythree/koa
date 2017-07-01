@@ -62,11 +62,12 @@
 <script>
 
 export default {
-    props: ["config", "scrollCallBack", "value"],
+    props: ["config", "scrollCallBack", "value", "v"],
     data() {
         return {
             navStatus: false,
             val: 0,
+            vv: this.v || 0,
             num: 20,
             coe: 1,
             minVal: 0,
@@ -154,27 +155,29 @@ export default {
         },
         delatFn(delta) {
             let obj = {
-                box: this.$refs.iscroll_box_content
+                box: this.$refs.iscroll_box_content,
+                type: "middle"
             }
+            this.val -= this.num
+
             if (delta < 0) {
-                if (this.val <= -this.maxVal) {
-                    this.val = -this.maxVal
+                if (this.val - this.vv <= -this.maxVal) {
+                    if (!this.vv) {
+                        this.val = -this.maxVal
+                    }
                     obj.type = "bottom"
+                    obj.render = () => {
+                        return this.delatFn(-1)
+                    }
                     clearTimeout(this.timer)
                     this.timer = setTimeout(() => {
                         this.calculation()
                     }, 150)
-                } else {
-                    this.val -= this.num
-                    obj.type = "middle"
                 }
             } else {
                 if (this.val >= 0) {
                     this.val = 0
                     obj.type = "top"
-                } else {
-                    this.val += this.num
-                    obj.type = "middle"
                 }
             }
             obj.val = -this.val

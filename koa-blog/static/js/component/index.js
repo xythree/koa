@@ -15,6 +15,7 @@ import calendarSelect from "../../../vue_component/index/calendarSelect.vue"
 import alertBox from "../../../vue_component/index/alert.vue"
 import city from "../../../vue_component/index/city.vue"
 import scrollBox from "../../../vue_component/index/scrollBox.vue"
+import processBox from "../../../vue_component/index/processBox.vue"
 
 let routes = [{
     path: "/",
@@ -50,6 +51,9 @@ let routes = [{
 }, {
     path: "/scrollBox",
     component: scrollBox
+}, {
+    path: "/processBox",
+    component: processBox
 }]
 
 

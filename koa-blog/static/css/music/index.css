@@ -417,32 +417,6 @@ body {
   flex: 1;
   margin-top: 8px;
   height: 2px;
-  background: #666;
-}
-
-.iprocess .isong_process_box .isong_process em {
-  position: relative;
-  left: 0;
-  top: 0;
-  display: block;
-  height: 2px;
-  width: 0;
-  background: #fff;
-  -webkit-transition: width .25s;
-  transition: width .25s;
-}
-
-.iprocess .isong_process_box .isong_process b {
-  position: absolute;
-  top: 50%;
-  right: -5px;
-  width: 10px;
-  height: 10px;
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
 }
 
 .ivolume {
@@ -872,6 +846,7 @@ body {
     width: 100px;
   }
   .icontent .ifoot .ivolume .ivolume_controll {
+    display: none;
     position: absolute;
     top: 28px;
     right: 10px;
@@ -883,6 +858,8 @@ body {
   }
   .icontent .ifoot .ivolume .iplayListIcon {
     top: 20px;
+    left: auto;
+    right: 20px;
   }
   .icontent .ifoot .ivolume .ivolume_process {
     display: none;

@@ -7,7 +7,9 @@
         text-align: center;
         background: #fff;
         border: 1px solid #ddd;
-        
+        .calendar_header {
+            overflow: hidden;
+        }
         .iprev,
         .inext {
             text-decoration: none;

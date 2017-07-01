@@ -154,6 +154,9 @@ $color: #f92672;
             <li>
                 <router-link to="/scrollBox">scrollBox</router-link>
             </li>
+            <li>
+                <router-link to="/processBox">processBox</router-link>
+            </li>
         </ul>
     
         <div class="irouter-view">
