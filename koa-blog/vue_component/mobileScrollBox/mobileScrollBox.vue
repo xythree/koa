@@ -1,3 +1,4 @@
+
 <style lang="sass" scoped>
 .iscroll_box {
     position: relative;    
@@ -42,6 +43,7 @@
     }
 }
 
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity .5s;
@@ -56,13 +58,13 @@
 
 <template>
     <div class="iscroll_box" :class="{'active': status}" @mouseover="iscrollBoxOver" @mouseout="iscrollBoxOut" ref="iscroll_box" :style="objStyle">
-        <div class="iscroll_box_content" ref="iscroll_box_content" :style="topVal">
+        <div class="iscroll_box_content" @touchstart="iscrollBoxDown" ref="iscroll_box_content" :style="topVal">
             <slot></slot>
         </div>
     
         <transition name="fade">
-            <div class="iscroll_box_bar" @mousedown="iscrollBoxBarDown" v-show="navStatus" :style="{'background-color': config.c1}" ref="iscroll_box_bar">
-                <span :style="spanStyle"  @mousedown="iscrollBoxBarSpanDown" ref="iscroll_box_bar_span"></span>
+            <div class="iscroll_box_bar" @mousedown="iscrollBoxBarDown" @touchstart="iscrollBoxBarDown" v-show="navStatus" :style="{'background-color': config.c1}" ref="iscroll_box_bar">
+                <span :style="spanStyle" @touchstart="iscrollBoxBarSpanDown" @mousedown="iscrollBoxBarSpanDown" ref="iscroll_box_bar_span"></span>
             </div>
         </transition>
     </div>
@@ -95,6 +97,9 @@ export default {
         }
     },
     computed: {
+        mobile() {
+            return window.ontouchstart === undefined ? false : true
+        },
         _unit() {
             return this.config.unit || "px"
         },
@@ -128,6 +133,19 @@ export default {
         }
     },
     methods: {
+        offset(obj) {
+            let ele = obj,
+                left = ele.offsetLeft,
+                top = ele.offsetTop
+
+            while (ele.offsetParent && ele.offsetParent.tagName.toLowerCase() != "body") {
+                ele = ele.offsetParent
+                left += ele.offsetLeft
+                top += ele.offsetTop
+            }
+
+            return { left, top }
+        },
         changeVal() {
             this.val = -this.value
 
@@ -167,28 +185,37 @@ export default {
                 box: this.$refs.iscroll_box_content,
                 type: "middle"
             }
-            this.val -= this.num
 
-            if (delta < 0) {
-                if (this.val - this.vv <= -this.maxVal) {
-                    if (!this.loadstatus) {
-                        this.val = -this.maxVal
-                    }
-                    obj.type = "bottom"
-                    obj.render = () => {
-                        return this.delatFn(-1)
-                    }
-                    clearTimeout(this.timer)
-                    this.timer = setTimeout(() => {
-                        this.calculation()
-                    }, 150)
-                }
+            if (this.mobile) {
+                
+                this.val = -delta + this.y
+                
             } else {
-                if (this.val >= 0) {
-                    this.val = 0
-                    obj.type = "top"
+                if (delta < 0) {
+                    this.val -= this.num
+                    if (this.val - this.vv <= -this.maxVal) {
+                        if (!this.loadstatus) {
+                            this.val = -this.maxVal
+                        }
+                        obj.type = "bottom"
+                        obj.render = () => {
+                            return this.delatFn(-1)
+                        }
+                        clearTimeout(this.timer)
+                        this.timer = setTimeout(() => {
+                            this.calculation()
+                        }, 150)
+                    }
+
+                } else {
+                    this.val += this.num
+                    if (this.val >= 0) {
+                        this.val = 0
+                        obj.type = "top"
+                    }
                 }
             }
+
             obj.val = -this.val
             if (this.loadstatus) {
                 this.scrollCallBack && this.scrollCallBack(obj)
@@ -204,7 +231,7 @@ export default {
                 height: this.minHeight + this._unit
             }
         },
-        iscrollBoxOver() {
+        iscrollBoxOver(e) {
             if (this.config.hoverStatus) {
                 this.navStatus = true
             }
@@ -221,18 +248,44 @@ export default {
             }
             this.hv = false
         },
+        iscrollBoxDown(e) {
+            let _e = e.targetTouches[0]
+            this.y = _e.pageY - this.$refs.iscroll_box_bar_span.offsetTop
+            this.status = true
+            e.preventDefault()
+        },
         iscrollBoxBarSpanDown(e) {
             if (!this.config.darg) return
-            this.y = e.y - this.$refs.iscroll_box_bar_span.offsetTop
+            let _e = e
+            if (e.targetTouches) {
+                _e = e.targetTouches[0]
+            }
+            this.y = _e.pageY - this.$refs.iscroll_box_bar_span.offsetTop
             this.status = true
         },
         iscrollBoxBarDown(e) {
-            if (this.$refs.iscroll_box_bar_span.contains(e.target)) return
-            if (e.offsetY > this.$refs.iscroll_box_bar_span.offsetTop) {
-                this.val = -(e.offsetY - this.minHeight) / this.coe
-                this.delatFn(-e.offsetY)
+            let _e = e,
+                y = 0,
+                span = this.$refs.iscroll_box_bar_span,
+                top = 0, v = 0
+
+            if (e.targetTouches) {
+                _e = e.targetTouches[0]
+                y = _e.pageY
             } else {
-                this.val = -e.offsetY / this.coe
+                y = _e.pageY
+            }
+
+            v = this.offset(_e.target).top
+            y -= v
+            top = this.offset(span).top - v
+
+            if (span.contains(e.target)) return
+            if (y > top) {
+                this.val = -(y - this.minHeight) / this.coe
+                this.delatFn(-y)
+            } else {
+                this.val = -y / this.coe
             }
 
         }
@@ -241,9 +294,15 @@ export default {
 
         this.calculation()
 
-        this.wheelEvent(this.$refs.iscroll_box, delta => {
-            this.delatFn(delta)
-        })
+        let doc = document,
+            _move = this.mobile ? "touchmove" : "mousemove",
+            _end = this.mobile ? "touchend" : "mouseup"
+
+        if (!this.mobile) {
+            this.wheelEvent(this.$refs.iscroll_box, delta => {
+                this.delatFn(delta)
+            })
+        }
 
         if (this.$refs.iscroll_box_content.offsetHeight < this.h) {
             this.navStatus = false
@@ -256,15 +315,19 @@ export default {
             this.changeVal()
         }
 
-        document.addEventListener("mousemove", e => {
+        document.addEventListener(_move, e => {
+            let _e = e
             if (!this.status) return
-            let ny = e.y - this.y
+            if (e.targetTouches) {
+                _e = e.targetTouches[0]
+            }
+            let ny = _e.pageY - this.y
 
             this.val = -ny / this.coe
             this.delatFn(-ny)
         }, false)
 
-        document.addEventListener("mouseup", e => {
+        document.addEventListener(_end, e => {
             this.status = false
         }, false)
     }

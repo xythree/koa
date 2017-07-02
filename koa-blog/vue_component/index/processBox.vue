@@ -1,6 +1,6 @@
 <style lang="sass">
 .demo {
-    width: 40%;
+    width: 55%;
 }
 </style>
 
@@ -26,7 +26,7 @@ export default {
         return {
             v: 0,
             value: 0.1,
-            drag: false
+            drag: true
         }
     },
     components: {
@@ -45,9 +45,7 @@ export default {
         }
     },
     mounted() {
-        setTimeout(() => {
-            this.drag = true
-        }, 3000)
+
     }
 }
 

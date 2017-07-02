@@ -801,23 +801,13 @@ $w: 250px;
                 right: 0;
                 width: 100px;
                 .ivolume_controll {
-                    display: none;
                     position: absolute;
-                    top: 28px;
-                    right: 10px;
-                    -webkit-box-flex: 0;
-                    -ms-flex: none;
-                    flex: none;
-                    width: auto;
-                    margin: 0;
+                    top: -99999px;
                 }
                 .iplayListIcon {
                     top: 20px;
                     left: auto;
                     right: 20px;
-                }
-                .ivolume_process {
-                    display: none;
                 }
             }
         }

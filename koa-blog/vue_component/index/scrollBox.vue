@@ -14,9 +14,7 @@
 
 <template>
     <div class="scrollDemo">
-        <p>自定义滚动条,无限加载</p>
-        <br />
-        <scroll_box :value="value" :v="400" :config="config" :scrollCallBack="scrollCallBack">
+        <scroll_box :value="value"  :config="config1" >
             <p v-for="item in arr">{{item}}</p>
             <div class="loading" v-show="loading">loading...</div>
         </scroll_box>
@@ -24,6 +22,16 @@
         <p v-for="item in aa">
             <a href="javascript:;" @click="jump(item)">跳转到{{item}}</a>
         </p>
+        <br />
+
+        <p>无限加载</p>
+        <br />
+        <scroll_box :v="400" :loadstatus="loadstatus" :config="config" :scrollCallBack="scrollCallBack">
+            <p v-for="item in arr">{{item}}</p>
+            <div class="loading" v-show="loading">loading...</div>
+        </scroll_box>
+        <br />
+        
         <br />
         <pre>
                     <code class="html">
@@ -53,12 +61,14 @@ export default {
         scrollCallBack(obj) {
             if (obj.type == "bottom") {
                 this.loading = true
+                this.loadstatus = false
                 clearTimeout(this.timer)
                 this.timer = setTimeout(() => {
                     for (let i = 0; i < 15; i++) {
                         this.arr.push(this.arr.length)
                     }
                     this.loading = false
+                    this.loadstatus = true
                     obj.render()
                 }, 300)
             }
@@ -67,7 +77,7 @@ export default {
     computed: {
         arr() {
             let temp = []
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 100; i++) {
                 temp.push(i)
             }
             return temp
@@ -78,11 +88,20 @@ export default {
     },
     data() {
         return {
+            loadstatus: true,
             loading: false,
             timer: "",
             aa: [0, 100, 300, 600],
             v: "",
+            config1: {
+                darg: true,
+                width: 200,
+                height: 200,
+                unit: "px",
+                hoverStatus: false
+            },
             config: {
+                darg: false,
                 width: 200,
                 height: 200,
                 unit: "px",

@@ -40,7 +40,7 @@
     <div class="iprocess_box">
         <div class="iprocess_content" :style="{'background-color': config && config.c1}" :class="{'active': status}" ref="iprocess_content" @click="clickFn">
             <em :style="{'width': (process*100) + '%', 'background-color': config && config.c2}">
-                <b ref="b" @mousedown="downFn" :style="{'background-color': config && config.c3}"></b>
+                <b ref="b" @mousedown="downFn" @touchstart="downFn" :style="{'background-color': config && config.c3}"></b>
             </em>
         </div>
     </div>
@@ -71,7 +71,7 @@ export default {
         }
     },
     methods: {
-        offet(obj) {
+        offset(obj) {
             let ele = obj,
                 left = ele.offsetLeft,
                 top = ele.offsetTop
@@ -86,7 +86,12 @@ export default {
         },
         downFn(e) {
             this.status = true
-            this.x = e.pageX - this.val
+            if (e.targetTouches) {
+                let _e = e.targetTouches[0]
+                this.x = _e.pageX - this.val
+            } else {
+                this.x = e.pageX - this.val
+            }
         },
         getMaxVal() {
             this.maxVal = this.$refs.iprocess_content.offsetWidth
@@ -95,14 +100,14 @@ export default {
         clickFn(e) {
             if (!this._drag) return
             if (e.target == this.$refs.b) return
-            let val = e.pageX - this.offet(e.target).left
+            let val = e.pageX - this.offset(e.target).left
 
             this.setVal(val)
-            this.processCallBack && this.processCallBack(this.process)
         },
         setVal(v) {
             this.val = v
             this.process = this.toFixedFn(this.val / this.maxVal)
+            this.processCallBack && this.processCallBack(this.process)
         },
         toFixedFn(v) {
             return +v.toFixed(2)
@@ -119,37 +124,48 @@ export default {
 
             val = this.toFixedFn(val * this.maxVal)
             this.setVal(val)
+        },
+        init() {
+            let doc = document,
+                mobile = window.ontouchstart === undefined ? false : true,
+                _move = mobile ? "touchmove" : "mousemove",
+                _end = mobile ? "touchend" : "mouseup"
+                
+            doc.addEventListener(_move, e => {
+                let _e = e
+                if (!this._drag) return
+                if (!this.status) return
+                if (e.targetTouches) {
+                    _e = e.targetTouches[0]
+                }
+
+                let nx = Math.max(_e.pageX - this.x, 0)
+                let val = Math.min(Math.abs(nx), this.maxVal)
+
+                this.setVal(val)
+
+            }, false)
+
+            doc.addEventListener(_end, e => {
+                this.status = false
+            }, false)
+
+            window.addEventListener("resize", () => {
+                clearTimeout(this.timer)
+                this.timer = setTimeout(() => {
+                    this.getMaxVal()
+                }, 500)
+            })
+
+            this.getMaxVal()
+
+            if (this.value) {
+                this.setValue(this.value)
+            }
         }
     },
     mounted() {
-        let doc = document
-
-        doc.addEventListener("mousemove", e => {
-            if (!this._drag) return
-            if (!this.status) return
-            let nx = Math.max(e.pageX - this.x, 0)
-            let val = Math.min(Math.abs(nx), this.maxVal)
-
-            this.setVal(val)
-            this.processCallBack && this.processCallBack(this.process)
-        }, false)
-
-        doc.addEventListener("mouseup", e => {
-            this.status = false
-        }, false)
-
-        window.addEventListener("resize", () => {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-                this.getMaxVal()
-            }, 500)
-        })
-
-        this.getMaxVal()
-
-        if (this.value) {
-            this.setValue(this.value)
-        }
+        this.init()
     }
 }
 

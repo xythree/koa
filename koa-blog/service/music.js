@@ -1,4 +1,4 @@
-//const crypto = require("./crypto")
+const crypto = require("./crypto")
 
 module.exports = (router, render) => {
 
@@ -22,8 +22,38 @@ module.exports = (router, render) => {
         ctx.body = await render("/music/index")
     })
 
-    /*
-    //搜索
+    router.get("/music/api", async ctx => {
+
+        const params = ctx.request.query
+        const limit = params.limit || 15
+        const obj = {
+            //path: config.hostname + "/weapi/cloudsearch/get/web",
+            path: config.hostname + "/api/search/pc",
+            s: params.s,
+            type: 1,
+            offset: (params.offset || 0) * limit,
+            limit: limit
+        }
+        let cryptoResult = crypto(obj)
+        let result = {}
+
+        /*
+        result.result = await ctx.post({
+            path: obj.path,
+            params: cryptoResult.params,
+            encSecKey: cryptoResult.encSecKey
+        }, {
+            headers: config.headers
+        })
+        */
+        result.result = await ctx.post(obj, {
+            headers: config.headers
+        })
+        result.result = JSON.parse(result.result)
+        ctx.body = await result
+    })
+
+
     router.post("/music/search", async ctx => {
 
         const params = ctx.request.body
@@ -45,6 +75,7 @@ module.exports = (router, render) => {
         }, {
             headers: config.headers
         }).then(result => {
+            console.log(result)
             ctx.body = result
         }, () => {
             ctx.status = 502
@@ -119,6 +150,6 @@ module.exports = (router, render) => {
         })
 
     })
-    */
+
 
 }
