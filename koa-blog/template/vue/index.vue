@@ -111,7 +111,7 @@ export default {
             const dispatch = this.$store.dispatch
 
             dispatch("setSearchVal", this.searchVal)
-            dispatch("search", { skip: 1 })
+            dispatch("search", { skip: 0 })
             this.$router.push("/")
         },
         focusFn() {

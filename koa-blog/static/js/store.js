@@ -15,7 +15,7 @@ const store = new Vuex.Store({
         setSearchVal({ state }, val) {
             state.searchVal = val
         },
-        search({ state, dispatch }, { skip = 1 }) {
+        search({ state, dispatch }, { skip = 0 }) {
             dispatch("getArticleList", { skip })
         },
         getArticleList({ state }, { skip, limit = 15 }) {
@@ -26,8 +26,10 @@ const store = new Vuex.Store({
                     skip
                 }
             }).then(result => {
-                state.articleTotal = result.data.count
-                state.articleList = result.data.result
+                let data = result.data.data
+
+                state.articleTotal = data.count
+                state.articleList = data.result
             })
         }
     }

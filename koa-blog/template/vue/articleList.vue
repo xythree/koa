@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         paginationCallBack(ind) {
-            this.getArticleList(ind)
+            this.getArticleList(ind - 1)
         },
         getArticleList(skip, limit = 15) {
             this.$store.dispatch("getArticleList", { skip, limit })

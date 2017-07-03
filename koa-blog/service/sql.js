@@ -2,6 +2,18 @@ const sql = require("./../service/model")
 const md5 = require("md5")
 const validator = require("validator")
 
+function _unescape(data) {
+
+    if (data.length) {
+        data.forEach(t => {
+            t.title = validator.unescape(t.title)
+            t.content = validator.unescape(t.content)
+        })
+    }
+
+    return data
+}
+
 module.exports = {
     article: {
         async update(obj1, obj2 = {}) {
@@ -11,31 +23,117 @@ module.exports = {
 
             return result
         },
-        async find(obj, skip, limit) {
-            let result = ""
+        async find(obj, skip = 0, limit = 15) {
+            let data = ""
 
-            if (skip != undefined) {
-                result = await sql.Article.find(obj).limit(limit).skip(skip * limit)
+            data = await sql.Article.find(obj).limit(limit).skip(skip * limit)
+
+            return _unescape(data)
+        },
+        async findOne(obj) {
+            let data = ""
+
+            data = await sql.Article.findOne(obj)
+
+            return _unescape(data)
+        },
+        async findId(id) {
+            let data = ""
+
+            data = await sql.Article.findOne({ _id: id })
+
+            return _unescape(data)
+        },
+        async findArticleComment(id) {
+            let data = ""
+
+            data = await sql.Article.aggregate().match({ _id: global.MgTypes.ObjectId(id) }).lookup({
+                from: "comments",
+                localField: "flag",
+                foreignField: "aid",
+                as: "comments"
+            }).project({
+                author: 1,
+                title: 1,
+                content: 1,
+                create_time: 1,
+                views: 1,
+                flag: 1,
+                comments: {
+                    aid: 1,
+                    cid: 1,
+                    title: 1,
+                    create_time: 1,
+                    username: 1,
+                    content: 1,
+                    flag: 1,
+                    show: 1
+                }
+            }).limit(1)
+
+            return _unescape(data)
+        },
+        async findTitle(title, skip = 0, limit = 15) {
+            let data = ""
+            let obj = title ? {
+                title: {
+                    $regex: title,
+                    $options: "i"
+                }
+            } : {}
+
+            data = await sql.Article.aggregate().match(obj).limit(limit).skip(skip * limit).project({
+                author: 1,
+                title: 1,
+                content: 1,
+                create_time: 1,
+                views: 1,
+                flag: 1,
+            }).group({
+                _id: null,
+                result: {
+                    $addToSet: {
+                        _id: "$_id",
+                        title: "$title",
+                        content: "$content",
+                        create_time: "$create_time",
+                        views: "$views",
+                        flag: "$flag"
+                    }
+                },
+                count: {
+                    $sum: "$title"
+                }
+            })
+
+            if (data.length) {
+                data[0].result = _unescape(data[0].result)
+                data = data[0]
             } else {
-                result = await sql.Article.find(obj)
+                data = {
+                    count: 0,
+                    result: []
+                }
             }
 
-            if (result.length) {
-                result.forEach(t => {
-                    t.title = validator.unescape(t.title)
-                    t.content = validator.unescape(t.content)
-                })
-            }
-            return result
+            return data
         },
         async count(obj) {
             return await sql.Article.find(obj).count()
         },
         async prev(id) {
-            return await sql.Article.find({ _id: { $lt: id } }).sort({ _id: -1 }).limit(1)
+            let data = ""
+
+            data = await sql.Article.find({ _id: { $lt: id } }).sort({ _id: -1 }).limit(1)
+
+            return _unescape(data)
         },
         async next(id) {
-            return await sql.Article.find({ _id: { $gt: id } }).sort({ _id: 1 }).limit(1)
+            let data = ""
+
+            data = await sql.Article.find({ _id: { $gt: id } }).sort({ _id: 1 }).limit(1)
+
+            return _unescape(data)
         }
     },
     comment: {

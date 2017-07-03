@@ -317,7 +317,7 @@ export default {
         }
     },
     filters: {
-        getLastTime(value) {
+        getLastTime(value) {            
             return xythree.getLastTime(+new Date(value))
         }
     },
@@ -333,7 +333,7 @@ export default {
         },
         paginationCallBack(ind) {
             this.index = ind
-            this.getComment({ skip: ind })
+            //this.getComment({ skip: ind })
         },
         fetchData() {
             this.loading_box = true
@@ -343,7 +343,7 @@ export default {
                     id: this.$route.query.id
                 }
             }).then(result => {
-                let data = result.data.result[0]
+                let data = result.data.data[0]
                 let prev = result.data.prev
                 let next = result.data.next
 
@@ -354,6 +354,8 @@ export default {
                 this.views = data.views
                 this.flag = data.flag
                 this.href = location.href
+
+                this.commentList = data.comments
 
                 if (next.length) {
                     this.nextLink = {
