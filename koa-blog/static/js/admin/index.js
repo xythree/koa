@@ -18,7 +18,7 @@ let store = new Vuex.Store({
         jumpAddEditor({ state }, data) {
             let href = "/admin/add-editor"
 
-            if (data) {
+            if (data != undefined) {
                 href += "?id=" + data
             }
             window.open(href)
@@ -101,7 +101,7 @@ let store = new Vuex.Store({
                     const data = result.data
                     dispatch("setAddEditArtilcleStatus", true)
                     dispatch("setArticle", {
-                        id: data._id,
+                        id: data.id,
                         title: data.title,
                         content: data.content
                     })
@@ -117,9 +117,9 @@ Vue.component("article-list", {
     props: ["list", "index"],
     template: `
         <li>
-            <p @click="show(list._id)">{{list.title}}</p>
-            <span class="article-delete" @click="remove(list._id, index)">删除</span>
-            <span class="article-edit" @click="edit(list._id)">编辑</span>
+            <p @click="show(list.id)">{{list.title}}</p>
+            <span class="article-delete" @click="remove(list.id, index)">删除</span>
+            <span class="article-edit" @click="edit(list.id)">编辑</span>
         </li>`,
     methods: {
         show(id) {
@@ -152,9 +152,9 @@ Vue.component("article-list", {
 
             dispatch("setAlertBoxSureCallBack", () => {
                 dispatch("removeArticle", id).then(result => {
-                    if (result.data.ok == 1) {
+                    if (result.data.code == 1) {
                         dispatch("removeArticleList", index)
-                        dispatch("getArticleList", this.$store.state.pagination.index)
+                        dispatch("getArticleList", this.$store.state.pagination.index - 1)
                     }
                 })
             })
@@ -241,7 +241,7 @@ Vue.component("article-box", {
         <div class="article-box" v-show="articleBoxStatus">
             <h3 class="article-box-title">{{articleBoxInfo.title}}</h3>
             <p class="article-box-time">{{new Date(articleBoxInfo.last_modify_time).toLocaleString()}}</p>
-            <div class="article-box-edit" @click="edit(articleBoxInfo._id)">编辑</div>
+            <div class="article-box-edit" @click="edit(articleBoxInfo.id)">编辑</div>
             <div class="article-box-close">
                 <span @click="close">关闭</span>
             </div>

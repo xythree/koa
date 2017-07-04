@@ -5,6 +5,7 @@ const fs = require("fs")
 const path = require("path")
 const { uploadFile } = require("./../service/upload")
 const { isLogin } = require("./../service/function")(sql)
+const mysql = require("./../service/mysql")
 
 module.exports = (router, render) => {
 
@@ -63,10 +64,13 @@ module.exports = (router, render) => {
         let result = {}
 
         if (params.username && params.password) {
+            /*
             result = await sql.Users.find({
                 username: params.username,
                 password: md5(params.password)
             })
+            */
+            result = await mysql.users.login(params.username, md5(params.password))
 
             if (result.length) {
                 ctx.cookies.set("username", params.username, {
@@ -106,18 +110,23 @@ module.exports = (router, render) => {
 
         if (params.username && params.password) {
 
-            result.result = await sql.Users.findOne({ username: params.username })
+            //result.result = await sql.Users.findOne({ username: params.username })
+            result.result = await mysql.users.findUsername(params.username)
 
             if (result.result && result.result.length) {
                 result.code = 2
                 result.msg = "用户名已经存在"
             } else {
 
+                /*
                 await sql.Users.create({
                     username: params.username,
                     password: md5(params.password),
                     create_time: Date.now()
                 })
+                */
+
+                result.result = await mysql.users.resgiter(params.username, md5(params.password))
 
                 ctx.cookies.set("username", params.username, {
                     //expires: new Date(Date.now() + 60 * 60 * 1000)
@@ -186,12 +195,13 @@ module.exports = (router, render) => {
     router.post("/article/add-edit-article", async ctx => {
         let params = ctx.request.body
         let result = {},
-            time = Date.now()
+            author = ctx.cookies.get("username")
 
         params.title = validator.escape(params.title)
         params.content = validator.escape(params.content)
 
         if (!params.id) {
+            /*
             result = await sql.Article.create({
                 author: ctx.cookies.get("username"),
                 title: params.title,
@@ -200,7 +210,13 @@ module.exports = (router, render) => {
                 last_modify_time: time,
                 flag: "flag" + time + Math.round(Math.random() * 9999)
             })
+            */
+            if (author) {
+                result = await mysql.articles.add(author, params.title, params.content)
+            }
+
         } else {
+            /*
             result = await sql.Article.update({
                 _id: params.id
             }, {
@@ -210,6 +226,8 @@ module.exports = (router, render) => {
                     last_modify_time: time
                 }
             })
+            */
+            result = await mysql.articles.update(params.id, params.title, params.content)
         }
 
         ctx.body = await result
@@ -221,7 +239,8 @@ module.exports = (router, render) => {
         let result = {}
 
         if (params.id) {
-            result = await sql.Article.remove({ _id: params.id })
+            //result = await sql.Article.remove({ _id: params.id })
+            result = await mysql.delete("articles", +params.id)
         } else {
             result = "id不存在"
         }
@@ -257,9 +276,13 @@ module.exports = (router, render) => {
         let skip = params.skip
 
         skip = skip < 0 ? 0 : skip
+            /*
+            result.count = await sql.Article.find({ author: username }).count()
+            result.result = await sql.Article.find({ author: username }).limit(+limit).skip(skip * limit)
+            */
+        result.count = await mysql.count("articles")
+        result.result = await mysql.articles.find(+skip)
 
-        result.count = await sql.Article.find({ author: username }).count()
-        result.result = await sql.Article.find({ author: username }).limit(+limit).skip(skip * limit)
         if (result.result.length) {
             result.result.forEach(t => {
                 t.title = validator.unescape(t.title)

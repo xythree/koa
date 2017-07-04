@@ -69,7 +69,7 @@ module.exports = {
                     flag: 1,
                     show: 1
                 }
-            }).limit(1)
+            })
 
             return _unescape(data)
         },

@@ -62,6 +62,7 @@
         </p>
         <div id="container" name="content" type="text/plain"></div>
         <p class="add-edit-article-btn">
+            <label><input type="checkbox" v-model="articleEmpty">提交完清空</label>
             <button @click="submit" class="add-edit-article-sure">确定</button>
             <button class="add-edit-article-empty" @click="empty">清空</button>
         </p>
@@ -84,17 +85,21 @@
                 data: {
                     id: "",
                     title: "",
-                    content: ""
+                    content: "",
+                    articleEmpty: true
                 },
                 methods: {
                     empty() {
                         let result = confirm("确定清空吗?")
 
                         if (result) {
-                            this.title = ""
-                            this.content = ""
-                            ue.setContent("")
+                            this.clear()
                         }
+                    },
+                    clear() {
+                        this.title = ""
+                        this.content = ""
+                        ue.setContent("")
                     },
                     submit() {
                         this.content = ue.getContent()
@@ -110,7 +115,10 @@
                     },
                     addArticle(d) {
                         axios.post("/article/add-edit-article", d).then(result => {
-                            if (result.status == 200) {
+                            if (result.data.code == 1) {
+                                if (this.articleEmpty) {
+                                    this.clear()
+                                }
                                 alert("提交成功!")
                             }
                         })
