@@ -317,7 +317,7 @@ export default {
         }
     },
     filters: {
-        getLastTime(value) {            
+        getLastTime(value) {
             return xythree.getLastTime(+new Date(value))
         }
     },
@@ -359,7 +359,7 @@ export default {
 
                 if (next.length) {
                     this.nextLink = {
-                        link: "/article?id=" + next[0]._id,
+                        link: "/article?id=" + next[0].id,
                         title: next[0].title
                     }
                 } else {
@@ -367,7 +367,7 @@ export default {
                 }
                 if (prev.length) {
                     this.prevLink = {
-                        link: "/article?id=" + prev[0]._id,
+                        link: "/article?id=" + prev[0].id,
                         title: prev[0].title
                     }
                 } else {

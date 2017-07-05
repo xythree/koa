@@ -1,4 +1,5 @@
 const sql = require("./sql")
+const mysql = require("./mysql")
 
 module.exports = (router, render) => {
 
@@ -13,25 +14,41 @@ module.exports = (router, render) => {
             skip = params.skip || 0,
             obj = {}
 
+        result.data = {}
+
         if (params.id) {
 
+            /*
             await sql.article.update({ _id: params.id }, {
                 $inc: {
                     views: 1
                 }
-            })
+            })            
 
             result.data = await sql.article.findArticleComment(params.id)
             result.prev = await sql.article.prev(params.id)
             result.next = await sql.article.next(params.id)
+            */
+
+            let _sql = "update articles set views=views+1 where id=? limit 1"
+            let _values = [+params.id]
+            await mysql.update(_sql, _values)
+
+            result.data = await mysql.findId("articles", params.id)
+            result.prev = await mysql.prev("articles", params.id)
+            result.next = await mysql.next("articles", params.id)
+
 
         } else if (params.txt) {
 
-            result.data = await sql.article.findTitle(params.txt, +skip, +limit)
+            //result.data = await sql.article.findTitle(params.txt, +skip, +limit)
+            result.data.result = await mysql.articles.findTitle(params.txt, skip, limit)
 
         } else if (params.skip != undefined) {
 
-            result.data = await sql.article.findTitle("", +skip, +limit)
+            //result.data = await sql.article.findTitle("", +skip, +limit)            
+            result.data.result = await mysql.find("articles", skip, limit)
+            result.data.count = await mysql.count("articles")
 
         }
 

@@ -25,9 +25,12 @@ module.exports = sql => {
             return result
         },
         async base64(filepath) {
-            let img = await fs.readFileSync(filepath)
-
-            return "data:image/" + path.extname(filepath).substr(1) + ";base64," + img.toString("base64")
+            return await new Promise((resolve, reject) => {
+                fs.readFile(filepath, (err, data) => {
+                    fs.unlink(filepath)
+                    resolve("data:image/" + path.extname(filepath).substr(1) + ";base64," + data.toString("base64"))
+                })
+            })
         },
         async mkdirsSync(dirname) {
             if (fs.existsSync(dirname)) {

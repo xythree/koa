@@ -254,13 +254,9 @@ module.exports = (router, render) => {
         let result = {}
 
         if (params.id) {
-            result = await sql.Article.find({ _id: params.id })
-            if (result.length) {
-                result.forEach(t => {
-                    t.title = validator.unescape(t.title)
-                    t.content = validator.unescape(t.content)
-                })
-            }
+
+            //result = await sql.Article.find({ _id: params.id })
+            result = await mysql.findId("articles", params.id)
             result = result[0]
         } else {
             result = "id不存在"
@@ -281,14 +277,7 @@ module.exports = (router, render) => {
             result.result = await sql.Article.find({ author: username }).limit(+limit).skip(skip * limit)
             */
         result.count = await mysql.count("articles")
-        result.result = await mysql.articles.find(+skip)
-
-        if (result.result.length) {
-            result.result.forEach(t => {
-                t.title = validator.unescape(t.title)
-                t.content = validator.unescape(t.content)
-            })
-        }
+        result.result = await mysql.find("articles", skip)
 
         ctx.body = await result
     })

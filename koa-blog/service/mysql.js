@@ -1,4 +1,5 @@
 const mysql = require("mysql")
+const validator = require("validator")
 
 const sql = mysql.createConnection({
     host: "localhost",
@@ -20,13 +21,38 @@ async function _public(_sql, _values) {
             if (!err) {
                 result = data
             }
+            result = _unescape(result)
+
             resolve(result)
         })
     })
 }
 
+function _unescape(data) {
+    if (data.length && data[0].title) {
+        data.forEach(t => {
+            t.title = validator.unescape(t.title)
+            t.content = validator.unescape(t.content)
+        })
+    }
+
+    return data
+}
+
 
 module.exports = {
+    async findId(str, id) {
+        let sql = "select * from " + str + " where id=? limit 1"
+        let values = [+id]
+
+        return _public(sql, values)
+    },
+    async find(str, skip = 0, limit = 15) {
+        let sql = "select * from " + str + " limit ?,?"
+        let values = [skip * limit, +limit]
+
+        return _public(sql, values)
+    },
     async delete(str, id) {
         let sql = "delete from " + str + " where id=?"
         let values = [id]
@@ -38,6 +64,21 @@ module.exports = {
         } else {
             return { code: 0 }
         }
+    },
+    async update(sql, values) {
+        return _public(sql, values)
+    },
+    async prev(str, id) {
+        let sql = "select * from " + str + " where id<? order by id asc limit 1"
+        let values = [+id]
+
+        return _public(sql, values)
+    },
+    async next(str, id) {
+        let sql = "select * from " + str + " where id>? order by id desc limit 1"
+        let values = [+id]
+
+        return _public(sql, values)
     },
     async count(str) {
         let result = 0
@@ -92,9 +133,9 @@ module.exports = {
         }
     },
     articles: {
-        async find(skip = 0, limit = 15) {
-            let sql = "select * from articles limit ?,?"
-            let values = [skip * limit, limit]
+        async findTitle(title, skip = 0, limit = 15) {
+            let sql = "select * from articles where title like ? limit ?,?"
+            let values = ["%" + title + "%", skip * limit, +limit]
 
             return _public(sql, values)
         },

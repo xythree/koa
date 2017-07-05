@@ -44,8 +44,7 @@ module.exports = (router, render) => {
         if (result.state == "SUCCESS") {
             let _url = "./static" + result.url
 
-            result = base64(_url)
-            fs.unlink(_url)
+            result = await base64(_url)
 
         }
 
