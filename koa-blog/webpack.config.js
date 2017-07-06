@@ -1,5 +1,7 @@
 const webpack = require("webpack")
 const path = require("path")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
     entry: {
@@ -13,39 +15,44 @@ module.exports = {
         demo: "./static/js/demo/index.js"
     },
     output: {
-        path: path.resolve(__dirname, 'static/js/dist'),
+        path: path.resolve(__dirname, "static/js/dist"),
+        //filename: "js/[name].js"
         filename: "[name].js"
     },
+    plugins: [
+        /*
+        new ExtractTextPlugin("css/[name].css"),
+        new HtmlWebpackPlugin({
+            inject: true,
+            chunks: ["demo"],
+            minify: true,
+            cache: true,
+            hash: true
+        })
+        */
+    ],
     module: {
         rules: [{
-                test: /\.vue$/,
-                loader: "vue-loader",
-                options: {
-                    postcss: function() {
-                        return [require("autoprefixer")({ browsers: ["last 5 versions"] })]
-                    },
-                    plugins: ["transform-vue-jsx"]
-                }
-            },
-            {
-                test: /\.js$/,
-                use: ["babel-loader"],
-                exclude: /mode_modules/
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    { loader: "style-loader" },
-                    { loader: "css-loader" },
-                    { loader: "sass-loader" },
-                    { loader: "postcss-loader" }
-                ]
+            test: /\.vue$/,
+            loader: "vue-loader",
+            options: {
+                postcss: function() {
+                    return [require("autoprefixer")({ browsers: ["last 5 versions"] })]
+                },
+                plugins: ["transform-vue-jsx"]
             }
-        ]
+        }, {
+            test: /\.js$/,
+            use: ["babel-loader"],
+            exclude: /mode_modules/
+        }, {
+            test: /\.(css|scss)$/,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: ["css-loader", "sass-loader", "postcss-loader"]
+            })
+        }]
     },
-    plugins: [
-
-    ],
     resolve: {
         alias: {
             "vue$": "vue/dist/vue.common.js"

@@ -137,9 +137,6 @@ export default {
                 this.delatFn(1)
             }
         },
-        mousewheelFn(e) {
-            this.delatFn(e.wheelDelta)
-        },
         wheelEvent(docs, callback) {
             /*滚动事件*/
             let mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel" /*FF doesn't recognize mousewheel as of FF3.x*/
@@ -167,9 +164,9 @@ export default {
                 box: this.$refs.iscroll_box_content,
                 type: "middle"
             }
-            this.val -= this.num
-
+            
             if (delta < 0) {
+                this.val -= this.num
                 if (this.val - this.vv <= -this.maxVal) {
                     if (!this.loadstatus) {
                         this.val = -this.maxVal
@@ -184,6 +181,7 @@ export default {
                     }, 150)
                 }
             } else {
+                this.val += this.num
                 if (this.val >= 0) {
                     this.val = 0
                     obj.type = "top"
@@ -234,7 +232,6 @@ export default {
             } else {
                 this.val = -e.offsetY / this.coe
             }
-
         }
     },
     mounted() {

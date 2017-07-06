@@ -1,16 +1,13 @@
 import Vue from "vue"
 
 
-import tree_box from "./../../../vue_component/index/tree.vue"
-
-
-
+import app from "./../../../vue_component/index/dragBox.vue"
 
 
 let vm = new Vue({
     el: "#word",
     //render: h => h(word)
     components: {
-        app: tree_box
+        app
     }
 })

@@ -15,7 +15,7 @@
 <template>
     <div class="scrollDemo">
         <scroll_box :value="value"  :config="config1" >
-            <p v-for="item in arr">{{item}}</p>
+            <p v-for="item in arr2">{{item}}</p>
             <div class="loading" v-show="loading">loading...</div>
         </scroll_box>
         <br />
@@ -76,6 +76,13 @@ export default {
     },
     computed: {
         arr() {
+            let temp = []
+            for (let i = 0; i < 100; i++) {
+                temp.push(i)
+            }
+            return temp
+        },
+        arr2() {
             let temp = []
             for (let i = 0; i < 100; i++) {
                 temp.push(i)

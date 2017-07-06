@@ -160,6 +160,9 @@ $color: #f92672;
             <li>
                 <router-link to="/tree">tree</router-link>
             </li>
+            <li>
+                <router-link to="/drag">drag</router-link>
+            </li>
         </ul>
     
         <div class="irouter-view">
