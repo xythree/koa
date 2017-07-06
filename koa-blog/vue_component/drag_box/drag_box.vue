@@ -105,7 +105,7 @@ export default {
         },
         init() {
             let idrag_box = this.$refs.idrag_box
-            console.log(idrag_box)
+            
             this.xMax = window.innerWidth - idrag_box.offsetWidth
             this.yMax = window.innerHeight - idrag_box.offsetHeight
         }
