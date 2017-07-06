@@ -49,7 +49,7 @@
 <script>
 
 export default {
-    props: ["processCallBack", "value", "config", "drag"],
+    props: ["processCallBack", "value", "config", "drag", "stop"],
     data() {
         return {
             process: 0,
@@ -102,17 +102,18 @@ export default {
             if (e.target == this.$refs.b) return
             let val = e.pageX - this.offset(e.target).left
 
-            this.setVal(val)
+            this.setVal(val, true)
         },
-        setVal(v) {
+        setVal(v, flag) {
             this.val = v
             this.process = this.toFixedFn(this.val / this.maxVal)
-            this.processCallBack && this.processCallBack(this.process)
+            this.processCallBack && this.processCallBack(this.process, flag || this.status)
         },
         toFixedFn(v) {
             return +v.toFixed(2)
         },
         setValue(v) {
+            if (this.stop) return
             if (!this._drag) return
             let val = v
 

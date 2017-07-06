@@ -106,7 +106,7 @@
                                 <b></b>
                             </em>
                             -->
-                        <process_box :drag="process_drag" :value="process_value" :config="process_config" :processCallBack="processCallBack"></process_box>
+                        <process_box :drag="process_drag" :stop="process_stop" :value="process_value" :config="process_config" :processCallBack="processCallBack"></process_box>
                     </div>
                     <div class="isong_end_time">{{audioDuration|timeFormat}}</div>
                 </div>
@@ -183,7 +183,9 @@ export default {
                 c3: "#fff"
             },
             process_drag: false,
-            process_volume_value: 1
+            process_volume_value: 1,
+            process_timer: "",
+            process_stop: false
         }
     },
     components: {
@@ -230,8 +232,15 @@ export default {
             }
             this.$refs.audio.volume = n
         },
-        processCallBack(n) {
-            this.$refs.audio.currentTime = n * this.audioDuration
+        processCallBack(n, flag) {
+            if (flag) {
+                this.process_stop = true
+                clearTimeout(this.process_timer)
+                this.process_timer = setTimeout(() => {
+                    this.process_stop = false
+                    this.$refs.audio.currentTime = n * this.audioDuration
+                }, 250)
+            }
         },
         showPlate() {
             this.showPlateStatus = !this.showPlateStatus
