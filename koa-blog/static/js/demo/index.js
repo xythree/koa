@@ -1,7 +1,7 @@
 import Vue from "vue"
 
 
-import app from "./../../../vue_component/index/dragBox.vue"
+import app from "./../../../vue_component/index/dragLayout.vue"
 
 
 let vm = new Vue({

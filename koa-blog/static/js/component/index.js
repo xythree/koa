@@ -18,6 +18,7 @@ import scrollBox from "../../../vue_component/index/scrollBox.vue"
 import processBox from "../../../vue_component/index/processBox.vue"
 import tree from "../../../vue_component/index/tree.vue"
 import dragBox from "../../../vue_component/index/dragBox.vue"
+import dragLayout from "../../../vue_component/index/dragLayout.vue"
 
 let routes = [{
     path: "/",
@@ -62,6 +63,9 @@ let routes = [{
 }, {
     path: "/drag",
     component: dragBox
+}, {
+    path: "/dragLayout",
+    component: dragLayout
 }]
 
 

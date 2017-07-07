@@ -163,6 +163,9 @@ $color: #f92672;
             <li>
                 <router-link to="/drag">drag</router-link>
             </li>
+            <li>
+                <router-link to="/dragLayout">dragLayout</router-link>
+            </li>
         </ul>
     
         <div class="irouter-view">
