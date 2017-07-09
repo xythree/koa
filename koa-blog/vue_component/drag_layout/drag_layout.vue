@@ -7,11 +7,11 @@
 
 .idrag_box {    
     margin: 5px;
-    width: 300px;
-    min-width: 100px;
+    width: 250px;    
     border: 1px solid #ddd;
     border-radius: 3px;    
     transition: all .25s;
+    -webkit-tap-highlight-color: transparent;
 
     $v: 30px;
     .idrag_title {
@@ -44,6 +44,7 @@
 }
 .empty {
     border: 1px dashed #ddd;
+    overflow: hidden;
 }
 </style>
 
@@ -51,7 +52,7 @@
     <div class="idrag_parent" ref="idrag_parent">
     
         <div v-for="(item, index) in arr" class="idrag_box" :class="{'empty': item == null, 'dragStatus': index == temp &&dragStatus}" ref="idrag_box">
-            <div class="idrag_title" @mousedown="downFn($event, index)">
+            <div class="idrag_title" @mousedown="downFn($event, index)" @touchstart="downFn($event, index)">
                 <h3>{{item.name}} </h3>
                 <span @click="downMove(index)">{{index == arr.length - 1 ? "&nbsp;" : "↓"}}</span>
                 <span @click="upMove(index)">{{index == 0 ? "&nbsp;" : "↑"}}</span>
@@ -127,6 +128,10 @@ export default {
             this.arr.splice(num, 0, temp)
         },
         downFn(e, index) {
+            let _e = e
+            if (_e.targetTouches) {
+                _e = _e.targetTouches[0]
+            }
             if (e.currentTarget != e.target) return
             this._target = e.currentTarget.parentNode
             if (this._target.className != "idrag_box") return
@@ -136,14 +141,13 @@ export default {
             this.dragStatus = true
             this.ax = _offset.left
             this.ay = _offset.top
-            this._x = e.pageX - _offset.left
-            this._y = e.pageY - _offset.top
+            this._x = _e.pageX - _offset.left
+            this._y = _e.pageY - _offset.top
             this._target.style.left = _offset.left + "px"
             this._target.style.top = _offset.top + "px"
-            this.temp = index
+            this.index = this.temp = index
             this.empty = this.$refs.empty
-            this.empty.style.width = this._target.offsetWidth + "px"
-            this.empty.style.height = this._target.offsetHeight + "px"
+            this.empty.style.height = this._target.offsetHeight - 2 + "px"
             this.$refs.idrag_parent.insertBefore(this.empty, this.$refs.idrag_box[index])
             this.calcWH()
         },
@@ -155,12 +159,20 @@ export default {
         }
     },
     mounted() {
-        let doc = document
+        let doc = document,
+            mobile = window.navigator.userAgent.match(/(iPhone|iPod|Android|iOS)/i) ? true : false,
+            _move = mobile ? "touchmove" : "mousemove",
+            _end = mobile ? "touchend" : "mouseup"
 
-        doc.addEventListener("mousemove", e => {
+        doc.addEventListener(_move, e => {
+            let _e = e
             if (!this.dragStatus) return
-            let x = e.pageX - this._x
-            let y = e.pageY - this._y
+            if (e.targetTouches) {
+                e.preventDefault()
+                _e = e.targetTouches[0]
+            }            
+            let x = _e.pageX - this._x
+            let y = _e.pageY - this._y
 
             x = Math.min(x, this.xMax)
             y = Math.min(y, this.yMax)
@@ -181,8 +193,14 @@ export default {
                     if (this.x >= _offset.left && this.x <= _offset.left + t.offsetWidth && this.y >= _offset.top && this.y <= _offset.top + t.offsetHeight) {
                         this.index = i
                         if (this.dir > 0) {
+                            if (this.temp > i) {
+                                this.index = i + 1
+                            }
                             this.$refs.idrag_parent.insertBefore(this.empty, this.$refs.idrag_box[i + 1])
                         } else {
+                            if (this.temp < i) {
+                                this.index = i - 1
+                            }
                             this.$refs.idrag_parent.insertBefore(this.empty, this.$refs.idrag_box[i])
                         }
 
@@ -195,7 +213,6 @@ export default {
             if (this.ax >= _empty.left && this.ax <= _empty.left + this.empty.offsetWidth && this.ay >= _empty.top && this.ay <= _empty.top + this.empty.offsetHeight) {
                 this.index = this.temp
             }
-
             this._target.style.left = this.x + "px"
             this._target.style.top = this.y + "px"
 
@@ -203,14 +220,14 @@ export default {
 
         let timer
 
-        doc.addEventListener("mouseup", e => {
+        doc.addEventListener(_end, e => {
             this.dragStatus = false
 
             if (this._target) {
                 let _empty = this.offset(this.$refs.empty)
 
                 this._target.style.left = _empty.left + "px"
-                this._target.style.top = _empty.top + "px"
+                this._target.style.top = _empty.top - doc.body.scrollTop + "px"
 
                 clearTimeout(timer)
 
@@ -219,10 +236,10 @@ export default {
                     this._target.removeAttribute("style")
                     this._target = false
 
-                    if (this.x == 0 || this.y == 0) return
-                    if (this.index != this.temp) {
-                        this.toggle(this.temp, this.index)
-                    }
+                    //if (this.x == 0 || this.y == 0) return
+                    //if (this.index != this.temp) {
+                    this.toggle(this.temp, this.index)
+                    //}
 
                 }, 150)
             }

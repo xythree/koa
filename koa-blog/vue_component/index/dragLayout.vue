@@ -1,13 +1,14 @@
-<style>
+<style scoped>
 .demo {
-    margin: 50px;
+    margin: 5px;
+    width: 100%;
 }
 </style>
 
 <template>
   
     <div class="demo">
-        <p>拖拽布局</p>
+        <p>拖动布局</p>
         <br /><br />
         <drag_layout />
 

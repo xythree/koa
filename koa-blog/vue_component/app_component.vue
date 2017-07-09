@@ -9,12 +9,13 @@ $color: #f92672;
 
     .irouter-list {
         position: fixed;
-        padding-top: 100px;
+        padding-top: 50px;
         left: 0;
         width: 180px;
-        height: 100%;
+        min-height: 100%;
         border-right: 1px solid #ddd;
         transition: all .5s;
+        overflow: auto;
 
         li {
             text-align: right;
