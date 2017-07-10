@@ -18,11 +18,6 @@
                     <li class="irecord" :class="{'action': playListShow}" @click="showRecord">
                         <span></span>播放记录</li>
                 </ul>
-                <div class="ps">
-                    数据来源:
-                    <br />
-                    <a target="_blank" href="https://api.imjad.cn/cloudmusic/index.html">https://api.imjad.cn/cloudmusic/index.html</a>
-                </div>
                 <div class="isentence">{{sentence}}</div>
             </div>
             <div class="icenter">
@@ -39,6 +34,7 @@
                                 <p>
                                     {{index + 1}}.
                                     <a @click="play(item)" href="javascript:;">{{item.name}}</a>
+                                    <span @click="isongDeleteFn(index)" class="isong_delete">删除</span>
                                 </p>
                                 <p>{{item.ar[0].name}}</p>
                                 <p>{{item.al.name}}</p>
@@ -89,7 +85,7 @@
             <div class="imgBg" v-show="playSong.al && playSong.al.picUrl">
                 <img :src="playSong.al && playSong.al.picUrl" />
             </div>
-            <audio ref="audio" autoplay :loop="condIconIndex == 0" :src="song.url"></audio>
+            <audio ref="audio" :loop="condIconIndex == 0" :src="song.url"></audio>
             <div class="icontroll">
                 <div class="icontroll_btn iprev" @click="prev"></div>
                 <div @click="toggle" class="icontroll_btn iplay" :class="{'istop': playStatus}"></div>
@@ -102,10 +98,10 @@
                     <div class="isong_start_time">{{audioCurrentTime|timeFormat}}</div>
                     <div class="isong_process" ref="isong_process">
                         <!--
-                            <em :style="{'width': setSongProcess}">
-                                <b></b>
-                            </em>
-                            -->
+                                    <em :style="{'width': setSongProcess}">
+                                        <b></b>
+                                    </em>
+                                    -->
                         <process_box :drag="process_drag" :stop="process_stop" :value="process_value" :config="process_config" :processCallBack="processCallBack"></process_box>
                     </div>
                     <div class="isong_end_time">{{audioDuration|timeFormat}}</div>
@@ -122,10 +118,10 @@
                     <div @click="setVolume" class="ivolume_btn" :class="{'muted': muted}"></div>
                     <div class="ivolume_process">
                         <!--
-                            <em :style="{'width': volumeVal}">
-                                <b></b>
-                            </em>
-                            -->
+                                    <em :style="{'width': volumeVal}">
+                                        <b></b>
+                                    </em>
+                                    -->
                         <process_box :drag="true" :value="process_volume_value" :config="process_config" :processCallBack="processVolumeCallBack"></process_box>
                     </div>
                 </div>
@@ -144,7 +140,7 @@ export default {
     data() {
         let temp = ["遇见", "没那么简单", "情非得已", "回梦游仙"]
         return {
-            hostname: "https://api.imjad.cn/cloudmusic/", //https://api.imjad.cn/cloudmusic/index.html
+            hostname: "/cloudmusic/api", //https://api.imjad.cn/cloudmusic/index.html
             searchVal: temp[Math.round(Math.random() * (temp.length - 1))],
             songList: [],
             playList: (localStorage.playList && JSON.parse(localStorage.playList)) || [],
@@ -224,6 +220,10 @@ export default {
         }
     },
     methods: {
+        isongDeleteFn(index) {
+            this.playList.splice(index, 1)
+            localStorage.playList = JSON.stringify(this.playList)
+        },
         processVolumeCallBack(n) {
             if (n <= 0) {
                 this.muted = true
@@ -378,8 +378,9 @@ export default {
                 }).then(result => {
                     this.song = result.data.data[0]
                     this.getLyric()
-                    this.toggle()
-
+                    this.$nextTick(() => {
+                        this.toggle()
+                    })
                 })
             } else {
                 this.toggle()
@@ -397,7 +398,6 @@ export default {
             } else if (this.playList.length) {
                 this.randomPlay()
             }
-            this.imgRotateFn()
         },
         prev() {
             if (!this.playList.length) return
@@ -444,6 +444,9 @@ export default {
             this.playStatus = true
             this.playend = false
             this.audioCurrentTime = refs.audio.currentTime
+            this.imgRotateFn()
+        })
+        audioBox.addEventListener("durationchange", () => {
             this.audioDuration = refs.audio.duration
         })
         audioBox.addEventListener('timeupdate', e => {
@@ -497,12 +500,12 @@ export default {
             this.getElementsByTagName("a")[0].classList.remove(tempClassName)
         }, false)
 
-
         axios.get("/json/sentence.json").then(result => {
             let r = result.data.sentence
 
             this.sentence = r[Math.round(Math.random() * r.length) - 1]
         })
+
     }
 }    
 </script>

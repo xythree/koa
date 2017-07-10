@@ -6,19 +6,20 @@ import app from "../../../vue_component/app_component.vue"
 Vue.use(VueRouter)
 
 
-import pagination from "../../../vue_component/index/pagination.vue"
-import selectBox from "../../../vue_component/index/selectBox.vue"
-import selectList from "../../../vue_component/index/selectList.vue"
-import waveButton from "../../../vue_component/index/waveButton.vue"
-import calendar from "../../../vue_component/index/calendar.vue"
-import calendarSelect from "../../../vue_component/index/calendarSelect.vue"
-import alertBox from "../../../vue_component/index/alert.vue"
-import city from "../../../vue_component/index/city.vue"
-import scrollBox from "../../../vue_component/index/scrollBox.vue"
-import processBox from "../../../vue_component/index/processBox.vue"
-import tree from "../../../vue_component/index/tree.vue"
-import dragBox from "../../../vue_component/index/dragBox.vue"
-import dragLayout from "../../../vue_component/index/dragLayout.vue"
+//import pagination from "../../../vue_component/index/pagination.vue"
+//import selectBox from "../../../vue_component/index/selectBox.vue"
+//import selectList from "../../../vue_component/index/selectList.vue"
+//import waveButton from "../../../vue_component/index/waveButton.vue"
+//import calendar from "../../../vue_component/index/calendar.vue"
+//import calendarSelect from "../../../vue_component/index/calendarSelect.vue"
+//import alertBox from "../../../vue_component/index/alert.vue"
+//import city from "../../../vue_component/index/city.vue"
+//import scrollBox from "../../../vue_component/index/scrollBox.vue"
+//import processBox from "../../../vue_component/index/processBox.vue"
+//import tree from "../../../vue_component/index/tree.vue"
+//import dragBox from "../../../vue_component/index/dragBox.vue"
+//import dragLayout from "../../../vue_component/index/dragLayout.vue"
+
 
 let routes = [{
     path: "/",
@@ -28,44 +29,44 @@ let routes = [{
 }, {
     path: "/pagination",
     components: {
-        default: pagination
+        default: r => require(["../../../vue_component/index/pagination.vue"], r)
     }
 }, {
     path: "/selectBox",
-    component: selectBox
+    component: r => require(["../../../vue_component/index/selectBox.vue"], r)
 }, {
     path: "/selectList",
-    component: selectList
+    component: r => require(["../../../vue_component/index/selectList.vue"], r)
 }, {
     path: "/calendar",
-    component: calendar
+    component: r => require(["../../../vue_component/index/calendar.vue"], r)
 }, {
     path: "/calendarSelect",
-    component: calendarSelect
+    component: r => require(["../../../vue_component/index/calendarSelect.vue"], r)
 }, {
     path: "/waveButton",
-    component: waveButton
+    component: r => require(["../../../vue_component/index/waveButton.vue"], r)
 }, {
     path: "/alert",
-    component: alertBox
+    component: r => require(["../../../vue_component/index/alert.vue"], r)
 }, {
     path: "/city",
-    component: city
+    component: r => require(["../../../vue_component/index/city.vue"], r)
 }, {
     path: "/scrollBox",
-    component: scrollBox
+    component: r => require(["../../../vue_component/index/scrollBox.vue"], r)
 }, {
     path: "/processBox",
-    component: processBox
+    component: r => require(["../../../vue_component/index/processBox.vue"], r)
 }, {
     path: "/tree",
-    component: tree
+    component: r => require(["../../../vue_component/index/tree.vue"], r)
 }, {
     path: "/drag",
-    component: dragBox
+    component: r => require(["../../../vue_component/index/dragBox.vue"], r)
 }, {
     path: "/dragLayout",
-    component: dragLayout
+    component: r => require(["../../../vue_component/index/dragLayout.vue"], r)
 }]
 
 
@@ -88,7 +89,7 @@ router.beforeEach((to, from, next) => {
             t.innerHTML = "<ol>" + code + "</ol>"
             hljs.highlightBlock(t)
         })
-    }, 10)
+    }, 100)
     next()
 })
 

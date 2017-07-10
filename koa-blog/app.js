@@ -43,7 +43,7 @@ router.get("/404", async ctx => {
 
 require("./service/index")(router, render)
 
-require("./service/music")(router, render)
+require("./service/cloudmusic")(router, render)
 
 require("./service/component")(router, render)
 

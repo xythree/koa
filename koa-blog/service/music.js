@@ -1,4 +1,4 @@
-//const crypto = require("./crypto")
+const crypto = require("./crypto")
 
 module.exports = (router, render) => {
 
@@ -11,7 +11,8 @@ module.exports = (router, render) => {
             "Content-Type": "application/x-www-form-urlencoded",
             "Referer": "http://music.163.com",
             "Host": "music.163.com",
-            "Cookie": "appver=1.5.6",
+            //"Cookie": "appver=1.5.6",
+            "Cookie": "os=uwp; osver=10.0.10586.318; appver=1.2.1;",
             "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
         }
     }
@@ -60,12 +61,71 @@ module.exports = (router, render) => {
         const limit = params.limit || 15
         const obj = {
             path: config.hostname + "/weapi/cloudsearch/get/web",
-            //path: config.hostname + "/api/search/pc",
             s: params.s,
             type: params.type || 1,
             offset: (params.offset || 0) * limit,
-            limit: limit
+            limit: limit,
+            csrf_token: ""
         }
+
+        let cryptoResult = crypto(obj)
+
+        await ctx.post({
+            path: obj.path,
+            params: cryptoResult.params,
+            encSecKey: cryptoResult.encSecKey
+        }, {
+            headers: config.headers
+        }).then(result => {
+            ctx.body = result
+        }, () => {
+            ctx.status = 502
+            ctx.body = "fetch error"
+        })
+    })
+
+    //获取歌曲信息    
+    router.post("/music/detail", async ctx => {
+        const params = ctx.request.body
+        const obj = {
+            //path: config.hostname + "/api/song/detail/",
+            path: config.hostname + "/weapi/v3/song/detail",
+            //path: "http://api.imjad.cn/cloudmusic",
+            //c: JSON.stringify([{
+            //  id: params.id
+            //}]),
+            //id: params.id,
+            //ids: `[${params.id}]`,
+            c: `[{id: ${params.id}}]`,
+            csrf_token: ""
+        }
+
+        let cryptoResult = crypto(obj)
+
+        await ctx.post({
+            path: obj.path,
+            params: cryptoResult.params,
+            encSecKey: cryptoResult.encSecKey
+        }, {
+            headers: config.headers
+        }).then(result => {
+            ctx.body = result
+        }, () => {
+            ctx.status = 502
+            ctx.body = "fetch error"
+        })
+
+    })
+
+    router.post("/music/song", async ctx => {
+        const params = ctx.request.body
+        const obj = {
+            path: config.hostname + "/weapi/song/enhance/player/url",
+            ids: [params.id],
+            br: 128000,
+            csrf_token: ""
+        }
+
         let cryptoResult = crypto(obj)
 
         await ctx.post({
@@ -76,36 +136,6 @@ module.exports = (router, render) => {
             headers: config.headers
         }).then(result => {
             console.log(result)
-            ctx.body = result
-        }, () => {
-            ctx.status = 502
-            ctx.body = "fetch error"
-        })
-    })
-
-    //获取歌曲信息    
-    router.get("/music/detail", async ctx => {
-        const params = ctx.request.query
-        const obj = {
-            //path: config.hostname + "/api/song/detail/",
-            //path: config.hostname + "/weapi/v3/song/detail/",
-            path: "http://api.imjad.cn/cloudmusic",
-            "c": JSON.stringify([{
-                id: params.id
-            }]),
-            id: params.id,
-            ids: `[${params.id}]`,
-            csrf_token: ""
-        }
-        let cryptoResult = crypto(obj)
-
-        await ctx.post({
-            path: obj.path,
-            params: cryptoResult.params,
-            encSecKey: cryptoResult.encSecKey
-        }, {
-            headers: config.headers
-        }).then(result => {
             ctx.body = result
         }, () => {
             ctx.status = 502

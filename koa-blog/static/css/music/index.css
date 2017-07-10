@@ -312,17 +312,6 @@ body {
   background: url(/images/music/icon.png) no-repeat 0 -376px;
 }
 
-.ps {
-  width: 80%;
-  margin: 20px;
-  top: 150px;
-  word-wrap: break-word;
-}
-
-.ps a {
-  color: #999;
-}
-
 .isentence {
   position: absolute;
   width: 80%;
@@ -541,6 +530,11 @@ body {
 
 .isong_list_box .isong_list li p a:hover {
   color: #f00;
+}
+
+.isong_list_box .isong_list li .isong_delete {
+  float: right;
+  cursor: pointer;
 }
 
 .iplay_list_box .isong_title li {

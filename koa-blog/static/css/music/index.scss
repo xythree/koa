@@ -326,16 +326,6 @@ $w: 250px;
     }
 }
 
-.ps {
-    width: 80%;
-    margin: 20px;
-    top: 150px;
-    word-wrap: break-word;
-    a {
-        color: #999;
-    }
-}
-
 .isentence {
     position: absolute;
     width: 80%;
@@ -527,6 +517,10 @@ $w: 250px;
                         color: $c;
                     }
                 }
+            }
+            .isong_delete {
+                float: right;
+                cursor: pointer;
             }
         }
     }

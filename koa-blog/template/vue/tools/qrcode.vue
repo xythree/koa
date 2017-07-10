@@ -125,7 +125,9 @@ export default {
             base64_text: "",
             base64_src: "",
             img_text: "",
-            img_src: ""
+            img_src: "",
+            getqrcodeStatus: true,
+            getimgStatus: true
         }
     },
     methods: {
@@ -134,13 +136,16 @@ export default {
             this.text = ""
         },
         getqrcode() {
+            if (!this.getqrcodeStatus) return
             if (!this.text.trim()) return
+            this.getqrcodeStatus = false
             axios.post("/qrcode", {
                 text: this.text,
                 type: this.type,
                 margin: this.margin,
                 size: this.size
             }).then(result => {
+                this.getqrcodeStatus = true
                 this.src = result.data.result
             })
         },
@@ -167,6 +172,7 @@ export default {
             } catch (e) { }
         },
         getimg() {
+            if (!this.getimgStatus) return
             if (this.img_src) {
                 let files = this.img_src[0]
                 let formdata = new FormData()
@@ -180,7 +186,7 @@ export default {
                     return
                 }
                 formdata.append('file', files)
-
+                this.getimgStatus = false
                 axios({
                     url: "/base64",
                     method: "post",
@@ -189,6 +195,7 @@ export default {
                         "Content-Type": "multipart/form-data"
                     }
                 }).then(result => {
+                    this.getimgStatus = true
                     this.img_text = result.data
                 })
             }

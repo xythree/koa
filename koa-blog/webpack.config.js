@@ -15,9 +15,10 @@ module.exports = {
         demo: "./static/js/demo/index.js"
     },
     output: {
-        path: path.resolve(__dirname, "static/js/dist"),
+        path: path.resolve(__dirname, "static/dist/js"),
         //filename: "js/[name].js"
-        filename: "[name].js"
+        filename: "[name].js",
+        chunkFilename: "../../dist/js/[name].min.js"
     },
     plugins: [
         /*
