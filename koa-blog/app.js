@@ -51,6 +51,8 @@ require("./service/word")(router, render)
 
 require("./service/tools")(router, render)
 
+require("./service/novels")(router, render)
+
 require("./admin/index")(router, render)
 
 router.get("/m", async ctx => {

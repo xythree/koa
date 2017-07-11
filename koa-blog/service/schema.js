@@ -198,5 +198,41 @@ module.exports = {
             type: String,
             required: false
         }
+    },
+    novels: {
+        title: {
+            type: String,
+            required: false
+        },
+        author: {
+            type: String,
+            required: false
+        },
+        type: {
+            type: String,
+            required: false
+        },
+        coverImg: {
+            type: String,
+            required: false
+        }
+    },
+    novelContents: {
+        pid: {
+            type: String,
+            required: false
+        },
+        chapter: {
+            type: Number,
+            required: false
+        },
+        title: {
+            type: String,
+            required: false
+        },
+        content: {
+            type: String,
+            required: false
+        }
     }
 }
