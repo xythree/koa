@@ -3,7 +3,9 @@ const router = require("koa-router")()
 const serve = require("koa-static")
 const views = require("co-views")
 const bodyparser = require("koa-bodyparser")
-const session = require("koa-session2")
+    //const session = require("koa-session2")
+const session = require("koa-session-store")
+const mongoStore = require("koa-session-mongo")
 const app = new koa()
 const path = require("path")
 const fs = require("fs")
@@ -15,10 +17,22 @@ const render = views("./views", {
     ext: "ejs"
 })
 
+const mongoose = require("./service/mongoose")
 
+/*
 app.use(session({
     maxAge: 1000 * 60 * 60 * 24,
     key: "SESSIONID" //default "koa:sess" 
+}))
+*/
+
+app.keys = ["SESSIONID"]
+app.use(session({
+    store: mongoStore.create({
+        db: "koa_blog",
+        collection: "sessions",
+        maxAge: 60 * 60 * 1000
+    })
 }))
 
 
@@ -52,6 +66,10 @@ require("./service/word")(router, render)
 require("./service/tools")(router, render)
 
 require("./service/novels")(router, render)
+
+require("./service/makedown")(router, render)
+
+require("./service/verify")(router, render)
 
 require("./admin/index")(router, render)
 

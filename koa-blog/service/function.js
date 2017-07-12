@@ -5,7 +5,7 @@ module.exports = sql => {
 
     const obj = {
         async isLogin(ctx) {
-            const username = ctx.cookies.get("username")
+            const username = ctx.session.username
             let result = []
 
             if (username) {

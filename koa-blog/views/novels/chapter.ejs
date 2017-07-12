@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恨水无伤|<%= content.novels.title %>_<%= content.data.title %></title>
+</head>
+
+<body>
+
+    <div id="chapter">
+        <div class="icontent">
+            <h3><%= content.data.title %></h3>
+            <div class="ibox"><%- content.data.content %></div>
+            <% if (content.data.chapter != 1) { %>
+                <a href="<%= '/novels/' + content.novels._id + '?chapter='+ (content.data.chapter - 1) %>">上一章</a>
+            <% } %>
+            <% if (content.data.chapter < content.count) { %>
+                <a href="<%= '/novels/' + content.novels._id + '?chapter='+ (content.data.chapter + 1) %>">下一章</a>
+            <% } %>
+        </div>
+    </div>
+
+</body>
+
+</html>

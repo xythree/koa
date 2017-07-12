@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恨水无伤|小说</title>
+</head>
+
+<body>
+
+    <div id="novels">
+
+        <ul>
+        <% for(var i = 0; i < list.length; i++) { %>
+            <li>
+                <h3>
+                    <a href="/novels/<%= list[i]._id %>"><%= list[i].title %></a>
+                </h3>
+                <p><%= list[i].author %></p>
+                <p><%= list[i].type %></p>
+                <img src="<%= list[i].coverImg %>">
+            </li>
+        <% } %>
+        </ul>
+
+    </div>
+
+</body>
+
+</html>

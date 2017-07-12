@@ -10,7 +10,9 @@ const { mkdirsSync } = require("./function")()
 
 let chapter = 1
 let pid = ""
-let _src = "" //"http://read.qidian.com/chapter/2R9G_ziBVg41/MyEcwtk5i8Iex0RJOkJclQ2"
+    //let _src = "http://read.qidian.com/chapter/TtxVU3dYVW81/hk--Zu49t5cex0RJOkJclQ2"
+let _src = "http://read.qidian.com/chapter/2R9G_ziBVg41/MyEcwtk5i8Iex0RJOkJclQ2"
+
 
 request.get(_src).then(data => {
     //let _data = iconv.decode(data, "utf8")
@@ -61,23 +63,28 @@ function loop(src) {
         src = "http:" + src
     }
     request.get(src).then(async data => {
+
         const $ = cheerio.load(data.body, { decodeEntities: false })
         let title = $(".j_chapterName").text()
         let content = $(".j_readContent").html()
         let nextSrc = $("#j_chapterNext").attr("href")
 
-        await sql.novelContents.create({
-            pid: pid,
-            title: title,
-            chapter: chapter,
-            content: content
-        }).then((data, err) => {
-            console.log(chapter)
-            if (!err) {
-                ++chapter
-                loop(nextSrc)
-            }
-        })
+        if (title && content) {
+            await sql.novelContents.create({
+                pid: pid,
+                title: title,
+                chapter: chapter,
+                content: content
+            }).then((data, err) => {
+                console.log(chapter)
+                if (!err) {
+                    ++chapter
+                    loop(nextSrc)
+                }
+            })
+        } else {
+            process.exit()
+        }
 
     })
 

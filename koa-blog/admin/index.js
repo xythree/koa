@@ -20,11 +20,9 @@ module.exports = (router, render) => {
         await next()
     })
 
-
     router.get("/admin/", async ctx => {
         ctx.redirect("/admin/index")
     })
-
 
     router.get("/admin/index", async ctx => {
         if (ctx.session.usernameInfo && ctx.session.usernameInfo.level != 9) {
@@ -64,19 +62,22 @@ module.exports = (router, render) => {
         let result = {}
 
         if (params.username && params.password) {
-            /*
+
             result = await sql.Users.find({
                 username: params.username,
                 password: md5(params.password)
             })
-            */
-            result = await mysql.users.login(params.username, md5(params.password))
+
+            //result = await mysql.users.login(params.username, md5(params.password))
 
             if (result.length) {
+                /*
                 ctx.cookies.set("username", params.username, {
                     //expires: new Date(Date.now() + 60 * 60 * 1000)
                     maxAge: 60 * 60 * 1000
                 })
+                */
+                ctx.session.username = params.username
 
                 result = "ok"
             } else {
@@ -110,32 +111,42 @@ module.exports = (router, render) => {
 
         if (params.username && params.password) {
 
-            //result.result = await sql.Users.findOne({ username: params.username })
-            result.result = await mysql.users.findUsername(params.username)
+            if (params.verify.toLocaleLowerCase() == ctx.cookies.get("verify").toLocaleLowerCase()) {
 
-            if (result.result && result.result.length) {
-                result.code = 2
-                result.msg = "用户名已经存在"
+                //result.result = await sql.Users.findOne({ username: params.username })
+                result.result = await mysql.users.findUsername(params.username)
+
+                if (result.result && result.result.length) {
+                    result.code = 2
+                    result.msg = "用户名已经存在"
+                } else {
+
+                    /*
+                    await sql.Users.create({
+                        username: params.username,
+                        password: md5(params.password),
+                        create_time: Date.now()
+                    })
+                    */
+
+                    result.result = await mysql.users.resgiter(params.username, md5(params.password))
+
+                    /*
+                    ctx.cookies.set("username", params.username, {
+                        //expires: new Date(Date.now() + 60 * 60 * 1000)
+                        maxAge: 60 * 60 * 1000
+                    })
+                    */
+
+                    ctx.session.useraname = params.username
+
+                    result.code = 1
+                    result.msg = "ok"
+
+                }
             } else {
-
-                /*
-                await sql.Users.create({
-                    username: params.username,
-                    password: md5(params.password),
-                    create_time: Date.now()
-                })
-                */
-
-                result.result = await mysql.users.resgiter(params.username, md5(params.password))
-
-                ctx.cookies.set("username", params.username, {
-                    //expires: new Date(Date.now() + 60 * 60 * 1000)
-                    maxAge: 60 * 60 * 1000
-                })
-
-                result.code = 1
-                result.msg = "ok"
-
+                result.code = 0
+                result.msg = "验证码错误"
             }
         } else {
             result.code = 0
@@ -147,10 +158,13 @@ module.exports = (router, render) => {
 
 
     router.get("/logout", async ctx => {
+        /*
         ctx.cookies.set("username", "", {
             //expires: new Date(Date.now() - 1)
             maxAge: -1
         })
+        */
+        ctx.session.username = ""
         ctx.body = await "logout success"
     })
 

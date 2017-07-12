@@ -25,6 +25,10 @@
                 <input type="password" placeholder="密码" @keyup.enter="submit" v-model="password">
             </p>
             <p>
+                <input type="text" v-model="verify" />
+                <img :src="verifyUrl" @click="verifyFn" />
+            </p>
+            <p>
                 <button @click="submit">注册</button>
             </p>
         </div>
@@ -37,24 +41,32 @@ import { getParams } from "./../../static/js/xythree"
 export default {
     data() {
         return {
+            verify: "",
+            verifyUrl: "/verify",
             username: "",
             password: "",
             type: "login"
         }
     },
     methods: {
+        verifyFn() {
+            this.verifyUrl = "/verify?" + Math.random()
+        },
         toggleType(type) {
             this.type = type
         },
         register() {
             axios.post("/register", {
                 username: this.username.trim(),
-                password: this.password.trim()
+                password: this.password.trim(),
+                verify: this.verify.trim()
             }).then(result => {
                 if (result.status == 200 && result.data == "ok") {
                     this.redirect()
                 } else {
-                    alert(result.data)
+                    this.verifyFn()
+                    this.verify = ""
+                    alert(result.data.msg)
                 }
             })
         },
