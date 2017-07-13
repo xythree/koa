@@ -12,6 +12,8 @@ module.exports = {
         tools: "./static/js/tools/index.js",
         word: "./static/js/word/index.js",
         login_register: "./static/js/login_register/index.js",
+        markdown: "./static/js/tools/markdown.js",
+        qrcode: "./static/js/tools/qrcode.js",
         demo: "./static/js/demo/index.js"
     },
     output: {

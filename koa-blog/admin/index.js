@@ -138,7 +138,7 @@ module.exports = (router, render) => {
                     })
                     */
 
-                    ctx.session.useraname = params.username
+                    ctx.session.username = params.username
 
                     result.code = 1
                     result.msg = "ok"
@@ -209,7 +209,7 @@ module.exports = (router, render) => {
     router.post("/article/add-edit-article", async ctx => {
         let params = ctx.request.body
         let result = {},
-            author = ctx.cookies.get("username")
+            author = ctx.session.username
 
         params.title = validator.escape(params.title)
         params.content = validator.escape(params.content)
@@ -279,7 +279,7 @@ module.exports = (router, render) => {
     })
 
     router.get("/article/article-list", async ctx => {
-        let username = ctx.cookies.get("username")
+        let username = ctx.session.username
         let params = ctx.request.query
         let result = {}
         let limit = +params.limit || 15

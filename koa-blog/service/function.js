@@ -41,6 +41,18 @@ module.exports = sql => {
                     return true
                 }
             }
+        },
+        async cleardir(_path) {
+            if (fs.existsSync(_path)) {
+                return await new Promise((resolve, reject) => {
+                    fs.readdir(_path, (err, data) => {
+                        data.forEach(t => {
+                            fs.unlink(path.resolve(_path, t))
+                        })
+                        resolve(true)
+                    })
+                })
+            }
         }
     }
 

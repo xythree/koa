@@ -7,7 +7,7 @@ const { base64 } = require("./function")()
 module.exports = (router, render) => {
 
     router.get("/tools", async ctx => {
-        ctx.body = await render("tools")
+        ctx.body = await render("tools/index")
     })
 
     router.post("/qrcode", async ctx => {
@@ -49,6 +49,14 @@ module.exports = (router, render) => {
         }
 
         ctx.body = await result
+    })
+
+    router.get("/qrcode", async ctx => {
+        ctx.body = await render("tools/qrcode")
+    })
+
+    router.get("/md", async ctx => {
+        ctx.body = await render("tools/markdown")
     })
 
 }

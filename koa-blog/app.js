@@ -67,11 +67,13 @@ require("./service/tools")(router, render)
 
 require("./service/novels")(router, render)
 
-require("./service/makedown")(router, render)
-
 require("./service/verify")(router, render)
 
+require("./service/download")(router, render)
+
 require("./admin/index")(router, render)
+
+
 
 router.get("/m", async ctx => {
     ctx.body = "mobile"

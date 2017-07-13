@@ -1,5 +1,9 @@
-
-<style lang="sass" scoped>
+<style lang="sass">
+body,
+.iqrcode_box *{
+    padding: 0;
+    margin: 0;
+}
 .iqrcode_box {
     min-width: 800px;
     padding: 10px;
@@ -36,11 +40,37 @@
         border: 1px solid #ddd;
     }
 }
+.ilink_box {
+    $h: 30px;
+    height: $h;
+    line-height: $h;    
+    border-bottom: 1px solid #eee;
+    background: #333;
+    
+    a {
+        $c: #fff;
+        text-decoration: none;
+        padding: 0 20px;
+        color: $c;
+        font-size: 14px;
+        border-right: 1px dotted $c;
+        transition: all .5s;
+
+        &:hover {
+            color: #f00;
+        }
+    }
+}
 </style>
 
 <template>
     <div class="iqrcode_content">
+        <div class="ilink_box">
+            <a href="/">首页</a>
+            <a href="/tools">工具</a>
+        </div>
         <div class="iqrcode_box">
+    
             <h5>二维码生成</h5>
             <div class="iqrcode_text">
                 <p>
@@ -73,7 +103,7 @@
             </div>
             <img class="img" :src="src" />
         </div>
-
+    
         <div class="iqrcode_box">
             <h5>base64转图片</h5>
             <div class="iqrcode_text">
@@ -87,7 +117,7 @@
             </div>
             <img class="img" style="border: none;" :src="base64_src" />
         </div>
-
+    
         <div class="iqrcode_box">
             <h5>图片转base64</h5>
             <div class="iqrcode_text">
@@ -176,12 +206,12 @@ export default {
             if (this.img_src) {
                 let files = this.img_src[0]
                 let formdata = new FormData()
-                
+
                 if (!/^image/.test(files.type)) {
                     alert("仅支持图片转换")
                     return
                 }
-                if (files.size/1024 > 1024) {
+                if (files.size / 1024 > 1024) {
                     alert("文件太大了,仅支持小于等于1M")
                     return
                 }
