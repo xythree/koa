@@ -39,7 +39,7 @@
 <template>
     <div class="iprocess_box">
         <div class="iprocess_content" :style="{'background-color': config && config.c1}" :class="{'active': status}" ref="iprocess_content" @click="clickFn">
-            <em :style="{'width': (process*100) + 'px', 'background-color': config && config.c2}">
+            <em :style="{'width': val + 'px', 'background-color': config && config.c2}">
                 <b ref="b" @mousedown="downFn" @touchstart="downFn" :style="{'background-color': config && config.c3}"></b>
             </em>
         </div>

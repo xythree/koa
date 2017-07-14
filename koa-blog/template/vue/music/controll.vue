@@ -228,7 +228,7 @@ export default {
             song: {},
             playSong: {},
             playStatus: false,
-            playend: false,            
+            playend: false,
             audioCurrentTime: 0,
             audioDuration: 0,
             condIconIndex: localStorage.condIconIndex || 0,
@@ -238,7 +238,6 @@ export default {
                 { text: "列表循环", type: "icondList" }
             ],
             muted: false,
-            volumeVal: "100%",
             process_config: {
                 c1: "#666",
                 c2: "#fff",
@@ -309,10 +308,6 @@ export default {
                 this.process_volume_value = 0
                 this.muted = true
             }
-            this.setVolumeVal(audio.volume)
-        },
-        setVolumeVal(num) {
-            this.volumeVal = num * 100 + "%"
         },
         showRecord() {
 
@@ -370,12 +365,12 @@ export default {
             }
         },
         prev() {
-            if (!this.playList.length) return
+            if (this.playList.length <= 1) return
             this.playListIndex = --this.playListIndex < 0 ? this.playList.length - 1 : this.playListIndex
             this.prevNext()
         },
         next() {
-            if (!this.playList.length) return
+            if (this.playList.length <= 1) return
             this.playListIndex = ++this.playListIndex > this.playList.length - 1 ? 0 : this.playListIndex
             this.prevNext()
         },
@@ -387,27 +382,27 @@ export default {
             this.prevNext()
         },
         init() {
-            let refs = this.$refs,
-                audioBox = refs.audio
+            let refs = this.$refs
+            let audioBox = refs.audio
 
             audioBox.addEventListener('play', e => {
                 this.process_drag = true
                 this.playStatus = true
                 this.playend = false
-                this.audioCurrentTime = refs.audio.currentTime
+                this.audioCurrentTime = audioBox.currentTime
             })
             audioBox.addEventListener("durationchange", () => {
-                this.audioDuration = refs.audio.duration
+                this.audioDuration = audioBox.duration
             })
             audioBox.addEventListener('timeupdate', e => {
-                this.audioCurrentTime = refs.audio.currentTime
+                this.audioCurrentTime = audioBox.currentTime
             })
             audioBox.addEventListener('ended', () => {
+                let condIcon = this.condIcon[this.condIconIndex]
+
                 this.playStatus = false
                 this.playend = true
                 this.process_drag = false
-
-                let condIcon = this.condIcon[this.condIconIndex]
 
                 if (condIcon.type == "icondRandom") {
                     this.randomPlay()

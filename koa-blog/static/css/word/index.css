@@ -280,16 +280,16 @@ body {
 }
 
 .irecite_box .irecite_word_list_box {
-  padding-top: 10px;
   overflow: hidden;
+  padding-top: 10px;
 }
 
 .irecite_box .irecite_word_list_box .irecite_word_list {
   float: left;
   width: 160px;
   padding: 5px;
-  background: #fff;
   border-radius: 5px;
+  background: #fff;
   max-height: 540px;
   overflow-y: auto;
 }

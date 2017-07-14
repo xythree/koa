@@ -5,6 +5,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
     entry: {
+        //vendor: ["vue", "axios"],
         index: "./static/js/index.js",
         component: "./static/js/component/index.js",
         music: "./static/js/music/index.js",
@@ -18,19 +19,23 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "static/dist/js"),
-        //filename: "js/[name].js"
         filename: "[name].js",
+        //filename: "[name].[chunkhash:8].js",
         chunkFilename: "../../dist/js/[name].min.js"
     },
     plugins: [
         /*
-        new ExtractTextPlugin("css/[name].css"),
+        new ExtractTextPlugin("css/[name].[contenthash:8].css"),
         new HtmlWebpackPlugin({
             inject: true,
             chunks: ["demo"],
-            minify: true,
-            cache: true,
-            hash: true
+            cache: true
+        })
+        */
+        /*
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor', 'manifest']
         })
         */
     ],
