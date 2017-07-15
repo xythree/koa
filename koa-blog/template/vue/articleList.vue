@@ -13,12 +13,12 @@
                     <div class="ibox_ani_1">
                         <div class="ibox_ani_2">
                             <h5>
-                                <router-link :to="item.id | routerId">
+                                <router-link :to="item._id | routerId">
                                     <i class="fa fa-hashtag"></i>{{item.title}}
                                 </router-link>
                             </h5>
                             <p>{{item.content|formatHtml}}</p>
-                            <router-link class="iread_more" :to="item.id | routerId">阅读全文</router-link>
+                            <router-link class="iread_more" :to="item._id | routerId">阅读全文</router-link>
                         </div>
                     </div>
                 </li>

@@ -31,11 +31,10 @@ module.exports = {
             chunks: ["demo"],
             cache: true
         })
-        */
-        /*
-        new webpack.optimize.OccurrenceOrderPlugin(),
+        
         new webpack.optimize.CommonsChunkPlugin({
-            names: ['vendor', 'manifest']
+            //names: ['vendor', 'manifest']
+            names: ["vendor"]
         })
         */
     ],
