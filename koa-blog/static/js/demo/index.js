@@ -13,6 +13,6 @@ let vm = new Vue({
         app
     },
     mounted() {
-        alert(1)
+
     }
 })

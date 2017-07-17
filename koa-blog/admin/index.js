@@ -7,6 +7,10 @@ const { uploadFile } = require("./../service/upload")
 const { isLogin } = require("./../service/function")(sql)
     //const mysql = require("./../service/mysql")
 
+const config = {
+    limit: 15
+}
+
 module.exports = (router, render) => {
 
     router.use("/admin/*", async(ctx, next) => {
@@ -25,11 +29,36 @@ module.exports = (router, render) => {
     })
 
     router.get("/admin/index", async ctx => {
+
         if (ctx.session.usernameInfo && ctx.session.usernameInfo.level != 9) {
             ctx.redirect("/")
             return
         }
-        ctx.body = await render("/admin/index")
+
+        let username = ctx.session.username
+        let params = ctx.request.query
+        let result = {}
+        let limit = +params.limit || config.limit
+        let skip = params.skip || 1
+
+        skip = skip < 0 ? 0 : skip - 1
+
+        result.limit = limit
+        result.index = skip + 1
+        result.count = await sql.Article.find({ author: username }).count()
+        result.result = await sql.Article.find({ author: username }).limit(+limit).skip(skip * limit)
+
+        result.arr = []
+
+        for (var i = 0, len = Math.ceil(result.count / config.limit); i < len; i++) {
+            result.arr.push(i + 1)
+        }
+
+        let n = result.index - result.count - 1
+        result.prevPageArr = result.arr.slice(n < 0 ? 0 : n, result.index - 1)
+        result.nextPageArr = result.arr.slice(result.index, result.index + result.count)
+
+        ctx.body = await render("/admin/index", { data: result })
     })
 
     router.get("/admin/login_register", async ctx => {
@@ -55,7 +84,6 @@ module.exports = (router, render) => {
         ctx.body = await render("/admin/login")
     })
     */
-
 
     router.get("/login", async ctx => {
         let params = ctx.request.query
@@ -90,7 +118,6 @@ module.exports = (router, render) => {
         ctx.body = await result
     })
 
-
     /*
     router.get("/admin/register", async ctx => {
         let is_login = await isLogin(ctx)
@@ -103,7 +130,6 @@ module.exports = (router, render) => {
         ctx.body = await render("/admin/register")
     })
     */
-
 
     router.post("/register", async ctx => {
         let params = ctx.request.body
@@ -208,8 +234,9 @@ module.exports = (router, render) => {
 
     router.post("/article/add-edit-article", async ctx => {
         let params = ctx.request.body
-        let result = {},
-            author = ctx.session.username
+        let result = {}
+        let author = ctx.session.username
+        let time = Date.now()
 
         params.title = validator.escape(params.title)
         params.content = validator.escape(params.content)
@@ -218,14 +245,13 @@ module.exports = (router, render) => {
             if (author) {
 
                 result = await sql.Article.create({
-                    author: ctx.cookies.get("username"),
+                    author: ctx.session.username, //ctx.cookies.get("username"),
                     title: params.title,
                     content: params.content,
                     create_time: time,
                     last_modify_time: time,
                     flag: "flag" + time + Math.round(Math.random() * 9999)
                 })
-
 
                 //result = await mysql.articles.add(author, params.title, params.content)
             }
@@ -280,10 +306,10 @@ module.exports = (router, render) => {
     })
 
     router.get("/article/article-list", async ctx => {
-        let username = ctx.session.username
+        let username = "xythree" //ctx.session.username
         let params = ctx.request.query
         let result = {}
-        let limit = +params.limit || 15
+        let limit = +params.limit || config.limit
         let skip = params.skip
 
         skip = skip < 0 ? 0 : skip

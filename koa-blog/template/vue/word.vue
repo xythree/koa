@@ -222,6 +222,7 @@ export default {
                     skip: this.skip
                 }
             }).then(result => {
+                this.reciteIndex = 0
                 this.reciteWordList = result.data.result
                 this.value = this.reciteWordList[this.reciteIndex].word
                 this.search()

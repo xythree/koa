@@ -15,6 +15,7 @@ module.exports = {
         login_register: "./static/js/login_register/index.js",
         markdown: "./static/js/tools/markdown.js",
         qrcode: "./static/js/tools/qrcode.js",
+        articleCenter: "./static/js/admin/articleCenter.js",
         demo: "./static/js/demo/index.js"
     },
     output: {
@@ -31,7 +32,7 @@ module.exports = {
             chunks: ["demo"],
             cache: true
         })
-        
+
         new webpack.optimize.CommonsChunkPlugin({
             //names: ['vendor', 'manifest']
             names: ["vendor"]

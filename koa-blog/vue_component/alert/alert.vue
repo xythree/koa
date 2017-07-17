@@ -34,6 +34,7 @@
         background: #fff;
         border-radius: 5px;
         h3 {
+            margin: 0;
             padding: v(5) v(10);
             font-weight: normal;
             border-bottom: 1px dotted #ddd;

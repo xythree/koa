@@ -75,6 +75,8 @@ require("./service/download")(router, render)
 
 require("./admin/index")(router, render)
 
+require("./userCenter/index")(router, render)
+
 
 
 router.get("/m", async ctx => {
