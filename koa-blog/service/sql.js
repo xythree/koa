@@ -9,6 +9,9 @@ function _unescape(data) {
             t.title = validator.unescape(t.title)
             t.content = validator.unescape(t.content)
         })
+    } else if (data && data.title) {
+        data.title = validator.unescape(data.title)
+        data.content = validator.unescape(data.content)
     }
 
     return data

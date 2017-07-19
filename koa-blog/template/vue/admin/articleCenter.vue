@@ -12,8 +12,8 @@ export default {
     props: ["alertBoxStatus", "alertBoxText"],
     data() {
         return {
-            //alertBoxStatus: false,
-            //alertBoxText: ""
+            alertBoxStatus: false,
+            alertBoxText: ""
         }
     },
     components: {

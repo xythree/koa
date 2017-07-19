@@ -15,8 +15,6 @@ let vm = new Vue({
     methods: {
         removeFn(e, id) {
 
-            this.alertBoxStatus = true
-            return
             axios.get("/article/remove-article", {
                 params: {
                     id: id

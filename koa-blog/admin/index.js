@@ -5,6 +5,7 @@ const fs = require("fs")
 const path = require("path")
 const { uploadFile } = require("./../service/upload")
 const { isLogin } = require("./../service/function")(sql)
+const mon = require("./../service/sql")
     //const mysql = require("./../service/mysql")
 
 const config = {
@@ -17,10 +18,10 @@ module.exports = (router, render) => {
         let is_login = await isLogin(ctx)
         let _path = ctx.path
         if (!is_login.length && _path != "/admin/login_register" && _path != "/login" && _path != "/register") {
-            ctx.redirect("/admin/login_register")
-            return
+            //ctx.redirect("/admin/login_register")
+            //return
         }
-        ctx.session.usernameInfo = is_login[0]
+        //ctx.session.usernameInfo = is_login[0]
         await next()
     })
 
@@ -31,11 +32,11 @@ module.exports = (router, render) => {
     router.get("/admin/index", async ctx => {
 
         if (ctx.session.usernameInfo && ctx.session.usernameInfo.level != 9) {
-            ctx.redirect("/")
-            return
+            //ctx.redirect("/")
+            //return
         }
 
-        let username = ctx.session.username
+        let username = "xythree" //ctx.session.username
         let params = ctx.request.query
         let result = {}
         let limit = +params.limit || config.limit
@@ -296,9 +297,9 @@ module.exports = (router, render) => {
 
         if (params.id) {
 
-            result = await sql.Article.find({ _id: params.id })
+            result = await mon.article.findOne({ _id: params.id })
                 //result = await mysql.findId("articles", params.id)
-            result = result[0]
+
         } else {
             result = "id不存在"
         }
