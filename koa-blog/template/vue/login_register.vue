@@ -1,6 +1,6 @@
 <template>
     <div id="login_register">
-        <div class="login" v-show="this.type == 'login'">
+        <div class="login" v-show="this.flag == 'login'">
             <p>
                 <a href="javascript:;" @click="toggleType('register')">没有帐号,注册?</a>
             </p>
@@ -14,7 +14,7 @@
                 <button @click="submit">登录</button>
             </p>
         </div>
-        <div class="register" v-show="this.type != 'login'">
+        <div class="register" v-show="this.flag != 'login'">
             <p>
                 <a href="javascript:;" @click="toggleType('login')">已有帐号,切换登录</a>
             </p>
@@ -39,13 +39,14 @@ import axios from "axios"
 import { getParams } from "./../../static/js/xythree"
 
 export default {
+    props: ["type","loginRegisterCallBack"],
     data() {
         return {
             verify: "",
             verifyUrl: "/verify",
             username: "",
             password: "",
-            type: "login"
+            flag: this.type || "login"
         }
     },
     methods: {
@@ -53,7 +54,7 @@ export default {
             this.verifyUrl = "/verify?" + Math.random()
         },
         toggleType(type) {
-            this.type = type
+            this.flag = type
         },
         register() {
             axios.post("/register", {
@@ -61,8 +62,12 @@ export default {
                 password: this.password.trim(),
                 verify: this.verify.trim()
             }).then(result => {
-                if (result.status == 200 && result.data == "ok") {
-                    this.redirect()
+                if (result.status == 200 && result.data.code == 1) {
+                    if (this.loginRegisterCallBack) {
+                        this.loginRegisterCallBack(result.data.result)
+                    } else {
+                        this.redirect()
+                    }
                 } else {
                     this.verifyFn()
                     this.verify = ""
@@ -77,10 +82,14 @@ export default {
                     password: this.password.trim()
                 }
             }).then(result => {
-                if (result.status == 200 && result.data == "ok") {
-                    this.redirect()
+                if (result.status == 200 && result.data.code == 1) {
+                    if (this.loginRegisterCallBack) {
+                        this.loginRegisterCallBack(result.data.result)
+                    } else {
+                        this.redirect()
+                    }
                 } else {
-                    alert(result.data)
+                    alert(result.data.msg)
                 }
             })
         },
@@ -96,7 +105,7 @@ export default {
             }
         },
         submit() {
-            this[this.type]()
+            this[this.flag]()
         }
     }
 }

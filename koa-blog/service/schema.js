@@ -234,5 +234,27 @@ module.exports = {
             type: String,
             required: false
         }
+    },
+    chatRecords: {
+        username: {
+            type: String,
+            required: false
+        },
+        value: {
+            type: String,
+            required: false
+        },
+        ip: {
+            type: String,
+            required: false
+        },
+        time: {
+            type: Number,
+            required: false
+        },
+        roomId: {
+            type: String,
+            required: false
+        }
     }
 }

@@ -21,6 +21,7 @@ module.exports = (router, render) => {
             //ctx.redirect("/admin/login_register")
             //return
         }
+
         //ctx.session.usernameInfo = is_login[0]
         await next()
     })
@@ -92,14 +93,14 @@ module.exports = (router, render) => {
 
         if (params.username && params.password) {
 
-            result = await sql.Users.find({
+            result.result = await sql.Users.find({
                 username: params.username,
                 password: md5(params.password)
             })
 
             //result = await mysql.users.login(params.username, md5(params.password))
 
-            if (result.length) {
+            if (result.result.length) {
                 /*
                 ctx.cookies.set("username", params.username, {
                     //expires: new Date(Date.now() + 60 * 60 * 1000)
@@ -108,12 +109,15 @@ module.exports = (router, render) => {
                 */
                 ctx.session.username = params.username
 
-                result = "ok"
+                result.code = 1
+                result.msg = "ok"
             } else {
-                result = "用户名或密码不正确"
+                result.code = 0
+                result.msg = "用户名或密码不正确"
             }
         } else {
-            result = "用户名或密码不能为空"
+            result.code = 0
+            result.msg = "用户名或密码不能为空"
         }
 
         ctx.body = await result
