@@ -16,6 +16,8 @@ module.exports = {
         markdown: "./static/js/tools/markdown.js",
         qrcode: "./static/js/tools/qrcode.js",
         articleCenter: "./static/js/admin/articleCenter.js",
+        chat: "./static/js/chat/index.js",
+        chatroom: "./static/js/chat/chatroom.js",
         demo: "./static/js/demo/index.js"
     },
     output: {
@@ -25,6 +27,13 @@ module.exports = {
         chunkFilename: "../../dist/js/[name].min.js"
     },
     plugins: [
+        /*
+        //自动加载模块
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        })
+        */
         /*
         new ExtractTextPlugin("css/[name].[contenthash:8].css"),
         new HtmlWebpackPlugin({

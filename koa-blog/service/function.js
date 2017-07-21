@@ -4,6 +4,14 @@ const path = require("path")
 module.exports = sql => {
 
     const obj = {
+        ip(ctx) {
+            let ip = ctx.req.headers['x-forwarded-for'] ||
+                ctx.req.connection.remoteAddress ||
+                ctx.req.socket.remoteAddress ||
+                ctx.req.connection.socket.remoteAddress
+
+            return ip.split(":").pop()
+        },
         async isLogin(ctx) {
             const username = ctx.session.username
             let result = []

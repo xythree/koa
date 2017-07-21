@@ -8,6 +8,7 @@
 
 import alert_box from "../../../vue_component/alert/alert.vue"
 
+
 export default {
     props: ["alertBoxStatus", "alertBoxText"],
     data() {

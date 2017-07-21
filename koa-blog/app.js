@@ -9,6 +9,8 @@ const session = require("koa-session2")
 const app = new koa()
 const path = require("path")
 const fs = require("fs")
+const server = require("http").createServer(app.callback())
+const io = require("socket.io")(server)
 
 const config = require("./config")
 const mw_request = require("./middleware/request")
@@ -35,7 +37,6 @@ app.use(session({
     })
 }))
 */
-
 
 
 app.use(mw_request())
@@ -77,7 +78,7 @@ require("./admin/index")(router, render)
 
 require("./userCenter/index")(router, render)
 
-
+require("./service/chat")(router, render, io)
 
 router.get("/m", async ctx => {
     ctx.body = "mobile"
@@ -99,6 +100,7 @@ router.post("/demo", async ctx => {
 })
 
 
-app.listen(config.port, () => {
+
+server.listen(config.port, () => {
     console.log(`running port: ${config.port}`)
 })

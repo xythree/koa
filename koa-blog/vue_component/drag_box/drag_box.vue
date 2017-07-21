@@ -44,9 +44,9 @@
 </style>
 
 <template>
-    <div class="idrag_box" ref="idrag_box" v-show="show" :style="styleObj">
+    <div class="idrag_box" ref="idrag_box" v-show="showStatus" :style="styleObj">
         <div class="idrag_title" @mousedown="downFn">
-            <h3>提示</h3>
+            <h3>{{tit}}</h3>
             <a class="idrag_close" @click="closeFn">X</a>
         </div>
         <div class="idrag_content">
@@ -58,9 +58,9 @@
 <script>
 
 export default {
+    props: ["title", "show", "dragCallBack"],
     data() {
         return {
-            show: true,
             dragStatus: false,
             x: window.innerWidth/2.5,
             y: window.innerHeight/2.5,
@@ -71,6 +71,12 @@ export default {
         }
     },
     computed: {
+        tit() {
+            return this.title || "提示"
+        },
+        showStatus() {
+            return this.show || false
+        },
         styleObj() {
             return {
                 left: this.x + "px",
@@ -101,7 +107,8 @@ export default {
             this._y = e.pageY - _offset.top
         },
         closeFn() {
-            this.show = false
+            this.showStatus = false
+            this.dragCallBack && this.dragCallBack()
         },
         init() {
             let idrag_box = this.$refs.idrag_box
