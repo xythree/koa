@@ -7,7 +7,16 @@ $c3: #fff;
 $c4: #efefef;
 
 .ichat {
-
+    .ichat_box {
+        float: left;
+        margin-top: 50px;
+        margin-left: 250px;
+        width: 600px;
+        height: 700px;
+        iframe {
+            border: 1px solid $c2;
+        }
+    }
 }
 
 .ichatroom_list_box {
@@ -15,7 +24,7 @@ $c4: #efefef;
     left: 0;
     top: 0;
     width: 200px;
-    height: 100%;    
+    height: 100%;
     background: $c1;
     overflow-y: auto;
     overflow-x: hidden;
@@ -25,6 +34,7 @@ $c4: #efefef;
 
         $h: 35px;
         li {
+            list-style: none;
             margin-top: 5px;
             height: $h;
             line-height: $h;
@@ -52,12 +62,20 @@ $c4: #efefef;
         <div class="ichatroom_list_box">
             <h5>房间列表：</h5>
             <ul class="ichatroom_list">
-                <li class="createRoom" @click="joinRoom('')" >+创建房间</li>
-                <li v-for="(value, key, index) in roomlist" @click="joinRoom(key)">房间{{key}}</li>
+                <li class="createRoom" @click="joinRoom('')">+创建临时房间</li>
+                <li v-for="(value, key, index) in roomlist" @click="joinRoom(key)">{{key}}</li>
             </ul>
         </div>
-
-        <drag_box :show="dragBoxShow" :dragCallBack="dragCallBack" >
+        <ul style="margin-left: 200px;">
+            <li v-for="item in avatar">
+                <img :src="item" />
+            </li>
+        </ul>
+        <div class="ichat_box">
+            <iframe v-show="src" :src="src" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    
+        <drag_box :show="dragBoxShow" :dragCallBack="dragCallBack">
             <login_register :loginRegisterCallBack="loginRegisterCallBack" />
         </drag_box>
     </div>
@@ -76,9 +94,11 @@ const socket = io()
 export default {
     data() {
         return {
+            src: "",
             dragBoxShow: false,
             isLogin: false,
-            roomlist: {}
+            roomlist: {},
+            avatar: []
         }
     },
     components: {
@@ -108,7 +128,8 @@ export default {
             }
             let _id = id || this.getRoomId()
 
-            window.open("/chatroom/" + _id)
+            //window.open("/chatroom/" + _id)
+            this.src = "/chatroom/" + _id
         },
         init() {
             axios.get("/chat/roomlist").then(data => {
@@ -130,6 +151,38 @@ export default {
         socket.on("rooms", data => {
             this.roomlist = data
         })
+
+        axios.get("/json/avatar.json").then(data => {
+            this.avatar = data.data.headerImg
+        })
+
+        window.a = function (s) {
+            var len = s.length;
+            var stack = [];
+            if (len === 0 || len % 2 !== 0) {
+                return false;
+            }
+            s = s.replace(/\(/g, "1");
+            s = s.replace(/\)/g, "4");
+            s = s.replace(/\[/g, "2");
+            s = s.replace(/\]/g, "5");
+            s = s.replace(/\{/g, "3");
+            s = s.replace(/\}/g, "6");
+            console.log(s);
+            stack.push(s[0]);
+            for (var i = 1; i < len; i++) {
+                if (parseInt(s[i]) - stack[stack.length - 1] === 3) {
+                    stack.pop();
+                } else {
+                    stack.push(s[i]);
+                }
+            }
+            console.log(stack);
+            if (stack.length === 0)
+                return true;
+            else
+                return false;
+        }
 
     }
 }

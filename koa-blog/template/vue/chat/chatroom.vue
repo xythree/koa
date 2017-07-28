@@ -43,7 +43,54 @@ $c3: #fff;
     }
 }
 
+.info {
+    position: fixed;
+    width: 95%;
+    top: 0;
+    left: 0;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    font-size: 12px;
+    background: $c3;
+    z-index: 999;
+
+    .iall_list {
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+    }
+}
+.iall_list_box {
+    position: fixed;
+    width: 97%;
+    top: 30px;
+    left: 0;
+    max-height: 600px;
+    background: $c3;
+    font-size: 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 999;
+
+    ul {
+        width: 100%;
+        border-top: 1px dotted $c2;
+        border-bottom: 1px dotted $c2;
+        padding-bottom: 30px;
+        overflow: hidden;
+
+        li {
+            padding: 2px;
+            list-style: none;
+            float: left;
+            margin-left: 10px;
+        }
+    }
+}
+
 .ilist {
+    margin-top: 20px;
 
     li {
         list-style: none;
@@ -71,6 +118,7 @@ $c3: #fff;
                 border-left: 3px solid $c1;
             }
             .ispeak {
+                position: relative;
                 display: inline-block;
                 $pdv: 5px;
                 padding:$pdv;
@@ -78,8 +126,21 @@ $c3: #fff;
                 background: $c1;
                 border-radius: 5px;
                 word-wrap: break-word;
-                word-break: normal; 
+                word-break: normal;
                 word-break:break-all;
+
+                &:after {
+                    position: absolute;
+                    content: "";
+                    font-size: 0;
+                    height: 0;
+                    width: 0;
+                    top: 7px;
+                    left: -12px;
+                    border-width: 7px;
+                    border-style: solid;
+                    border-color: transparent $c1 transparent transparent;
+                }
             }
         }
     }
@@ -88,6 +149,15 @@ $c3: #fff;
             margin-right: 15px;
             margin-left: 0;
             text-align: right;
+
+            .ispeak {
+
+                &:after{
+                    left: auto;
+                    right: -12px; 
+                    border-color: transparent transparent transparent $c1;
+                }
+            }
         }
     }
     .itip {
@@ -112,8 +182,17 @@ $c3: #fff;
     <div class="ichatroom">
         <div class="ilist_box" ref="ilist_box">
             <div class="info">
-    
+                当前在线人数：{{rooms.length}}
+
+                <span class="iall_list" @click="showAllListFn" >在线人数列表</span>
             </div>
+            <transition name="fade">
+            <div class="iall_list_box" v-show="showAllListStatus">
+                <ul>
+                    <li v-for="item in rooms">{{item}}</li>
+                </ul>
+            </div>
+            </transition>
             <ul class="ilist" ref="ilist">
                 <li v-for="item in records" :class="{'iself': item.username == username}">
                     <transition name="fade">
@@ -160,16 +239,20 @@ const socket = io()
 export default {
     data() {
         return {
+            showAllListStatus: false,
+            rooms: [],
             isLogin: false,
             wh: 0,
             h: 0,
             value: "",
             records: [],
-            userlist: [],
             username: ""
         }
     },
     methods: {
+        showAllListFn() {
+            this.showAllListStatus = !this.showAllListStatus
+        },
         say() {
             if (this.username) {
                 if (!this.value) return
@@ -216,20 +299,14 @@ export default {
 
         //this.getUsername()
 
-        socket.emit("userlist", {
-            username: this.username
-        })
-
-        socket.on("userlist", data => {
-            this.userlist = data
-        })
-
-        socket.on("join", data => {
+        socket.on("join", (data, rooms) => {
             this.records = data
+            this.rooms = rooms
         })
 
-        socket.on("leave", data => {
+        socket.on("leave", (data, rooms) => {
             this.records = data
+            this.rooms = rooms
         })
 
         socket.on("message", data => {

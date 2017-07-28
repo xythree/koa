@@ -18,6 +18,7 @@ module.exports = {
         articleCenter: "./static/js/admin/articleCenter.js",
         chat: "./static/js/chat/index.js",
         chatroom: "./static/js/chat/chatroom.js",
+        robot: "./static/js/chat/robot.js",
         demo: "./static/js/demo/index.js"
     },
     output: {

@@ -8,8 +8,7 @@ body,
 .ilink_box {
     $h: 30px;
     height: $h;
-    line-height: $h;
-    text-align: right;
+    line-height: $h;    
     border-bottom: 1px solid #eee;
     background: #333;
     
@@ -19,7 +18,7 @@ body,
         padding: 0 20px;
         color: $c;
         font-size: 14px;
-        border-left: 1px dotted $c;
+        border-right: 1px dotted $c;
         transition: all .5s;
 
         &:hover {

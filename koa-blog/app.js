@@ -48,6 +48,7 @@ app.use(serve("./static"))
 app.use(router.routes())
 
 app.use(async(ctx, next) => {
+
     if (ctx.response.status == 404) {
         ctx.redirect("/404")
     }

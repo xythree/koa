@@ -235,6 +235,26 @@ module.exports = {
             required: false
         }
     },
+    rooms: {
+        roomId: {
+            type: String,
+            required: false
+        },
+        author: {
+            type: String,
+            required: false
+        },
+        explain: {
+            type: String,
+            required: true,
+            default: ""
+        },
+        password: {
+            type: String,
+            required: true,
+            default: ""
+        }
+    },
     chatRecords: {
         username: {
             type: String,
