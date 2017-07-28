@@ -22,10 +22,10 @@
                 <input type="text" placeholder="用户名" v-model="username">
             </p>
             <p>
-                <input type="password" placeholder="密码" @keyup.enter="submit" v-model="password">
+                <input type="password" placeholder="密码" v-model="password">
             </p>
             <p>
-                <input type="text" v-model="verify" />
+                <input type="text" v-model="verify" @keyup.enter="submit" />
                 <img :src="verifyUrl" @click="verifyFn" />
             </p>
             <p>
@@ -35,6 +35,7 @@
     </div>
 </template>
 <script>
+
 import axios from "axios"
 import { getParams } from "./../../static/js/xythree"
 

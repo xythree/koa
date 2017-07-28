@@ -49,7 +49,7 @@ export default {
         }
     },
     created() {
-        this.w = "75%"
+        this.w = "25%"
     },
     mounted() {
         this.repload()
