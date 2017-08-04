@@ -231,7 +231,7 @@ $c3: #fff;
 
 import axios from "axios"
 import io from "socket.io-client"
-import darg_box from "./../../../vue_component/drag_box/drag_box.vue"
+import darg_box from "vue_component/drag_box/drag_box.vue"
 import login_register from "./../login_register.vue"
 
 const socket = io()
