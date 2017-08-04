@@ -85,7 +85,7 @@ $c4: #efefef;
 <script>
 
 import axios from "axios"
-import drag_box from "./../../../vue_component/drag_box/drag_box.vue"
+import drag_box from "vue_component/drag_box/drag_box.vue"
 import login_register from "./../login_register.vue"
 import io from "socket.io-client"
 
@@ -152,37 +152,11 @@ export default {
             this.roomlist = data
         })
 
+        /*
         axios.get("/json/avatar.json").then(data => {
             this.avatar = data.data.headerImg
         })
-
-        window.a = function (s) {
-            var len = s.length;
-            var stack = [];
-            if (len === 0 || len % 2 !== 0) {
-                return false;
-            }
-            s = s.replace(/\(/g, "1");
-            s = s.replace(/\)/g, "4");
-            s = s.replace(/\[/g, "2");
-            s = s.replace(/\]/g, "5");
-            s = s.replace(/\{/g, "3");
-            s = s.replace(/\}/g, "6");
-            console.log(s);
-            stack.push(s[0]);
-            for (var i = 1; i < len; i++) {
-                if (parseInt(s[i]) - stack[stack.length - 1] === 3) {
-                    stack.pop();
-                } else {
-                    stack.push(s[i]);
-                }
-            }
-            console.log(stack);
-            if (stack.length === 0)
-                return true;
-            else
-                return false;
-        }
+        */
 
     }
 }

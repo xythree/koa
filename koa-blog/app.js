@@ -1,6 +1,6 @@
 const koa = require("koa")
 const router = require("koa-router")()
-const serve = require("koa-static")
+const serve = require("koa-static-cache")
 const views = require("co-views")
 const bodyparser = require("koa-bodyparser")
 const session = require("koa-session2")
@@ -43,12 +43,13 @@ app.use(mw_request())
 
 app.use(bodyparser())
 
-app.use(serve("./static"))
+app.use(serve(path.join(__dirname, "static"), {
+    maxAge: 1000 * 60 * 60 * 24
+}))
 
 app.use(router.routes())
 
 app.use(async(ctx, next) => {
-
     if (ctx.response.status == 404) {
         ctx.redirect("/404")
     }

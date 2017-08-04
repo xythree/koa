@@ -37,7 +37,7 @@
 <script>
 
 import axios from "axios"
-import { getParams } from "./../../static/js/xythree"
+import { getParams } from "js/xythree"
 
 export default {
     props: ["type","loginRegisterCallBack"],

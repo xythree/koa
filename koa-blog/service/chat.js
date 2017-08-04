@@ -110,8 +110,16 @@ module.exports = (router, render, io) => {
         ctx.body = await rooms
     })
 
+    /*
+    const crypto = require("crypto")
+    const fs = require("fs")
+    let txt = await fs.readFileSync("./static/dist/js/chat.js")
+    let _sha256 = await crypto.createHash("sha256").update(txt).digest("base64")
+    */
+
     router.get("/chat", async ctx => {
-        ctx.set("Strict-Transport-Security", "max-age=31536000")
+
+
         ctx.body = await render("chat/index")
     })
 
