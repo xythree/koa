@@ -5,7 +5,8 @@ const mongoose = require("mongoose")
 mongoose.Promise = global.Promise
 
 
-const db = mongoose.createConnection("localhost", "koa_blog")
+//const db = mongoose.createConnection("127.0.0.1", "koa_blog")
+const db = mongoose.connect("mongodb://localhost/koa_blog")
 
 //const db = mongoose.connect("mongoodb://localhost/test")
 

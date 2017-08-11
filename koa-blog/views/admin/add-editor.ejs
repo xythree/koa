@@ -4,13 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>文章编辑</title>
+    <meta http-equiv="Accept-CH" content="DPR, Width, Viewport-Width">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        
+    <link rel="stylesheet" href="/css/simplemde.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <style>        
         .editor-box {
             width: 1000px;
             margin: 0 auto;
@@ -50,25 +48,40 @@
         .add-edit-article-btn button:hover {
             background: #eee;
         }
+        .CodeMirror, .CodeMirror-scroll {
+            min-height: 500px;
+            max-height: 600px;
+        }
+        .textarea_box {
+            
+        }
     </style>
+    
+
 </head>
 
 <body>
-
-
+    
     <div id="editor-box" class="editor-box">
         <p class="title">
             <input type="text" placeholder="标题" v-model="title">
         </p>
+        <div class="textarea_box">
+            <textarea id="textarea" ></textarea>
+        </div>
+        
         <div id="container" name="content" type="text/plain"></div>
+        
         <p class="add-edit-article-btn">
             <label><input type="checkbox" v-model="articleEmpty">提交完清空</label>
             <button @click="submit" class="add-edit-article-sure">确定</button>
             <button class="add-edit-article-empty" @click="empty">清空</button>
         </p>
     </div>
+    
 
-
+    <script src="/dist/js/editor.js"></script>
+    
     <script src="/js/ueditor/ueditor.config.js"></script>
     <script src="/js/ueditor/editor_api.js"></script>
     <% include template/script.ejs %>
@@ -143,6 +156,7 @@
                 }
             })
         </script>
+
 </body>
 
 </html>
