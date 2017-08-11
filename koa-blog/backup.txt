@@ -1,4 +1,4 @@
-mongoimport -d koa_blog -c words -file words.csv --type csv -f id,word,exchange,voice,times
-mongoimport -d koa_blog -c missing -file missing.csv --type csv -f id,word
-mongoimport -d koa_blog -c means -file means.csv --type csv -f wordId,posId,means
-mongoimport -d koa_blog -c pos -file pos.csv --type csv -f id,name,means
+mongoimport -d koa_blog -c words -file words.csv --type csv -f id,word,exchange,voice,times --authenticationDatabase admin -u -p= 
+mongoimport -d koa_blog -c missing -file missing.csv --type csv -f id,word --authenticationDatabase admin -u -p=
+mongoimport -d koa_blog -c means -file means.csv --type csv -f wordId,posId,means --authenticationDatabase admin -u -p=
+mongoimport -d koa_blog -c pos -file pos.csv --type csv -f id,name,means --authenticationDatabase admin -u -p=

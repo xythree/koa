@@ -19,6 +19,7 @@ module.exports = {
         chat: "./static/js/chat/index.js",
         chatroom: "./static/js/chat/chatroom.js",
         robot: "./static/js/chat/robot.js",
+        editor: "./static/js/editor/editor.js",
         demo: "./static/js/demo/index.js"
     },
     output: {

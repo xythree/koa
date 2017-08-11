@@ -158,6 +158,12 @@ export default {
         })
         */
 
+        axios.post("/lru", {
+            a: 1,
+            cache: true
+        }).then(data => {
+            console.log(data.data)
+        })
     }
 }
 </script>
