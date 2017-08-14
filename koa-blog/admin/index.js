@@ -243,42 +243,43 @@ module.exports = (router, render) => {
         let author = ctx.session.username
         let time = Date.now()
 
-        params.title = validator.escape(params.title)
-        params.content = validator.escape(params.content)
+        if (author) {
+            params.title = validator.escape(params.title)
+            params.content = validator.escape(params.content)
 
-        if (!params.id) {
-            if (author) {
+            if (!params.id) {
 
                 result = await sql.Article.create({
-                    author: ctx.session.username, //ctx.cookies.get("username"),
+                    author: author, //ctx.cookies.get("username"),
                     title: params.title,
                     content: params.content,
+                    md: params.md,
                     create_time: time,
                     last_modify_time: time,
                     flag: "flag" + time + Math.round(Math.random() * 9999)
                 })
 
                 //result = await mysql.articles.add(author, params.title, params.content)
+
+            } else {
+
+                result = await sql.Article.update({
+                    _id: params.id
+                }, {
+                    $set: {
+                        title: params.title,
+                        content: params.content,
+                        md: params.md,
+                        last_modify_time: time
+                    }
+                })
+
+                //result = await mysql.articles.update(params.id, params.title, params.content)
             }
-
-        } else {
-
-            result = await sql.Article.update({
-                _id: params.id
-            }, {
-                $set: {
-                    title: params.title,
-                    content: params.content,
-                    last_modify_time: time
-                }
-            })
-
-            //result = await mysql.articles.update(params.id, params.title, params.content)
         }
 
         ctx.body = await result
     })
-
 
     router.get("/article/remove-article", async ctx => {
         let params = ctx.request.query

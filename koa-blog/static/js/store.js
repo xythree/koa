@@ -26,10 +26,10 @@ const store = new Vuex.Store({
                     skip
                 }
             }).then(result => {
-                let data = result.data.data
+                let data = result.data
 
                 state.articleTotal = data.count
-                state.articleList = data.result
+                state.articleList = data.data
             })
         }
     }

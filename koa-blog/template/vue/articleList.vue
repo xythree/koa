@@ -1,6 +1,6 @@
 <template>
-    <div class="iarticle_box">
-        <ul class="iarticle">
+    <div class="iarticle_box">        
+        <ul class="iarticle" >
             <template v-if="articleList.length == 0">
                 <li>什么也没有~
                     <br />
@@ -9,6 +9,7 @@
                 </li>
             </template>
             <template v-else>
+                
                 <li v-for="item in articleList">
                     <div class="ibox_ani_1">
                         <div class="ibox_ani_2">
@@ -22,8 +23,9 @@
                         </div>
                     </div>
                 </li>
+
             </template>
-        </ul>
+        </ul>        
         <pagination_box :total="total" :paginationCallBack="paginationCallBack"></pagination_box>
     </div>
 </template>

@@ -72,7 +72,9 @@
                 </div>
             </div>
             <div class="irouter_view">
-                <router-view></router-view>
+                <keep-alive>
+                    <router-view></router-view>
+                </keep-alive>
             </div>
         </div>
         <repload></repload>

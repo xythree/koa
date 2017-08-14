@@ -44,9 +44,10 @@ module.exports = (router, render) => {
             result.data = await sql.article.findTitle(params.txt, +skip, +limit)
                 //result.data.result = await mysql.articles.findTitle(params.txt, skip, limit)
 
-        } else if (params.skip != undefined) {
+        } else if (skip != undefined) {
 
             result.data = await sql.article.findTitle("", +skip, +limit)
+            result.count = await sql.article.count({})
                 //result.data.result = await mysql.find("articles", skip, limit)
                 //result.data.count = await mysql.count("articles")
 
