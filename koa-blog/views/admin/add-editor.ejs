@@ -81,17 +81,21 @@
     
 
     <script src="/dist/js/editor.js"></script>
-    
+    <!--
     <script src="/js/ueditor/ueditor.config.js"></script>
     <script src="/js/ueditor/editor_api.js"></script>
     <% include template/script.ejs %>
+   
+    
         <script>
+           
             let ue = UE.getEditor('container')
 
             ue.ready(() => {
                 ue.setHeight(400)
                 ue.setContent(vm.content)
             })
+            
 
             let vm = new Vue({
                 el: "#editor-box",
@@ -99,6 +103,7 @@
                     id: "",
                     title: "",
                     content: "",
+                    md: "",
                     articleEmpty: true
                 },
                 methods: {
@@ -156,7 +161,7 @@
                 }
             })
         </script>
-
+ -->
 </body>
 
 </html>

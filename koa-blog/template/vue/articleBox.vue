@@ -1,4 +1,4 @@
-<style lang="sass" scoped>
+<style lang="sass">
 .article_box {
     padding: 0 30px 30px;
     min-height: 600px;
@@ -38,8 +38,13 @@
     }
     .iarticle_content {
         min-height: 350px;
+        pre {
+            width: 100%;
+            overflow: auto;
+        }
     }
 }
+
 .icomment_box {
     padding: 30px 0;
     $h: 35px;
@@ -221,11 +226,11 @@
                     <span class="iarticle_views" v-if="false">{{views}}次浏览</span>
                 </div>
                 <div class="iarticle_content" v-html="content"></div>
-                <div class="isource_box">
+                <div class="isource_box" v-if="false">
                     原文链接:
                     <a :href="href">{{href}}</a>
                 </div>    
-                <div class="loading_box" v-show="loading_box"></div>    
+                <div class="loading_box" v-show="loading_box"></div>
             </div>
             <div class="iarticle_prev_next_link">
                 <template v-if="prevLink.link">
@@ -354,20 +359,19 @@ export default {
                 this.views = data.views
                 this.flag = data.flag
                 this.href = location.href
-
                 this.commentList = data.comments
 
-                if (next.length) {
+                if (next && next.length) {
                     this.nextLink = {
-                        link: "/article?id=" + next[0].id,
+                        link: "/article?id=" + next[0]._id,
                         title: next[0].title
                     }
                 } else {
                     this.nextLink = {}
                 }
-                if (prev.length) {
+                if (prev && prev.length) {
                     this.prevLink = {
-                        link: "/article?id=" + prev[0].id,
+                        link: "/article?id=" + prev[0]._id,
                         title: prev[0].title
                     }
                 } else {
@@ -405,7 +409,6 @@ export default {
     },
     mounted() {
         this.fetchData()
-
         //this.$refs.icommentForm.addEventListener("submit", e => {
             
         //})

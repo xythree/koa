@@ -157,11 +157,12 @@ export default {
             this.avatar = data.data.headerImg
         })
         */
-
+        
         axios.post("/lru", {
             a: 1,
             cache: true
         }).then(data => {
+            console.log({a:1})
             console.log(data.data)
         })
     }

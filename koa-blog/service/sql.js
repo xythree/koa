@@ -85,30 +85,16 @@ module.exports = {
                 }
             } : {}
 
-            data = await sql.Article.aggregate().match(obj).limit(limit).skip(skip * limit).project({
+            data = await sql.Article.aggregate().skip(skip * limit).limit(limit).match(obj).project({
                 author: 1,
                 title: 1,
                 content: 1,
                 create_time: 1,
                 views: 1,
-                flag: 1,
-            }).group({
-                _id: null,
-                result: {
-                    $addToSet: {
-                        _id: "$_id",
-                        title: "$title",
-                        content: "$content",
-                        create_time: "$create_time",
-                        views: "$views",
-                        flag: "$flag"
-                    }
-                },
-                count: {
-                    $sum: "$title"
-                }
+                flag: 1
             })
 
+            /*
             if (data.length) {
                 data[0].result = _unescape(data[0].result)
                 data = data[0]
@@ -118,8 +104,8 @@ module.exports = {
                     result: []
                 }
             }
-
-            return data
+            */
+            return _unescape(data)
         },
         async count(obj) {
             return await sql.Article.find(obj).count()
