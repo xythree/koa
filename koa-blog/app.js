@@ -19,8 +19,8 @@ const render = views("./views", {
     ext: "ejs"
 })
 
-const mongoose = require("./service/mongoose")
-
+//const mongoose = require("./service/mongoose")
+const mon = require("./service/sql")
 
 app.use(session({
     maxAge: 1000 * 60 * 60 * 24,
@@ -162,40 +162,48 @@ router.post("/lru", async ctx => {
 })
 
 
-const Vue = require("vue")
-const { createRenderer } = require("vue-server-renderer")
+
+//const { createRenderer, createBundleRenderer } = require("vue-server-renderer")
+
+const ssr = require("./service/ssr")()
 
 router.get("/ssr", async ctx => {
+    console.time()
     let result = ""
-
-    let renderer = await createRenderer({
-        template: fs.readFileSync("./template/html/ssr.html", "utf-8")
-    })
-
-    result = await new Promise((resolve, reject) => {
-
-        const app = new Vue({
-            data: {
-                b: 33,
-                a: 1,
-                title: 1,
-                meta: ""
-            },
-            template: "<div id='ssr'>{{a}} <abc :b='b' /> </div>"
+        /*
+        const serverBundle = require(config.staticDir + "vue-ssr-server-bundle.json")
+        const clientManifest = require(config.staticDir + "vue-ssr-client-manifest.json")
+        const renderer = createBundleRenderer(serverBundle, {
+            runInNewContext: false, // 推荐
+            template: fs.readFileSync("./template/html/ssr.html", "utf-8"),
+            clientManifest,
+            inject: false
         })
+        */
 
-        const context = {
-            title: 'hello',
-            meta: "",
-            scripts: "<script src='/js/vue.js'></script><script src='/js/ssr.js'></script>"
-        }
+    let list = await mon.article.findTitle("")
+        /*
+        result = await new Promise((resolve, reject) => {
 
-        renderer.renderToString(app, context, (err, html) => {
-            resolve(html)
+            const context = {
+                title: "hello",
+                meta: "",
+                scripts: ""
+            }
+
+            renderer.renderToString(context, (err, html) => {
+                resolve(html)
+            })
         })
+        */
+
+    result = await ssr({
+        list,
+        src: "./template/html/ssr.html"
     })
 
     ctx.body = await result
+    console.timeEnd()
 })
 
 
