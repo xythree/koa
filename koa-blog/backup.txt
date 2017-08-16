@@ -1,4 +1,11 @@
-mongoimport -d koa_blog -c words -file words.csv --type csv -f id,word,exchange,voice,times --authenticationDatabase admin -u -p= 
-mongoimport -d koa_blog -c missing -file missing.csv --type csv -f id,word --authenticationDatabase admin -u -p=
-mongoimport -d koa_blog -c means -file means.csv --type csv -f wordId,posId,means --authenticationDatabase admin -u -p=
-mongoimport -d koa_blog -c pos -file pos.csv --type csv -f id,name,means --authenticationDatabase admin -u -p=
+./mongoimport -d koa_blog -c words -file words.csv --type csv -f id,word,exchange,voice,times --authenticationDatabase admin -u -p= 
+./mongoimport -d koa_blog -c missing -file missing.csv --type csv -f id,word --authenticationDatabase admin -u -p=
+./mongoimport -d koa_blog -c means -file means.csv --type csv -f wordId,posId,means --authenticationDatabase admin -u -p=
+./mongoimport -d koa_blog -c pos -file pos.csv --type csv -f id,name,means --authenticationDatabase admin -u -p=
+
+./mongodump -h 127.0.0.1 -d koa_blog -o /home/data/mongodb/ --authenticationDatabase admin -u -p
+
+./mongorestore -h 127.0.0.1:27017 -d koa_blog --dir /home/data/mongodb/koa_blog --authenticationDatabase admin -u -p
+
+
+./mongoimport -d koa_blog -c users --file /home/data/mongodb/koa_blog/users.metadata.json --authenticationDatabase admin -u -p

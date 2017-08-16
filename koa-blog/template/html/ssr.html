@@ -5,13 +5,15 @@
 
     <title>{{ title }}</title>
 
-    {{{ meta }}}
+    {{{ meta }}} {{{ renderStyles() }}}
 </head>
 
 <body>
+
     <!--vue-ssr-outlet-->
 
-    {{{ scripts }}}
+    {{{ renderScripts() }}} {{{ scripts }}}
+
 </body>
 
 </html>
