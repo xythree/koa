@@ -6,7 +6,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin")
 module.exports = {
     entry: {
         //vendor: ["vue", "axios"],
-        index: "./static/js/index.js",
+        //index: "./static/js/index.js",
         component: "./static/js/component/index.js",
         music: "./static/js/music/index.js",
         poetry: "./static/js/poetry/index.js",
