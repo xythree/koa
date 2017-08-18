@@ -44,7 +44,7 @@ app.use(mw_request())
 app.use(bodyparser())
 
 app.use(serve(path.join(__dirname, "static"), {
-    maxAge: 1000 * 60 * 60 * 24
+    //maxAge: 1000 * 60 * 60 * 24
 }))
 
 app.use(router.routes())
@@ -77,7 +77,7 @@ router.get("/404", async ctx => {
     ctx.body = await render("404")
 })
 
-require("./service/index")(router, render)
+//require("./service/index")(router, render)
 
 require("./service/cloudmusic")(router, render)
 
@@ -98,6 +98,10 @@ require("./admin/index")(router, render)
 require("./userCenter/index")(router, render)
 
 require("./service/chat")(router, render, io)
+
+
+
+require("./ssr/home/server")(router)
 
 router.get("/m", async ctx => {
     ctx.body = "mobile"
@@ -162,49 +166,26 @@ router.post("/lru", async ctx => {
 })
 
 
-
-//const { createRenderer, createBundleRenderer } = require("vue-server-renderer")
-
-const ssr = require("./service/ssr")()
+const home_ssr = require("./service/ssr")({
+    serverBundle: "home-vue-ssr-server-bundle.json",
+    clientManifest: "home-vue-ssr-client-manifest.json"
+})
 
 router.get("/ssr", async ctx => {
     console.time()
     let result = ""
-        /*
-        const serverBundle = require(config.staticDir + "vue-ssr-server-bundle.json")
-        const clientManifest = require(config.staticDir + "vue-ssr-client-manifest.json")
-        const renderer = createBundleRenderer(serverBundle, {
-            runInNewContext: false, // 推荐
-            template: fs.readFileSync("./template/html/ssr.html", "utf-8"),
-            clientManifest,
-            inject: false
-        })
-        */
+
 
     let list = await mon.article.findTitle("")
-        /*
-        result = await new Promise((resolve, reject) => {
 
-            const context = {
-                title: "hello",
-                meta: "",
-                scripts: ""
-            }
-
-            renderer.renderToString(context, (err, html) => {
-                resolve(html)
-            })
-        })
-        */
-
-    result = await ssr({
-        list,
-        src: "./template/html/ssr.html"
+    result = await home_ssr({
+        list
     })
 
     ctx.body = await result
     console.timeEnd()
 })
+
 
 
 server.listen(config.port, () => {

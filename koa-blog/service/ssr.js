@@ -4,19 +4,17 @@ const { createRenderer, createBundleRenderer } = require("vue-server-renderer")
 
 const staticDir = "../static/dist/js/"
 
-const serverBundle = require(staticDir + "vue-ssr-server-bundle.json")
-const clientManifest = require(staticDir + "vue-ssr-client-manifest.json")
 
+module.exports = obj => {
 
-
-module.exports = () => {
-
+    const serverBundle = require(staticDir + obj.serverBundle)
+    const clientManifest = require(staticDir + obj.clientManifest)
 
     return async options => {
 
         const renderer = createBundleRenderer(serverBundle, {
             runInNewContext: false, // 推荐
-            template: fs.readFileSync(options.src, "utf-8"),
+            template: fs.readFileSync(options.src || "./template/html/ssr.html", "utf-8"),
             clientManifest,
             inject: false
         })
@@ -27,7 +25,7 @@ module.exports = () => {
                 title: "",
                 meta: "",
                 scripts: "",
-                abc: 123
+                url: options.url
             }
 
             Object.assign(context, options)
@@ -46,7 +44,10 @@ module.exports = () => {
             })
 
             stream.on("end", () => {
-                resolve(html) // 渲染完成
+                let state = JSON.stringify(context.state)
+
+                html = html.replace("<!--window-->", `<script>window.__INITIAL_STATE__=${state}</script>`)
+                resolve(html)
             })
 
         })

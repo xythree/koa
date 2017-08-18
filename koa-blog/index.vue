@@ -18,16 +18,18 @@ button {
         <ul>
             <li v-for="item in list">{{item.title}}</li>
         </ul>
+        <div id="router">
+            <router-link to="/abc">abc_link</router-link>
+            <router-view></router-view>
+        </div>
     </div>
 
 </template>
 
 <script>
 
-//import axios from "axios"
 
-
-export default {
+export default {    
     props: ["list"],
     data() {
         return {

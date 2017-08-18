@@ -1,0 +1,71 @@
+<template>
+    <div class="iarticle_box">
+        <ul class="iarticle">
+            <template v-if="articleList.length == 0">
+                <li>什么也没有~
+                    <br />
+                    <br />
+                    <br />
+                </li>
+            </template>
+            <template v-else>
+                <li v-for="item in articleList">
+                    <div class="ibox_ani_1">
+                        <div class="ibox_ani_2">
+                            <h5><a :href="item._id | routerId"><i class="fa fa-hashtag"></i>{{item.title}}</a></h5>
+                            <p>{{item.content|formatHtml}}</p>
+                            <a class="iread_more" :href="item._id | routerId">阅读全文</a>
+                        </div>
+                    </div>
+                </li>
+            </template>
+        </ul>
+        <pagination_box :total="total" :paginationCallBack="paginationCallBack"></pagination_box>
+    </div>
+</template>
+
+<script>
+
+import axios from "axios"
+import pagination_box from "vue_component/pagination/pagination.vue"
+
+export default {
+    props: ["articleList"],
+    data() {
+        return {
+            isBrowser: isBrowser
+        }
+    },
+    computed: {  
+        total() {
+            return 99
+        }
+    },
+    filters: {
+        routerId(value) {
+            return "/article/" + value
+        },
+        formatHtml(value) {
+            return value
+            let val = ""
+            let div = document.createElement("div")
+            
+            div.innerHTML = value
+            val = div.textContent
+
+            return val.length > 120 ? val.substring(0, 120) + "..." : val
+        }
+    },
+    components: {
+        pagination_box
+    },
+    methods: {
+        paginationCallBack(ind) {
+            
+        }
+    },
+    mounted() {
+        
+    }
+}
+</script>
