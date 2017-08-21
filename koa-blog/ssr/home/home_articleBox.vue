@@ -1,35 +1,32 @@
 
 <template>
     <div class="article_box">
-        <div class="iarticle_content_box">
+        <div class="iarticle_content_box" v-if="!isBrowser">
             <i v-if="false" class="fa fa-arrow-circle-left fa-2x" @click="close"></i>
-            <div class="iarticle">
-                <h3 class="iarticle_title">{{title}}</h3>
+            <div class="iarticle markdown-body">
+                <h3 class="iarticle_title">
+                    <i class="fa fa-hashtag"></i> {{info.title}}</h3>
                 <div class="iarticle_time_views">
-                    <span class="iarticle_time" v-if="false">{{time | getLastTime}}</span>
-                    <span class="iarticle_views" v-if="false">{{views}}次浏览</span>
+                    <span class="iarticle_time">{{info.create_time | getLastTime}}</span>
+                    <span class="iarticle_views">{{info.views}}次浏览</span>
                 </div>
-                <div class="iarticle_content" v-html="content"></div>
+                <div class="iarticle_content highlight" v-html="info.content"></div>
                 <div class="isource_box" v-if="false">
                     原文链接:
                     <a :href="href">{{href}}</a>
-                </div>    
+                </div>
                 <div class="loading_box" v-show="loading_box"></div>
             </div>
             <div class="iarticle_prev_next_link">
                 <template v-if="prevLink.link">
                     <div class="iarticle_prev_link">
                         <i class="fa fa-angle-double-left"></i>
-                        <router-link :to="prevLink.link">
-                            {{prevLink.title}}
-                        </router-link>
+                        <a :href="prevLink.link" :title="prevLink.title" >{{prevLink.title}}</a>
                     </div>
                 </template>
                 <template v-if="nextLink.link">
                     <div class="iarticle_next_link">
-                        <router-link :to="nextLink.link">
-                            {{nextLink.title}}
-                        </router-link>
+                        <a :href="nextLink.link" :title="nextLink.title">{{nextLink.title}}</a>
                         <i class="fa fa-angle-double-right"></i>
                     </div>
                 </template>
@@ -53,19 +50,19 @@
         <div class="icomment_box">
             <form ref="icommentForm" @submit="submitFn">
                 <div class="icomment_name">
-                    <label>名称:</label>
+                    <label>*名称:</label>
                     <p>
                         <input type="text" v-model="comment_username" required/>
                     </p>
                 </div>
                 <div class="icomment_email">
-                    <label>电子邮箱:</label>
+                    <label>*电子邮箱:</label>
                     <p>
                         <input type="email" v-model="comment_email" required />
                     </p>
                 </div>
                 <div class="icomment_content">
-                    <label>评论内容:</label>
+                    <label>*评论内容:</label>
                     <p>
                         <textarea v-model="comment_content" required></textarea>
                     </p>
@@ -89,21 +86,47 @@ export default {
     props: ["articleList"],
     data() {
         return {
-            flag: "",
-            title: this.articleList.title,
-            content: this.articleList.content,
+            isBrowser: isBrowser,
+            flag: this.$router.history.current.params.id,
             commentList: [],
             comment_username: "",
             comment_email: "",
             comment_content: "",
             total: 0,
-            time: 0,
-            views: 0,
             index: 1,
             href: "",
-            prevLink: {},
-            nextLink: {},
             loading_box: false
+        }
+    },
+    computed: {
+        info() {
+            if (this.articleList && this.articleList.article.length) {
+                return this.articleList.article[0]
+            }
+            return {
+                title: "",
+                content: "",
+                create_time: +new Date,
+                views: 1
+            }
+        },
+        prevLink() {
+            if (this.articleList && this.articleList.prev.length) {
+                return {
+                    link: "/article/" + this.articleList.prev[0]._id,
+                    title: this.articleList.prev[0].title
+                }
+            }
+            return {}
+        },
+        nextLink() {
+            if (this.articleList && this.articleList.next.length) {
+                return {
+                    link: "/article/" + this.articleList.next[0]._id,
+                    title: this.articleList.next[0].title
+                }
+            }
+            return {}
         }
     },
     filters: {
@@ -127,7 +150,7 @@ export default {
 
             axios.get("/article", {
                 params: {
-                    id: this.$route.query.id
+                    id: this.$router.history.current.params.id
                 }
             }).then(result => {
                 let data = result.data.data[0]
@@ -190,10 +213,11 @@ export default {
         }
     },
     mounted() {
-        
+        this.getComment({ skip: this.index })
         //this.$refs.icommentForm.addEventListener("submit", e => {
-            
+
         //})
     }
 }
+
 </script>

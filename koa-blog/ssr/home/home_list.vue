@@ -1,7 +1,7 @@
 <template>
     <div class="iarticle_box">
         <ul class="iarticle">
-            <template v-if="articleList.length == 0">
+            <template v-if="list.length == 0">
                 <li>什么也没有~
                     <br />
                     <br />
@@ -9,18 +9,18 @@
                 </li>
             </template>
             <template v-else>
-                <li v-for="item in articleList">
+                <li v-for="item in list">
                     <div class="ibox_ani_1">
                         <div class="ibox_ani_2">
                             <h5><a :href="item._id | routerId"><i class="fa fa-hashtag"></i>{{item.title}}</a></h5>
-                            <p>{{item.content|formatHtml}}</p>
+                            <p>{{item.text}}</p>
                             <a class="iread_more" :href="item._id | routerId">阅读全文</a>
                         </div>
                     </div>
                 </li>
             </template>
         </ul>
-        <pagination_box :total="total" :paginationCallBack="paginationCallBack"></pagination_box>
+        <pagination_box :url="url" :index="index" :total="total" :disready="disready" :paginationCallBack="paginationCallBack"></pagination_box>
     </div>
 </template>
 
@@ -33,27 +33,18 @@ export default {
     props: ["articleList"],
     data() {
         return {
-            isBrowser: isBrowser
-        }
-    },
-    computed: {  
-        total() {
-            return 99
+            disready: true,
+            isBrowser: isBrowser,
+            skip: 0,
+            index: this.articleList.index,
+            url: this.articleList.url,
+            list: this.articleList.articleList,
+            total: this.articleList.count
         }
     },
     filters: {
         routerId(value) {
             return "/article/" + value
-        },
-        formatHtml(value) {
-            return value
-            let val = ""
-            let div = document.createElement("div")
-            
-            div.innerHTML = value
-            val = div.textContent
-
-            return val.length > 120 ? val.substring(0, 120) + "..." : val
         }
     },
     components: {
@@ -61,7 +52,19 @@ export default {
     },
     methods: {
         paginationCallBack(ind) {
-            
+            this.skip = ind - 1
+
+            axios.get("/article", {
+                params: {
+                    type: "list",
+                    skip: this.skip
+                }
+            }).then(data => {
+                let d = data.data
+
+                this.list = d.articleList
+                this.total = d.count
+            })
         }
     },
     mounted() {

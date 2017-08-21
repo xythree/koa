@@ -52,7 +52,12 @@ app.use(router.routes())
 app.use(async(ctx, next) => {
 
     if (ctx.response.status == 404) {
-        ctx.redirect("/404")
+        if (ctx.request.header["content-type"]) {
+            ctx.status = 404
+            ctx.body = ""
+        } else {
+            ctx.redirect("/404")
+        }
     }
     next()
 })

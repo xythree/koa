@@ -44,9 +44,15 @@ module.exports = obj => {
             })
 
             stream.on("end", () => {
-                let state = JSON.stringify(context.state)
+                let str = ""
 
-                html = html.replace("<!--window-->", `<script>window.__INITIAL_STATE__=${state}</script>`)
+                if (context.state) {
+                    let state = JSON.stringify(context.state)
+                    str = `<script>window.__INITIAL_STATE__=${state}</script>`
+                }
+
+                html = html.replace("<!--window-->", str)
+
                 resolve(html)
             })
 

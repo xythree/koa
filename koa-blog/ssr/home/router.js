@@ -15,6 +15,10 @@ export function createRouter() {
             //component: resolve => require(["./home_list.vue"], resolve)
             component: home_list
         }, {
+            path: "/page/:id",
+            //component: resolve => require(["./home_list.vue"], resolve)
+            component: home_list
+        }, {
             path: "/article/:id",
             //component: resolve => require(["./home_articleBox.vue"], resolve)
             component: home_articleBox

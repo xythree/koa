@@ -29,7 +29,7 @@
 </style>
 
 <template>
-    <div class="paginationBox" v-show="arr.length > 1">
+    <div class="paginationBox" v-show="arr.length > 1">    
         <em v-if="ind > 1" @click="prev">《</em>
         <span v-if="ind >= count + 2" @click="jump(1)">1</span>
         <em v-if="ind > count + 1 && ind - count > 2">...</em>
@@ -42,13 +42,13 @@
         </template>
         <em v-if="ind + count < arr.length && ind + count < arr.length - 1">...</em>
         <span v-if="arr.length > 1 && ind + count < arr.length" @click="jump(arr.length)">{{arr.length}}</span>
-        <em v-if="ind != arr.length && total > _colnum" @click="next">》</em>
-    </div>  
+        <em v-if="ind != arr.length && total > _colnum" @click="next">》</em>    
+    </div>
 </template>
 
 <script>
 export default {
-    props: ["colnum", "index", "total", "last", "paginationCallBack"],
+    props: ["colnum", "index", "total", "url", "disready", "last", "paginationCallBack"],
     data() {
         return {
             ind: this.index || 1,
@@ -79,16 +79,22 @@ export default {
         this.ind = Math.min(this.ind, this.arr.length || 1)
     },
     mounted() {
-        if (this.last) {
-            this.jump(this.arr.length)
-        } else {
-            this.jump(this.ind)
+        if (!this.disready) {
+            if (this.last) {
+                this.jump(this.arr.length)
+            } else {
+                this.jump(this.ind)
+            }
         }
     },
     methods: {
         jump(ind) {
-            this.ind = ind
-            this.paginationCallBack && this.paginationCallBack(ind)
+            if (this.url) {
+                location.href = this.url + ind
+            } else {
+                this.ind = ind
+                this.paginationCallBack && this.paginationCallBack(ind)
+            }
         },
         prev() {
             this.jump(--this.ind)

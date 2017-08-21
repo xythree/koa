@@ -7,11 +7,15 @@ function _unescape(data) {
     if (data.length) {
         data.forEach(t => {
             t.title = validator.unescape(t.title)
-            t.content = validator.unescape(t.content)
+            if (t.content) {
+                t.content = validator.unescape(t.content)
+            }
         })
     } else if (data && data.title) {
         data.title = validator.unescape(data.title)
-        data.content = validator.unescape(data.content)
+        if (data.content) {
+            data.content = validator.unescape(data.content)
+        }
     }
 
     return data
@@ -43,7 +47,12 @@ module.exports = {
         async findId(id) {
             let data = ""
 
-            data = await sql.Article.findOne({ _id: id })
+            data = await sql.Article.aggregate().project({
+                title: 1,
+                content: 1,
+                create_time: 1,
+                views: 1
+            }).match({ _id: global.MgTypes.ObjectId(id) })
 
             return _unescape(data)
         },
@@ -76,7 +85,7 @@ module.exports = {
 
             return _unescape(data)
         },
-        async findTitle(title, skip = 0, limit = 15) {
+        async findTitle(title, condition = { title: 1, content: 1 }, skip = 0, limit = 15) {
             let data = ""
             let obj = title ? {
                 title: {
@@ -85,26 +94,8 @@ module.exports = {
                 }
             } : {}
 
-            data = await sql.Article.aggregate().skip(skip * limit).limit(limit).match(obj).project({
-                author: 1,
-                title: 1,
-                content: 1,
-                create_time: 1,
-                views: 1,
-                flag: 1
-            })
+            data = await sql.Article.aggregate().sort({ _id: -1 }).skip(skip * limit).limit(+limit).match(obj).project(condition)
 
-            /*
-            if (data.length) {
-                data[0].result = _unescape(data[0].result)
-                data = data[0]
-            } else {
-                data = {
-                    count: 0,
-                    result: []
-                }
-            }
-            */
             return _unescape(data)
         },
         async count(obj) {
@@ -113,8 +104,15 @@ module.exports = {
         async prev(id) {
             let data = ""
 
-            data = await sql.Article.find({ _id: { $lt: id } }).sort({ _id: -1 }).limit(1)
-
+            //data = await sql.Article.find({ _id: { $lt: id } }).sort({ _id: -1 }).limit(1)
+            data = await sql.Article.aggregate().match({
+                _id: {
+                    $lt: global.MgTypes.ObjectId(id)
+                }
+            }).sort({ _id: -1 }).limit(1).project({
+                title: 1
+            })
+            console.log(data)
             return _unescape(data)
         },
         async next(id) {

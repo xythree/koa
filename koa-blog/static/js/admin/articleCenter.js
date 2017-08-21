@@ -1,4 +1,4 @@
-window.jQuery = require("jquery")
+window.$ = window.jQuery = require("jquery")
 const bootstrap = require("bootstrap")
 
 
@@ -6,5 +6,5 @@ const bootstrap = require("bootstrap")
 
 
 //$('#myModal').on('shown.bs.modal', function() {
-//  $('#myInput').focus()
+
 //})

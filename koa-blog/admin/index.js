@@ -236,11 +236,10 @@ module.exports = (router, render) => {
         ctx.body = result
     })
 
-
     router.post("/article/add-edit-article", async ctx => {
         let params = ctx.request.body
         let result = {}
-        let author = ctx.session.username
+        let author = "xythree" //ctx.session.username
         let time = Date.now()
 
         if (author) {
@@ -254,6 +253,7 @@ module.exports = (router, render) => {
                     title: params.title,
                     content: params.content,
                     md: params.md,
+                    text: params.text,
                     create_time: time,
                     last_modify_time: time,
                     flag: "flag" + time + Math.round(Math.random() * 9999)
@@ -270,6 +270,7 @@ module.exports = (router, render) => {
                         title: params.title,
                         content: params.content,
                         md: params.md,
+                        text: params.text,
                         last_modify_time: time
                     }
                 })

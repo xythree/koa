@@ -18,7 +18,6 @@ module.exports = (router, render) => {
 
         if (params.id) {
 
-
             await sql.article.update({ _id: params.id }, {
                 $inc: {
                     views: 1
