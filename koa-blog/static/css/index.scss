@@ -248,6 +248,17 @@ table {
     height: 300px;
     background: url(/images/long_white.png) no-repeat center;
     opacity: .05;
+    animation: ani_long_white 5s ease-out infinite;
+}
+
+@keyframes ani_long_white {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
 }
 
 .ibody {
@@ -326,6 +337,7 @@ table {
         min-height: 300px;
         -webkit-transition: all .5s;
         transition: all .5s;
+        background: #fff;
         .icontext {
             padding-bottom: 150px;
         }
@@ -371,10 +383,11 @@ table {
                 }
                 p {
                     padding: 10px 0;
+                    color: #666;
                 }
                 .iread_more {
                     display: inline-block;
-                    color: #ddd;
+                    color: #bbb;
                     -webkit-transition: all .5s ease-out;
                     transition: all .5s ease-out;
                     &:hover {
@@ -666,13 +679,17 @@ table {
     }
     $v: 230px;
     .ibody {
+        position: absolute;
+        width: 100%;
+        overflow-x: hidden;
         .ileft {
-            left: -$v;
             box-shadow: none;
         }
         .iright {
+            position: absolute;
             margin-left: 0;
             max-width: 100%;
+            z-index: 2;
         }
         .imenuBg {
             position: fixed;
@@ -838,7 +855,7 @@ table {
 .icomment_list {
     padding: 30px;
     $h: 60px;
-    $c: #e1e1e1;
+    $c: #f1f1f1;
     $c1: #ddd;
     li {
         position: relative;

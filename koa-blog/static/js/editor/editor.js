@@ -57,9 +57,17 @@ let vm = new Vue({
                     id: this.id,
                     title: this.title,
                     md: this.content,
+                    text: this.getText(),
                     content: this.simplemde.markdown(this.content)
                 })
             }
+        },
+        getText() {
+            let div = document.createElement("div")
+
+            div.innerHTML = this.simplemde.markdown(this.content)
+
+            return div.textContent
         },
         addArticle(d) {
             axios.post("/article/add-edit-article", d).then(result => {
@@ -73,7 +81,7 @@ let vm = new Vue({
         }
     },
     mounted() {
-        let id = _xy.getParams("id")
+        this.id = _xy.getParams("id")
 
         this.simplemde = new SimpleMDE({
             element: document.getElementById("textarea"),
@@ -81,10 +89,10 @@ let vm = new Vue({
             autoDownloadFontAwesome: false
         })
 
-        if (id) {
+        if (this.id) {
             axios.get("/article/article-info", {
                 params: {
-                    id
+                    id: this.id
                 }
             }).then(result => {
                 let data = result.data

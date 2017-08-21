@@ -55,9 +55,13 @@ module.exports = {
             type: String,
             required: true
         },
+        text: {
+            type: String,
+            required: true
+        },
         md: {
             type: String,
-            require: true
+            required: true
         },
         create_time: {
             type: Date,
