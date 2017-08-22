@@ -1,5 +1,5 @@
 import Vue from "vue"
-import { createApp } from "./home"
+import { createApp } from "./articleBox"
 //import { createRouter } from "./router"
 
 import repload from "vue_component/repload/repload.vue"

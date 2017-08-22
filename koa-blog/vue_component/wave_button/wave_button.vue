@@ -36,9 +36,9 @@
 </style>
 
 <template>
-    <div @click="reppleClick" ref="button" class="wave_button_ripple">
+    <div @mousedown="reppleClick" ref="button" class="wave_button_ripple">
         <slot></slot>
-        <span class="wave_ripple" ref="repple" :class="{'animate': animate }"></span>
+        <span class="wave_ripple" ref="ripple" :class="{'animate': animate }"></span>
     </div>
 </template>
 
@@ -60,8 +60,8 @@ export default {
         button.style.lineHeight = button.offsetHeight + "px"
     },
     methods: {
-        reppleClick(e) {
-            let ripple = this.$refs.repple
+        reppleClick(e) {            
+            let ripple = this.$refs.ripple
             let x = e.offsetX - ripple.offsetWidth / 2
             let y = e.offsetY - ripple.offsetHeight / 2
 

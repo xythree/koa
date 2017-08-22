@@ -107,6 +107,7 @@ require("./service/chat")(router, render, io)
 
 
 require("./ssr/home/server")(router)
+require("./ssr/articleBox/server")(router)
 
 router.get("/m", async ctx => {
     ctx.body = "mobile"

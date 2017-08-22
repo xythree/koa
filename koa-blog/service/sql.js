@@ -6,7 +6,9 @@ function _unescape(data) {
 
     if (data.length) {
         data.forEach(t => {
-            t.title = validator.unescape(t.title)
+            if (t.title) {
+                t.title = validator.unescape(t.title)
+            }
             if (t.content) {
                 t.content = validator.unescape(t.content)
             }
@@ -104,7 +106,6 @@ module.exports = {
         async prev(id) {
             let data = ""
 
-            //data = await sql.Article.find({ _id: { $lt: id } }).sort({ _id: -1 }).limit(1)
             data = await sql.Article.aggregate().match({
                 _id: {
                     $lt: global.MgTypes.ObjectId(id)
@@ -112,7 +113,7 @@ module.exports = {
             }).sort({ _id: -1 }).limit(1).project({
                 title: 1
             })
-            console.log(data)
+
             return _unescape(data)
         },
         async next(id) {
@@ -125,27 +126,27 @@ module.exports = {
     },
     comment: {
         async create(obj) {
-            let result = ""
+            let data = ""
 
             obj.username = validator.escape(obj.username)
             obj.email = validator.escape(obj.email)
             obj.content = validator.escape(obj.content)
             obj.create_time = obj.create_time || Date.now()
 
-            result = await sql.Comment.create(obj)
+            data = await sql.Comment.create(obj)
 
-            return result
+            return _unescape(data)
         },
         async find(obj, skip, limit) {
-            let result = ""
+            let data = ""
 
-            if (skip != undefined) {
-                result = await sql.Comment.find(obj).limit(limit).skip(skip * limit)
+            if (skip != void 0) {
+                data = await sql.Comment.find(obj).limit(limit).skip(skip * limit)
             } else {
-                result = await sql.Comment.find(obj)
+                data = await sql.Comment.find(obj)
             }
 
-            return result
+            return _unescape(data)
         },
         async count(obj) {
             return await sql.Comment.find(obj).count()
