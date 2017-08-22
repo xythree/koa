@@ -89,7 +89,7 @@ export default {
     },
     methods: {
         jump(ind) {
-            if (this.url) {
+            if (this.url !== void 0) {
                 location.href = this.url + ind
             } else {
                 this.ind = ind

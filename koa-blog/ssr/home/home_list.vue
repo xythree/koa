@@ -20,7 +20,9 @@
                 </li>
             </template>
         </ul>
+        
         <pagination_box :url="url" :index="index" :total="total" :disready="disready" :paginationCallBack="paginationCallBack"></pagination_box>
+        
     </div>
 </template>
 

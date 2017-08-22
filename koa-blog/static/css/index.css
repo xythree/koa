@@ -701,6 +701,7 @@ table {
     position: absolute;
     margin-left: 0;
     max-width: 100%;
+    width: 100%;
     z-index: 2;
   }
   .ibody .imenuBg {
@@ -951,7 +952,7 @@ table {
 
 .iarticle_prev_next_link .iarticle_prev_link,
 .iarticle_prev_next_link .iarticle_next_link {
-  max-width: 45%;
+  max-width: 50%;
 }
 
 .iarticle_prev_next_link a {
