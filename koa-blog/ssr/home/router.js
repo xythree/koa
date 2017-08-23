@@ -8,6 +8,7 @@ import home_list from "./home_list.vue"
 //import home_articleBox from "./home_articleBox.vue"
 
 export function createRouter() {
+
     return new Router({
         mode: "history",
         routes: [{

@@ -1,10 +1,22 @@
-window.$ = window.jQuery = require("jquery")
-const bootstrap = require("bootstrap")
+import Vue from "vue"
+import axios from "axios"
 
+let vm = new Vue({
+    el: "#articleCenter",
+    methods: {
+        deleteFn(id) {
+            let _confirm = confirm("确定删除吗?")
 
-
-
-
-//$('#myModal').on('shown.bs.modal', function() {
-
-//})
+            if (_confirm) {
+                axios.get("/article/remove-article", {
+                    params: {
+                        id
+                    }
+                }).then(data => {
+                    let d = data.data
+                    console.log(d)
+                })
+            }
+        }
+    }
+})

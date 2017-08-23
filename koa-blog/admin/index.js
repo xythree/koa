@@ -48,7 +48,7 @@ module.exports = (router, render) => {
         result.limit = limit
         result.index = skip + 1
         result.count = await sql.Article.find({ author: username }).count()
-        result.result = await sql.Article.find({ author: username }).limit(+limit).skip(skip * limit)
+        result.result = await sql.Article.find({ author: username }).sort({ _id: -1 }).limit(+limit).skip(skip * limit)
 
         result.arr = []
 
@@ -322,7 +322,7 @@ module.exports = (router, render) => {
         skip = skip < 0 ? 0 : skip
 
         result.count = await sql.Article.find({ author: username }).count()
-        result.result = await sql.Article.find({ author: username }).limit(+limit).skip(skip * limit)
+        result.result = await sql.Article.find({ author: username }).sort({ _id: -1 }).limit(+limit).skip(skip * limit)
 
         //result.count = await mysql.count("articles")
         //result.result = await mysql.find("articles", skip)
