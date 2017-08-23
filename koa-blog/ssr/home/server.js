@@ -30,11 +30,12 @@ module.exports = router => {
     }
 
     router.get("/", async ctx => {
+        console.time("首页打开速度")
         let result = ""
         let list = await getList()
 
-        list.index = 1
-        list.url = "/page/"
+        //list.index = 1
+        //list.url = "/page/"
 
         result = await home_ssr({
             url: ctx.req.url,
@@ -47,6 +48,7 @@ module.exports = router => {
         })
 
         ctx.body = await result
+        console.timeEnd("首页打开速度")
     })
 
     router.get("/page/:id", async ctx => {

@@ -12,7 +12,7 @@
 
 </head>
 
-<body>
+<body id="app">
 
     <div class="container-fluid" id="articleCenter" >
         <div class="row">
@@ -51,7 +51,7 @@
                             <td><%= data.result[i].author %></td>
                             <td><%= data.result[i].title %></td>
                             <td class="text-center">
-                                <a href="#" data-toggle="modal" data-target="#myModal" >删除</a>
+                                <a href="#" @click="deleteFn('<%= data.result[i]._id %>')" data-toggle="modal" data-target="#myModal" >删除</a>
                                 <a href="/admin/add-editor?id=<%= data.result[i]._id %>">编辑</a>
                             </td>
                         </tr>
@@ -102,23 +102,6 @@
 
     </div>
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">提示</h4>
-            </div>
-            <div class="modal-body">
-                <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">确定</button>
-            </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
     <script src="/dist/js/articleCenter.js"></script>
 
