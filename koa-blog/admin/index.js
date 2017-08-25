@@ -247,8 +247,8 @@ module.exports = (router, render) => {
             params.content = validator.escape(params.content)
 
             if (!params.id) {
-
-                result = await sql.Article.create({
+                result.code = 1
+                result.result = await sql.Article.create({
                     author: author, //ctx.cookies.get("username"),
                     title: params.title,
                     content: params.content,
@@ -262,8 +262,8 @@ module.exports = (router, render) => {
                 //result = await mysql.articles.add(author, params.title, params.content)
 
             } else {
-
-                result = await sql.Article.update({
+                result.code = 1
+                result.result = await sql.Article.update({
                     _id: params.id
                 }, {
                     $set: {

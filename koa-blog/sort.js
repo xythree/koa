@@ -12,6 +12,48 @@ let $arr = [];
 ;
 (function() {
     let arr = $arr.slice(0)
+    let temp, len = arr.length
+    let min
+
+    console.time()
+    for (let i = 0; i < len - 1; i++) {
+        min = i
+        for (let j = i + 1; j < len; j++) {
+            if (arr[j] < arr[min]) {
+                min = j
+            }
+        }
+        temp = arr[i]
+        arr[i] = arr[min]
+        arr[min] = temp
+    }
+    console.timeEnd()
+    console.log(arr)
+})();
+
+;
+(function() {
+    let arr = $arr.slice(0)
+    let temp, len = arr.length
+    console.time()
+    for (let i = 0; i < len - 1; i++) {
+        for (let j = i + 1; j < len; j++) {
+            if (arr[i] > arr[j]) {
+                temp = arr[i]
+                arr[i] = arr[j]
+                arr[j] = temp
+            }
+        }
+    }
+    console.timeEnd()
+    console.log(arr)
+
+})();
+
+
+;
+(function() {
+    let arr = $arr.slice(0)
     let temp = ""
     let i = arr.length
 

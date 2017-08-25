@@ -64,7 +64,6 @@ app.use(async(ctx, next) => {
 
 router.use("*", async(ctx, next) => {
     let ua = ctx.header["user-agent"].toLowerCase()
-
     let match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
         /(webkit)[ \/]([\w.]+)/.exec(ua) ||
         /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
