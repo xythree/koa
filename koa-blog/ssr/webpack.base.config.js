@@ -33,6 +33,7 @@ module.exports = {
             })
         }]
     },
+    plugins: [new ExtractTextPlugin({ filename: 'common.[chunkhash].css' })],
     resolve: {
         alias: {
             "vue$": "vue/dist/vue.common.js",

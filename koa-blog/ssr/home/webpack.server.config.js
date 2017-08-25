@@ -13,7 +13,7 @@ module.exports = merge(baseConfig, {
     },
     output: {
         publicPath: "/dist/js/",
-        filename: "main.js"
+        filename: "[name].js"
     },
     // 这允许 webpack 以 Node 适用方式(Node-appropriate fashion)处理动态导入(dynamic import)，
     // 并且还会在编译 Vue 组件时，
