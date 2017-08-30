@@ -16,10 +16,10 @@ module.exports = {
             loader: "vue-loader",
             options: {
                 postcss: function() {
-                    return [require("autoprefixer")({ browsers: ["last 20 versions"] })]
+                    return [require("autoprefixer")({ browsers: ["last 5 versions"] })]
                 },
-                plugins: ["transform-vue-jsx"],
-                extractCSS: true
+                //需要 vue-loader 12.0.0+
+                //extractCSS: true,
             }
         }, {
             test: /\.js$/,
@@ -33,7 +33,6 @@ module.exports = {
             })
         }]
     },
-    plugins: [new ExtractTextPlugin({ filename: 'common.[chunkhash].css' })],
     resolve: {
         alias: {
             "vue$": "vue/dist/vue.common.js",

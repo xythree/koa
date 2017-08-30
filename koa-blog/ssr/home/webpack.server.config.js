@@ -4,7 +4,7 @@ const merge = require("webpack-merge")
 const nodeExternals = require("webpack-node-externals")
 const baseConfig = require("./../webpack.base.config.js")
 const VueSSRServerPlugin = require("vue-server-renderer/server-plugin")
-    //const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = merge(baseConfig, {
     // 将 entry 指向应用程序的 server entry 文件
@@ -45,5 +45,7 @@ module.exports = merge(baseConfig, {
         new webpack.DefinePlugin({
             isBrowser: false
         })
+        //需要 vue-loader 12.0.0+
+        //new ExtractTextPlugin({ filename: 'common.[chunkhash].css' })
     ]
 })

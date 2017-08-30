@@ -2,6 +2,7 @@ const webpack = require("webpack")
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     entry: {
@@ -29,6 +30,7 @@ module.exports = {
         chunkFilename: "../../dist/js/[name].min.js"
     },
     plugins: [
+        new UglifyJSPlugin(),
         /*
         //自动加载模块
         new webpack.ProvidePlugin({
@@ -68,7 +70,7 @@ module.exports = {
             test: /\.(css|scss)$/,
             use: ExtractTextPlugin.extract({
                 fallback: "style-loader",
-                use: ["css-loader", "sass-loader", "postcss-loader"]
+                use: ["css-loader?minimize", "sass-loader?minimize", "postcss-loader"]
             })
         }]
     },
