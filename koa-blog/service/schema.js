@@ -284,5 +284,27 @@ module.exports = {
             type: String,
             required: false
         }
+    },
+    gu: {
+        sign: {
+            type: String,
+            required: false
+        },
+        code: {
+            type: String,
+            required: false
+        },
+        name: {
+            type: String,
+            required: false
+        },
+        basic: {
+            type: Number,
+            required: false
+        },
+        increase: {
+            type: Number,
+            required: false
+        }
     }
 }

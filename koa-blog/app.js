@@ -103,6 +103,8 @@ require("./userCenter/index")(router, render)
 
 require("./service/chat")(router, render, io)
 
+require("./service/wechat")(router, render)
+
 
 
 require("./ssr/home/server")(router)

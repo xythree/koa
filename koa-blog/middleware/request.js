@@ -25,6 +25,7 @@ const request = function(params) {
             }
 
             try {
+
                 const req = _http.request(options, response => {
                     response.on("data", chunk => {
                         body.push(chunk)
