@@ -1,12 +1,12 @@
 const request = require("request")
 
 function abc(a, b, c) {
-    if (!a.length || !b.length || !c.length) {
+    if (a.length < 2 || b.length < 2 || c.length < 2) {
         return null
     }
     var a = a //经营活动产生的现金流量净额 busscashflownet
     var b = b //资本支出 acquassetcash | mananetr
-    var c = c //净利润 netparecompprof | netprofit
+    var c = c //净利润 netparecompprof | netprofit | compincoamt
     var d = [] //净现金流
 
     a.forEach((t, i) => {
@@ -52,9 +52,9 @@ return new Promise((resolve, reject) => {
         resolve()
     })
 }).then(() => {
-
-    let _src = `https://xueqiu.com/stock/f10/cfstatement.json?symbol=SZ${code}&page=1&size=35&_=` + +new Date //现金流量表
-    let _src2 = `https://xueqiu.com/stock/f10/incstatement.json?symbol=SZ${code}&page=1&size=35&_=` + +new Date //综合损益表
+    code = (/^6/.test(code) ? "SH" : "SZ") + code
+    let _src = `https://xueqiu.com/stock/f10/cfstatement.json?symbol=${code}&page=1&size=35&_=` + +new Date //现金流量表
+    let _src2 = `https://xueqiu.com/stock/f10/incstatement.json?symbol=${code}&page=1&size=35&_=` + +new Date //综合损益表
 
     let a = []
     let b = []
@@ -89,20 +89,17 @@ return new Promise((resolve, reject) => {
         return new Promise((resolve, reject) => {
             request({ url: _src2, jar: j }, function(err, res, body) {
                 let obj = JSON.parse(body)
-                let time = ["20170630"]
 
-                for (let i = 2016; i >= 2008; i--) {
-                    time.push(i + "1231")
-                }
-
-                time.forEach((t, i) => {
-                    obj.list.forEach((_t, i) => {
-                        if (t == _t.enddate) {
-                            c.push(_t.netparecompprof || _t.netprofit)
-                        }
+                if (obj.list) {
+                    time.forEach((t, i) => {
+                        obj.list.forEach((_t, i) => {
+                            if (t == _t.enddate) {
+                                c.push(_t.netparecompprof || _t.netprofit)
+                            }
+                        })
                     })
-                })
 
+                }
                 resolve()
             })
         }).then(() => {
