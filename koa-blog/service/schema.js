@@ -305,6 +305,49 @@ module.exports = {
         increase: {
             type: Number,
             required: false
+        },
+        roe1: {
+            type: String,
+            required: false
+        },
+        roe1Des: {
+            type: String,
+            default: "ROE(摊薄)",
+            required: false
+        },
+        roe2: {
+            type: String,
+            required: false
+        },
+        roe2Des: {
+            type: String,
+            default: "ROE(加权)",
+            required: false
+        },
+        nir: {
+            type: Number,
+            required: false
+        },
+        nirDes: {
+            type: String,
+            default: "净利润增长率",
+            required: false
+        },
+        totcurrasset: {
+            type: Number,
+            required: false
+        },
+        totliab: {
+            type: Number,
+            required: false
+        },
+        totmktcap: {
+            type: Number,
+            required: false
+        },
+        negotiablemv: {
+            type: Number,
+            required: false
         }
     }
 }

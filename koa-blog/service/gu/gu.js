@@ -1,7 +1,7 @@
 const request = require("request")
 
 function abc(a, b, c) {
-    if (!a.length || !b.length || !c.length) {
+    if (a.length < 2 || b.length < 2 || c.length < 2) {
         return null
     }
     //a 经营活动产生的现金流量净额 busscashflownet
@@ -53,21 +53,32 @@ module.exports = () => {
         })
     }).then(() => {
         return obj => {
-            let code = obj.code
-            let _src = `https://xueqiu.com/stock/f10/cfstatement.json?symbol=SZ${code}&page=1&size=35&_=` + +new Date //现金流量表
-            let _src2 = `https://xueqiu.com/stock/f10/incstatement.json?symbol=SZ${code}&page=1&size=35&_=` + +new Date //综合损益表
+            let code = (/^6/.test(obj.code) ? "SH" : "SZ") + obj.code
+            let timestamp = +new Date
+            let page = 1
+            let size = 35
+            let _src = `https://xueqiu.com/stock/f10/cfstatement.json?symbol=${code}&page=${page}&size=${size}&_=` + timestamp //现金流量表
+            let _src2 = `https://xueqiu.com/stock/f10/incstatement.json?symbol=${code}&page=${page}&size=${size}&_=` + timestamp //综合损益表
+            let _src3 = `https://xueqiu.com/stock/f10/balsheet.json?symbol=${code}&page=${page}&size=${size}&_=` + timestamp //资产负债表
 
-            let a = []
-            let b = []
-            let c = []
+            let a = [] //经营活动产生的现金流量净额 busscashflownet
+            let b = [] //资本支出 acquassetcash | mananetr
+            let c = [] //净利润 netparecompprof | netprofit
+            let d = [] //所有者权益(或股东权益)合计-净资产 righaggr
 
             return new Promise((resolve, reject) => {
                 let cookie = request.cookie(j.getCookieString(_src))
 
                 j.setCookie(cookie, _src)
 
-                request({ url: _src, jar: j }, function(err, res, body) {
-                    let obj = JSON.parse(body)
+                request({ url: _src, jar: j }, (err, res, body) => {
+                    let obj = {}
+
+                    try {
+                        obj = JSON.parse(body)
+                    } catch (e) {
+                        console.log(1, e, body)
+                    }
 
                     if (obj.list) {
                         time.forEach((t, i) => {
@@ -93,12 +104,13 @@ module.exports = () => {
 
                     j.setCookie(cookie, _src2)
 
-                    request({ url: _src2, jar: j }, function(err, res, body) {
-                        let obj = JSON.parse(body)
-                        let time = ["20170630"]
+                    request({ url: _src2, jar: j }, (err, res, body) => {
+                        let obj = {}
 
-                        for (let i = 2016; i >= 2008; i--) {
-                            time.push(i + "1231")
+                        try {
+                            obj = JSON.parse(body)
+                        } catch (e) {
+                            console.log(2, e, body)
                         }
 
                         if (obj.list) {
@@ -109,10 +121,10 @@ module.exports = () => {
                                     }
                                 })
                             })
-                            resolve()
-                        } else {
-                            resolve("end")
+
                         }
+
+                        resolve()
                     })
                 }).then(() => {
                     let result = abc(a, b, c)

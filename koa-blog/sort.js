@@ -13,6 +13,19 @@ let $arr = [];
 (function() {
     let arr = $arr.slice(0)
 
+    for (var i = 0; i <= arr.length; i++) {
+        if (arr[i] > arr[i + 1]) {
+            [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]
+            i = i - 2;
+        }
+    }
+
+})();
+
+;
+(function() {
+    let arr = $arr.slice(0)
+
     function binaryInsertionSort(array) {
         if (Object.prototype.toString.call(array).slice(8, -1) === 'Array') {
             console.time('二分插入排序耗时：');
