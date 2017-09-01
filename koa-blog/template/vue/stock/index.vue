@@ -1,28 +1,40 @@
 
 <style>
-*{padding: 0; margin: 0;}
+* {
+    padding: 0;
+    margin: 0;
+}
+
 body {
     font-size: 14px;
 }
+
 h6 {
     margin: 5px;
 }
+
 table {
-    border-collapse:collapse;
+    border-collapse: collapse;
 }
+
 td {
     padding: 5px;
     border: 1px solid #ddd;
-    text-align: center;    
+    text-align: center;
 }
+
 .red {
     color: #f00;
 }
+
 .list li {
-    padding: 30px;    
+    padding: 30px;
     border-bottom: 1px dotted #ddd;
 }
 
+.ipagination {
+    margin: 50px 0;
+}
 </style>
 
 
@@ -50,6 +62,9 @@ td {
                 </div>
             </li>
         </ul>
+        <div class="ipagination">
+            <pagination_box :total="total" :colnum="limit" :paginationCallBack="paginationCallBack"></pagination_box>
+        </div>
     </div>
 </template>
 
@@ -57,6 +72,9 @@ td {
 
 import axios from "axios"
 import Vue from "vue"
+
+import pagination_box from "vue_component/pagination/pagination.vue"
+
 
 window.good = []
 
@@ -71,7 +89,7 @@ Vue.component("table-box", {
         data() {
             let obj = []
             let val = this.str.split(",")
-            
+
             val.forEach((t, i) => {
                 let temp = t.split(":")
 
@@ -98,26 +116,44 @@ Vue.component("table-box", {
 export default {
     data() {
         return {
+            skip: 0,
+            limit: 5,
+            total: 0,
             list: []
         }
     },
-    mounted() {
-        axios.get("/stock", {
-            params: {
-                type: "all",
-                code: "000001",
-                basic: 80,
-                increase: 23
-            }
-        }).then(data => {
-            this.list = data.data
+    components: {
+        pagination_box
+    },
+    methods: {
+        paginationCallBack(ind) {
+            this.skip = ind - 1
 
-            /* 净净估值
-            this.list = data.data.filter((t, i) => {
-                return (t.totcurrasset - t.totliab) > (t.totmktcap)
+            axios.get("/stock", {
+                params: {
+                    type: "all",
+                    code: "000001",
+                    basic: 80,
+                    increase: 23,
+                    limit: this.limit,
+                    skip: this.skip
+                }
+            }).then(data => {
+                let d = data.data
+
+                this.total = d.count
+                this.list = d.data
+
+                /* 净净估值
+                this.list = data.data.filter((t, i) => {
+                    return (t.totcurrasset - t.totliab) > (t.totmktcap)
+                })
+                */
             })
-            */
-        })
+        }
+    },
+    mounted() {
+
     }
 }
 
