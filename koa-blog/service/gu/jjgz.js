@@ -8,9 +8,9 @@ module.exports = () => {
 
     let time = ["20170630"]
 
-    for (let i = 2016; i >= 2008; i--) {
-        //time.push(i + "1231")
-    }
+    /* for (let i = 2016; i >= 2008; i--) {
+        time.push(i + "1231")
+    } */
 
     return new Promise((resolve, reject) => {
         request.post({

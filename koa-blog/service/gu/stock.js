@@ -5,14 +5,18 @@ module.exports = (router, render) => {
 
 
     router.get("/stock", async ctx => {
-        let result = ""
+        let result = {}
         let params = ctx.request.query
         let type = params.type
         let obj = {}
+        let limit = +(params.limit || 15)
+        let skip = limit * (params.skip || 0)
 
         switch (type) {
             case "all":
-                result = await mon.gu.find(obj)
+                console.log(skip * limit, limit)
+                result.count = await mon.gu.find(obj).count()
+                result.data = await mon.gu.find(obj).skip(skip).limit(limit)
                 break
             case "filter":
                 if (params.basic != void 0) {
@@ -26,11 +30,13 @@ module.exports = (router, render) => {
                     }
                 }
 
-                result = await mon.gu.find(obj)
+                result.count = await mon.gu.find(obj).count()
+                result.data = await mon.gu.find(obj).skip(skip).limit(limit)
                 break
             case "code":
                 obj.code = params.code
-                result = await mon.gu.find(obj)
+                result.count = await mon.gu.find(obj).count()
+                result.data = await mon.gu.find(obj).skip(skip).limit(limit)
                 break
             default:
                 result = await render("stock/index")
