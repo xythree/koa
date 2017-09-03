@@ -21,7 +21,7 @@ module.exports = {
         //chatroom: "./static/js/chat/chatroom.js",
         //robot: "./static/js/chat/robot.js",
         //editor: "./static/js/editor/editor.js",
-        wechat: "./static/js/wechat/index.js",
+        //wechat: "./static/js/wechat/index.js",
         stock: "./static/js/stock/index.js",
         demo: "./static/js/demo/index.js"
     },

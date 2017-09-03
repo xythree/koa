@@ -40,6 +40,7 @@ td {
 
 <template>
     <div>
+        <input type="text" v-model="code" @keyup.enter="search" />
         <ul class="list">
             <li v-for="item in list">
                 <h5>{{item.name}}({{item.code}})</h5>
@@ -53,7 +54,7 @@ td {
                     <h6>ROE(加权)</h6>
                     <table-box :company="item" :str="item.roe2"></table-box>
                 </div>
-                <div>
+                <div v-if="item.totcurrasset">
                     <h6 :class="{red: (item.totcurrasset - item.totliab) > item.totmktcap }">净净估值:({{item.totcurrasset - item.totliab > item.totmktcap}})</h6>
                     <p>流动资产: {{item.totcurrasset}} </p>
                     <p>总负债: {{item.totliab}} </p>
@@ -88,25 +89,26 @@ Vue.component("table-box", {
     computed: {
         data() {
             let obj = []
-            let val = this.str.split(",")
+            if (this.str) {                
+                let val = this.str.split(",")
 
-            val.forEach((t, i) => {
-                let temp = t.split(":")
+                val.forEach((t, i) => {
+                    let temp = t.split(":")
 
-                obj.push({
-                    time: temp[0],
-                    value: temp[1]
+                    obj.push({
+                        time: temp[0],
+                        value: temp[1]
+                    })
                 })
-            })
 
-            let s = obj.every((t, i) => {
-                return t.value >= 15
-            })
-            if (s) {
-                this.good = true
-                window.good.push(this.company)
+                let s = obj.every((t, i) => {
+                    return t.value >= 15
+                })
+                if (s) {
+                    this.good = true
+                    window.good.push(this.company)
+                }
             }
-
             return obj
         }
     },
@@ -116,6 +118,7 @@ Vue.component("table-box", {
 export default {
     data() {
         return {
+            code: "",
             skip: 0,
             limit: 5,
             total: 0,
@@ -126,6 +129,25 @@ export default {
         pagination_box
     },
     methods: {
+        search() {
+            axios.get("/stock", {
+                params: {
+                    type: "code",
+                    code: this.code
+                }
+            }).then(data => {
+                let d = data.data
+
+                this.total = d.count
+                this.list = d.data
+
+                /* 净净估值
+                this.list = data.data.filter((t, i) => {
+                    return (t.totcurrasset - t.totliab) > (t.totmktcap)
+                })
+                */
+            })
+        },
         paginationCallBack(ind) {
             this.skip = ind - 1
 
