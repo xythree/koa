@@ -79,6 +79,7 @@ let vm = new Vue({
                     this.id = result.data.result._id
                     if (this.articleEmpty) {
                         this.clear()
+                        this.id = ""
                     }
                     alert("提交成功!")
                 }

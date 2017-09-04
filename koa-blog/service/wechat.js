@@ -2,15 +2,16 @@ const crypto = require("crypto")
 const LRU = require("lru-cache")
 const md5 = require("md5")
 const querystring = require("querystring")
-const parseString = require('xml2js').parseString //引入xml2js包
-const msg = require('./msg')
+const parseString = require("xml2js").parseString //引入xml2js包
+const msg = require("./msg")
 const request = require("request")
 
 const config = {
     token: "wechat",
     appid: "wxd485a65630e9a30e",
     secret: "58bc49b4adef181233bf161e4685528f",
-    apiDomain: "https://sz.api.weixin.qq.com/"
+    signature: "",
+    apiDomain: "https://api.weixin.qq.com/"
 }
 
 const access_token = md5("access_token")
@@ -101,6 +102,7 @@ module.exports = (router, render) => {
                                 refresh_token.cached.set(web_refresh_token, data.refresh_token)
                             }
                         }
+                        console.log("web_access_token", data)
                         resolve(data)
                     })
                 }).catch(() => {
@@ -122,9 +124,32 @@ module.exports = (router, render) => {
         } else {
             result = ""
         }
-        console.log(result)
+
         ctx.body = result
 
+    })
+
+    router.get("/wechat/auth", async ctx => {
+        let params = ctx.request.query
+
+        let result = {}
+
+        if (params.access_token && params.openid) {
+            result.data = await new Promise((resolve, reject) => {
+                request.get({
+                    url: config.apiDomain + `/sns/auth?access_token=${params.access_token}&openid=${params.openid}`,
+                    json: true
+                }, (err, res, data) => {
+                    console.log("auth", data)
+                    resolve(data)
+
+                })
+            }).catch(() => {
+                return {}
+            })
+        }
+
+        ctx.body = result
     })
 
     router.get("/wechat/userinfo", async ctx => {
@@ -138,7 +163,7 @@ module.exports = (router, render) => {
                     url: config.apiDomain + `/sns/userinfo?access_token=${params.access_token}&openid=${params.openid}&lang=zh_CN`,
                     json: true
                 }, (err, res, data) => {
-
+                    console.log("userinfo", data)
                     resolve(data)
 
                 })
@@ -186,7 +211,7 @@ module.exports = (router, render) => {
                     "button": [{
                         "type": "view",
                         "name": "授权",
-                        "url": "http://18n1952m73.51mypc.cn/wechat"
+                        "url": "https://www.xythree.com/wechat"
                     }, {
                         "name": "小工具",
                         "sub_button": [{
@@ -220,8 +245,8 @@ module.exports = (router, render) => {
         ctx.body = result
     })
 
-    /*
-    router.get('/wechat', async ctx => {
+
+    router.get("/wx", async ctx => {
         let params = ctx.request.query
             //1.获取微信服务器Get请求的参数 signature、timestamp、nonce、echostr
         let signature = params.signature //微信加密签名
@@ -235,8 +260,8 @@ module.exports = (router, render) => {
 
         //3.将三个参数字符串拼接成一个字符串进行sha1加密
         let tempStr = array.join("")
-        const hashCode = crypto.createHash('sha1') //创建加密类型 
-        let resultCode = hashCode.update(tempStr, 'utf8').digest('hex') //对传入的字符串进行加密
+        const hashCode = crypto.createHash("sha1") //创建加密类型 
+        let resultCode = hashCode.update(tempStr, "utf8").digest("hex") //对传入的字符串进行加密
 
         //4.开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
         if (resultCode === signature) {
@@ -245,14 +270,21 @@ module.exports = (router, render) => {
             result = "mismatch"
         }
 
-        ctx.body = await render("wechat/index")
+        ctx.body = await result
     })
-    */
+
 
     router.get("/wechat", async ctx => {
-        //let _href = encodeURIComponent("http://18n1952m73.51mypc.cn/")
 
-        ctx.body = await render("wechat/index")
+        ctx.body = await render("wechat/index", {
+            wxconfig: {
+                appid: config.appid,
+                timestamp: +new Date,
+                signature: config.signature,
+                nonceStr: Math.random().toString(16).substr(2),
+            },
+            timestamp: +new Date
+        })
 
     })
 
@@ -267,7 +299,7 @@ module.exports = (router, render) => {
             })
 
             ctx.req.on("end", () => {
-                let msgXml = Buffer.concat(buf).toString('utf-8')
+                let msgXml = Buffer.concat(buf).toString("utf-8")
 
                 parseString(msgXml, { explicitArray: false }, (err, result) => {
                     if (!err) {
@@ -280,13 +312,13 @@ module.exports = (router, render) => {
                         if (result.MsgType.toLowerCase() === "text") {
                             //根据消息内容返回消息信息
                             switch (result.Content) {
-                                case '1':
-                                    reportMsg = msg.txtMsg(fromUser, toUser, 'Hello ！我的英文名字叫 H-VK')
+                                case "1":
+                                    reportMsg = msg.txtMsg(fromUser, toUser, "Hello ！我的英文名字叫 H-VK")
                                     break
-                                case '2':
-                                    reportMsg = msg.txtMsg(fromUser, toUser, 'Node.js是一个开放源代码、跨平台的JavaScript语言运行环境，采用Google开发的V8运行代码,使用事件驱动、非阻塞和异步输入输出模型等技术来提高性能，可优化应用程序的传输量和规模。这些技术通常用于数据密集的事实应用程序');
+                                case "2":
+                                    reportMsg = msg.txtMsg(fromUser, toUser, "Node.js是一个开放源代码、跨平台的JavaScript语言运行环境，采用Google开发的V8运行代码,使用事件驱动、非阻塞和异步输入输出模型等技术来提高性能，可优化应用程序的传输量和规模。这些技术通常用于数据密集的事实应用程序");
                                     break
-                                case '文章':
+                                case "文章":
                                     var contentArr = [
                                             { Title: "Node.js 微信自定义菜单", Description: "使用Node.js实现自定义微信菜单", PicUrl: "http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast", Url: "http://blog.csdn.net/hvkcoder/article/details/72868520" },
                                             { Title: "Node.js access_token的获取、存储及更新", Description: "Node.js access_token的获取、存储及更新", PicUrl: "http://img.blog.csdn.net/20170528151333883?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast", Url: "http://blog.csdn.net/hvkcoder/article/details/72783631" },
@@ -296,12 +328,12 @@ module.exports = (router, render) => {
                                     reportMsg = msg.graphicMsg(fromUser, toUser, contentArr)
                                     break
                                 default:
-                                    reportMsg = msg.txtMsg(fromUser, toUser, '没有这个选项哦')
+                                    reportMsg = msg.txtMsg(fromUser, toUser, "没有这个选项哦")
                                     break
                             }
-                            resolve(reportMsg)
                         }
 
+                        resolve(reportMsg)
                     } else {
                         //打印错误
                         console.log(err)

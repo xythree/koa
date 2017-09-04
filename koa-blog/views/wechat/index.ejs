@@ -9,8 +9,27 @@
     <app />
 </div>
 
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
-<script src="/dist/js/wechat.js"></script>
+<script>
+    wx.config({
+        debug: false,
+        appId: <%= wxconfig.appid %>,
+        timestamp: <%= wxconfig.timestamp %>,
+        nonceStr: <%= wxconfig.nonceStr %>,
+        signature: <%= wxconfig.signature %>,
+        jsApiList: [
+            // 所有要调用的 API 都要加到这个列表中
+            'checkJsApi',
+            'openLocation',
+            'getLocation',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage'
+          ]
+    })
+</script>
+
+<script src="/dist/js/wechat.js?t=<%= timestamp %>"></script>
 
 </body>
 </html>

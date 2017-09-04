@@ -18,11 +18,22 @@ module.exports = (router, render) => {
         let is_login = await isLogin(ctx)
         let _path = ctx.path
         if (!is_login.length && _path != "/admin/login_register" && _path != "/login" && _path != "/register") {
-            //ctx.redirect("/admin/login_register")
-            //return
+            ctx.redirect("/admin/login_register")
+            return
         }
 
-        //ctx.session.usernameInfo = is_login[0]
+        ctx.session.usernameInfo = is_login[0]
+        await next()
+    })
+
+    router.use("/userCenter", async(ctx, next) => {
+        let is_login = await isLogin(ctx)
+
+        if (!is_login.length) {
+            ctx.redirect("/admin/login_register")
+            return
+        }
+        ctx.session.usernameInfo = is_login[0]
         await next()
     })
 
@@ -33,11 +44,11 @@ module.exports = (router, render) => {
     router.get("/admin/index", async ctx => {
 
         if (ctx.session.usernameInfo && ctx.session.usernameInfo.level != 9) {
-            //ctx.redirect("/")
-            //return
+            ctx.redirect("/userCenter")
+            return
         }
 
-        let username = "xythree" //ctx.session.username
+        let username = ctx.session.username
         let params = ctx.request.query
         let result = {}
         let limit = +params.limit || config.limit
@@ -60,7 +71,7 @@ module.exports = (router, render) => {
         result.prevPageArr = result.arr.slice(n < 0 ? 0 : n, result.index - 1)
         result.nextPageArr = result.arr.slice(result.index, result.index + result.count)
 
-        ctx.body = await render("/admin/index", { data: result })
+        ctx.body = await render("/admin/index", { data: result, userinfo: ctx.session.usernameInfo || {} })
     })
 
     router.get("/admin/login_register", async ctx => {
@@ -239,7 +250,7 @@ module.exports = (router, render) => {
     router.post("/article/add-edit-article", async ctx => {
         let params = ctx.request.body
         let result = {}
-        let author = "xythree" //ctx.session.username
+        let author = ctx.session.username
         let time = Date.now()
 
         if (author) {
@@ -313,7 +324,7 @@ module.exports = (router, render) => {
     })
 
     router.get("/article/article-list", async ctx => {
-        let username = "xythree" //ctx.session.username
+        let username = ctx.session.username
         let params = ctx.request.query
         let result = {}
         let limit = +params.limit || config.limit
