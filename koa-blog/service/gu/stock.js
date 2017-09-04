@@ -14,7 +14,6 @@ module.exports = (router, render) => {
 
         switch (type) {
             case "all":
-                console.log(skip * limit, limit)
                 result.count = await mon.gu.find(obj).count()
                 result.data = await mon.gu.find(obj).skip(skip).limit(limit)
                 break
