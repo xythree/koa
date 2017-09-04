@@ -19,6 +19,7 @@ const render = views("./views", {
     ext: "ejs"
 })
 
+
 //const mongoose = require("./service/mongoose")
 const mon = require("./service/sql")
 
@@ -64,6 +65,7 @@ app.use(async(ctx, next) => {
 
 router.use("*", async(ctx, next) => {
     let ua = ctx.header["user-agent"].toLowerCase()
+
     let match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
         /(webkit)[ \/]([\w.]+)/.exec(ua) ||
         /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
@@ -129,72 +131,6 @@ router.get("/demo", async ctx => {
 router.post("/demo", async ctx => {
     ctx.body = await "ok"
 })
-
-let axios = require("axios")
-let LRU = require("lru-cache")
-let md5 = require("md5")
-let querystring = require("querystring")
-let api, _config
-if (process.__API__) {
-    api = process.__API__
-} else {
-    api = process.__API__ = {
-        api: "http://localhost:8080/api/",
-        cached: LRU({
-            max: 1000,
-            maxAge: 1000 * 60
-        }),
-        cachedItem: {}
-    }
-}
-_config = api
-
-router.get("/api/lru", async ctx => {
-    let params = ctx.request.query
-    ctx.body = Math.random()
-})
-
-router.post("/lru", async ctx => {
-    let data = ctx.request.body
-    let url = "lru"
-    let result = ""
-    const key = md5(url + querystring.stringify(data))
-
-    if (_config.cached && _config.cached.has(key)) {
-        result = _config.cached.get(key)
-    } else {
-        result = await new Promise((resolve, reject) => {
-            axios.get(_config.api + url).then(res => {
-                if (_config.cached && data.cache) _config.cached.set(key, res.data)
-                resolve(res.data)
-            })
-        })
-    }
-    ctx.body = await result
-
-})
-
-
-const home_ssr = require("./service/ssr")({
-    serverBundle: "home-vue-ssr-server-bundle.json",
-    clientManifest: "home-vue-ssr-client-manifest.json"
-})
-
-router.get("/ssr", async ctx => {
-    console.time()
-    let result = ""
-
-
-    let list = await mon.article.findTitle("")
-
-    result = await home_ssr({
-        list
-    })
-
-    ctx.body = await result
-    console.timeEnd()
-})
-
 
 
 server.listen(config.port, () => {

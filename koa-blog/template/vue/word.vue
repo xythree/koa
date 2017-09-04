@@ -1,10 +1,9 @@
 
 <template>
     <div class="iword">
-    
         <transition name="fade">
             <div class="itip" v-show="!tip">
-                本功能主要用于MongoDB练习，单词量为135,115
+                单词量为135,115
                 <a href="javascript:;" @click="tipFn">X</a>
             </div>
         </transition>
