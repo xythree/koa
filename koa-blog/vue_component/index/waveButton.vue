@@ -4,6 +4,7 @@
 }
 .btn {
     height: 36px;
+    line-height: 36px;
     width: 96px;
     border-radius: 5px;
     border: 1px solid #ddd;

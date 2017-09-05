@@ -349,5 +349,62 @@ module.exports = {
             type: Number,
             required: false
         }
+    },
+    stockData: {
+        pid: {
+            type: String,
+            required: false
+        },
+        time: {
+            type: String,
+            required: false
+        },
+        //现金流量表
+        biznetcflow: { //经营活动产生的现金流净额
+            type: Number,
+            required: false
+        },
+        acquassetcash: { //资本开支(购建固定资产、无形资产和其他长期资产)
+            type: Number,
+            required: false
+        },
+        netprofit: { //现金流量表里的净利润
+            type: Number,
+            required: false
+        },
+        //综合损益表
+        parenetp: { //归属于母公司所有者的净利润
+            type: Number,
+            required: false
+        },
+        //资产负债表
+        totcurrasset: { //流动资产合计
+            type: Number,
+            required: false
+        },
+        fixedassenet: { //固定资产净额
+            type: Number,
+            required: false
+        },
+        righaggr: { //所有者权益(或股东权益)合计-净资产
+            type: Number,
+            required: false
+        },
+        curfds: { //货币资金
+            type: Number,
+            required: false
+        },
+        shorttermborr: { //短期借款
+            type: Number,
+            required: false
+        },
+        longborr: { //长期借款
+            type: Number,
+            required: false
+        },
+        bdspaya: { //应付债券
+            type: Number,
+            required: false
+        }
     }
 }
