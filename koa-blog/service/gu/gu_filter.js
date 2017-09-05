@@ -2,6 +2,7 @@ const gu = require("./gu")()
 const mon = require("../model")
 const roe = require("./roe")()
 const jjgz = require("./jjgz")()
+const gu_data = require("./gu_data")()
 
 let codeList = ""
 let goods = []
@@ -14,6 +15,12 @@ new Promise((resolve, reject) => {
 }).then(async data => {
     codeList = data
     let index = 0
+
+    let time = ["20170630"]
+
+    for (let i = 2016; i >= 2008; i--) {
+        time.push(i + "1231")
+    }
 
     function getResult(obj) {
         if (index < codeList.length) {
@@ -80,6 +87,43 @@ new Promise((resolve, reject) => {
                                 getResult(codeList[++index])
                             })
 
+                        } else {
+                            getResult(codeList[++index])
+                        }
+                    })
+                }, () => {
+                    getResult(codeList[++index])
+                })
+            } else if (s == "data") {
+                gu_data.then(f => {
+                    f(obj).then(d => {
+                        console.log(index, obj.name, obj.code, "data")
+                        if (d) {
+
+                            let nums = 0
+
+                            time.forEach((t, i) => {
+                                mon.stockData.create({
+                                    pid: obj.code,
+                                    time: t,
+                                    biznetcflow: d.a[i],
+                                    acquassetcash: d.b[i],
+                                    netprofit: d.c[i],
+                                    parenetp: d.d[i],
+                                    totcurrasset: d.e1[i],
+                                    fixedassenet: d.e2[i],
+                                    righaggr: d.e3[i],
+                                    curfds: d.e4[i],
+                                    shorttermborr: d.e5[i],
+                                    longborr: d.e6[i],
+                                    bdspaya: d.e7[i]
+                                }).then(() => {
+                                    ++nums
+                                    if (nums == time.length - 1) {
+                                        getResult(codeList[++index])
+                                    }
+                                })
+                            })
                         } else {
                             getResult(codeList[++index])
                         }

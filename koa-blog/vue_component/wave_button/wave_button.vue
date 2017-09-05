@@ -5,7 +5,7 @@
     border: none;
     border-radius: 3px;
     position: relative;
-    height: 100%;
+    height: 100%;    
     width: 100%;
     text-align: center;
     display: inline-block;
@@ -53,14 +53,14 @@ export default {
     },
     mounted() {
         let button = this.$refs.button
-        let repple = this.$refs.repple
+        let ripple = this.$refs.ripple
         let v = Math.max(button.offsetHeight, button.offsetWidth)
 
-        repple.style.width = repple.style.height = v + "px"
+        ripple.style.width = ripple.style.height = v + "px"
         button.style.lineHeight = button.offsetHeight + "px"
     },
     methods: {
-        reppleClick(e) {            
+        reppleClick(e) {
             let ripple = this.$refs.ripple
             let x = e.offsetX - ripple.offsetWidth / 2
             let y = e.offsetY - ripple.offsetHeight / 2

@@ -4,6 +4,7 @@ const mon = require("../model")
 module.exports = (router, render) => {
 
 
+
     router.get("/stock", async ctx => {
         let result = {}
         let params = ctx.request.query
@@ -44,5 +45,26 @@ module.exports = (router, render) => {
         ctx.body = await result
 
     })
+
+    router.get("/filter", async ctx => {
+        let result = {}
+        let params = ctx.request.query
+        let type = params.type
+        let code = params.code
+
+        switch (type) {
+            case "code":
+                result = await mon.stockData.find({
+                    pid: code
+                }).sort({ time: -1 }).limit(10)
+                break
+            default:
+                result = await render("stock/filter")
+        }
+
+        ctx.body = await result
+
+    })
+
 
 }
