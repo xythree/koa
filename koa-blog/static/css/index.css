@@ -334,8 +334,7 @@ table {
 }
 
 .ibody .iright {
-  min-height: 100%;
-  margin-left: 230px;
+  left: 230px;
   position: relative;
   max-width: 60%;
   min-height: 100%;
@@ -699,7 +698,7 @@ table {
   }
   .ibody .iright {
     position: absolute;
-    margin-left: 0;
+    left: 0;
     max-width: 100%;
     width: 100%;
     z-index: 2;
@@ -721,8 +720,7 @@ table {
   .showMenu .iright {
     margin-left: 230px;
   }
-  .showMenu .irouter_view,
-  .showMenu .isearch_box {
+  .showMenu .irouter_view {
     display: none;
     -webkit-animation: opacity_zero .5s both;
     animation: opacity_zero .5s both;
@@ -959,7 +957,7 @@ table {
   display: inline-block;
   vertical-align: top;
   color: #333;
-  max-width: 88%;
+  max-width: 85%;
   white-space: nowrap;
   word-break: keep-all;
   overflow: hidden;

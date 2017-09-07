@@ -40,6 +40,7 @@ td {
 
 <template>
     <div>
+        
         <input type="text" v-model="code" @keyup.enter="search" />
         <ul class="list">
             <li v-for="item in list">
@@ -71,6 +72,7 @@ export default {
             var d = [] //净现金流
 
             a.forEach((t, i) => {
+                console.log(t, b[i])
                 d.push(t - b[i])
             })
 
@@ -81,7 +83,7 @@ export default {
             var _d = d.reduce((c, p) => {
                 return +c + +p
             })
-
+            
             return {
                 basic: (_d / _b) * 100 + "%",
                 increase: ((d.shift() - d.pop()) / _b) * 100 + "%"

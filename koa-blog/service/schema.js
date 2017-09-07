@@ -355,6 +355,10 @@ module.exports = {
             type: String,
             required: false
         },
+        name: {
+            type: String,
+            required: false
+        },
         time: {
             type: String,
             required: false
