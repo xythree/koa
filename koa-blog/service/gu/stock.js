@@ -1,9 +1,6 @@
 const mon = require("../model")
 
-
 module.exports = (router, render) => {
-
-
 
     router.get("/stock", async ctx => {
         let result = {}

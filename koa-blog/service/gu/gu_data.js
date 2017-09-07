@@ -61,7 +61,7 @@ module.exports = () => {
                         time.forEach((t, i) => {
                             obj.list.forEach((_t, j) => {
                                 if (t == _t.enddate) {
-                                    a.push(_t.biznetcflow || _t.busscashflownet)
+                                    a.push(_t.mananetr || _t.biznetcflow || _t.busscashflownet)
                                     b.push(_t.acquassetcash)
                                     c.push(_t.netprofit)
                                 }
