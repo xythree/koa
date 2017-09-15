@@ -26,6 +26,7 @@
 export default {
     data() {
         return {
+            doc: document.documentElement || document.body,
             timer: "",
             show: false
         }
@@ -33,7 +34,7 @@ export default {
     methods: {
         backTop() {
             this.timer = setTimeout(() => {
-                let ibd = document.body
+                let ibd = this.doc
 
                 if (ibd.scrollTop <= 0) {
                     clearTimeout(this.timer)
@@ -46,7 +47,7 @@ export default {
     },
     mounted() {
         document.addEventListener("scroll", () => {
-            if (document.body.scrollTop > 350) {
+            if (this.doc.scrollTop > 350) {
                 this.show = true
             } else {
                 this.show = false

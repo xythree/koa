@@ -53,6 +53,7 @@ module.exports = {
                 title: 1,
                 content: 1,
                 create_time: 1,
+                text: 1,
                 views: 1
             }).match({ _id: global.MgTypes.ObjectId(id) })
 

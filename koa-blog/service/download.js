@@ -22,9 +22,7 @@ module.exports = (router, render) => {
                             "Content-Disposition": "attachment; filename=" + _nu[_nu.length - 1],
                             "Content-Length": stats.size
                         })
-
-                        fs.createReadStream(_u)
-                        resolve(1)
+                        resolve(fs.createReadStream(_u))
                     } else {
                         resolve(0)
                     }

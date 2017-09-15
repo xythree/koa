@@ -1,7 +1,7 @@
 
 <template>
     <div class="article_box">
-        <div class="iarticle_content_box" v-if="!isBrowser">
+        <div class="iarticle_content_box">
             <i v-if="false" class="fa fa-arrow-circle-left fa-2x" @click="close"></i>
             <div class="iarticle markdown-body">
                 <h3 class="iarticle_title">
@@ -10,7 +10,7 @@
                     <span class="iarticle_time">{{info.create_time | getLastTime}}</span>
                     <span class="iarticle_views">{{info.views}}次浏览</span>
                 </div>
-                <div class="iarticle_content highlight" v-html="info.content"></div>
+                <div class="iarticle_content highlight" v-html="info.content"></div>                
                 <div class="isource_box" v-if="false">
                     原文链接:
                     <a :href="href">{{href}}</a>
@@ -112,6 +112,7 @@ export default {
     computed: {
         info() {
             if (this.articleList && this.articleList.article.length) {
+                this.articleList.article[0].content = this.prism(this.articleList.article[0].content)
                 return this.articleList.article[0]
             }
             return {
@@ -149,6 +150,9 @@ export default {
         paginationBox
     },
     methods: {
+        prism(value) {
+            return value.replace(/<code>/g, "<code class='language-javascript'>")
+        },
         close() {
             this.$router.push("/")
         },
@@ -191,7 +195,6 @@ export default {
         }
     },
     mounted() {
-
         let timer, _t = this
         let doc = document
 
@@ -210,6 +213,8 @@ export default {
                 }
             }, 300)
         }
+        
+
     }
 }
 

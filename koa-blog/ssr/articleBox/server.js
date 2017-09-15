@@ -5,6 +5,8 @@ const home_ssr = require("../../service/ssr")({
     clientManifest: "articleBox-vue-ssr-client-manifest.json"
 })
 
+const minify = require('html-minifier').minify
+
 module.exports = router => {
 
 
@@ -29,21 +31,31 @@ module.exports = router => {
             article.next = await mon.article.next(id) || []
 
             let title = article.article[0].title
+            let description = (title + "," + article.article[0].text).substr(0, 128)
+            description = (description.length <= 128 ? description : description + "...").replace(/\"/g, "&quot;").replace(/\'/g, "&apos;")
 
             result = await home_ssr({
-                disState: true,
                 url: ctx.req.url,
                 article,
                 title: `${title}|恨水无伤`,
                 meta: `
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${title}">
-    <link rel="stylesheet" href="/css/index.min.css" />
-    <link rel="stylesheet" href="/css/github-markdown.min.css">
+    <meta name="description" content="恨水无伤的小站,前端学习笔记分享！" />
+    <meta name="description" content="${description}" />
+    <link rel="stylesheet" href="/css/articles.min.css" />
+    <link href="/css/prism.min.css" rel="stylesheet" />    
+                `,
+                scripts: `
+    <script src="/js/prism.js"></script>
                 `
             })
 
-            ctx.body = await result
+            //ctx.body = result
+            ctx.body = minify(result, {
+                removeComments: true, //去除注释
+                minifyJS: true,
+                minifyCSS: true,
+                collapseWhitespace: true
+            })
         } else {
             ctx.redirect("/404")
         }

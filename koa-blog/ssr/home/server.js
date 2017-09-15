@@ -4,9 +4,9 @@ const home_ssr = require("../../service/ssr")({
     serverBundle: "home-vue-ssr-server-bundle.json",
     clientManifest: "home-vue-ssr-client-manifest.json"
 })
+const minify = require('html-minifier').minify
 
 module.exports = router => {
-
 
     async function getList(skip = 0, limit = 15) {
         let list = {}
@@ -34,20 +34,24 @@ module.exports = router => {
         let result = ""
         let list = await getList()
 
-        //list.index = 1
-        //list.url = "/page/"
-
         result = await home_ssr({
             url: ctx.req.url,
             list,
+            //manifest: "manifest=/manifest/home.manifest",
             title: "恨水无伤",
             meta: `
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/index.min.css" />
+    <meta name="description" content="恨水无伤的小站,前端学习笔记分享！" />
+    <link rel="stylesheet" href="/css/index.min.css" />    
             `
         })
 
-        ctx.body = await result
+        ctx.body = minify(result, {
+            removeComments: true, //去除注释
+            minifyJS: true,
+            minifyCSS: true,
+            collapseWhitespace: true
+        })
+
         console.timeEnd("首页打开速度")
     })
 
@@ -68,12 +72,17 @@ module.exports = router => {
                 list,
                 title: "恨水无伤",
                 meta: `
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/index.min.css" />
+    <meta name="description" content="恨水无伤的小站,前端学习笔记分享！" />
                     `
             })
 
-            ctx.body = await result
+            ctx.body = minify(result, {
+                removeComments: true, //去除注释
+                minifyJS: true,
+                minifyCSS: true,
+                collapseWhitespace: true
+            })
         } else {
             ctx.redirect("/404")
         }
@@ -87,7 +96,7 @@ module.exports = router => {
             result = await getList(params.skip)
         }
 
-        ctx.body = await result
+        ctx.body = result
     })
 
 

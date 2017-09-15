@@ -7,7 +7,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
     entry: {
         //vendor: ["vue", "axios"],
-        //index: "./static/js/index.js",
+        index: "./static/js/index.js",
         //component: "./static/js/component/index.js",
         //music: "./static/js/music/index.js",
         //poetry: "./static/js/poetry/index.js",
@@ -16,11 +16,11 @@ module.exports = {
         //login_register: "./static/js/login_register/index.js",
         //markdown: "./static/js/tools/markdown.js",
         //qrcode: "./static/js/tools/qrcode.js",
-        //articleCenter: "./static/js/admin/articleCenter.js",
+        articleCenter: "./static/js/admin/articleCenter.js",
         //chat: "./static/js/chat/index.js",
         //chatroom: "./static/js/chat/chatroom.js",
         //robot: "./static/js/chat/robot.js",
-        //editor: "./static/js/editor/editor.js",
+        editor: "./static/js/editor/editor.js",
         //wechat: "./static/js/wechat/index.js",
         stock: "./static/js/stock/index.js",
         filter: "./static/js/stock/filter.js",

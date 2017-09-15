@@ -6,6 +6,8 @@ import app from "./../../../template/vue/music/controll.vue"
 
 //require("./../../css/word/index.css")
 
+
+
 let vm = new Vue({
     el: "#word",
     //render: h => h(word)
@@ -13,6 +15,7 @@ let vm = new Vue({
         app
     },
     mounted() {
+
 
     }
 })

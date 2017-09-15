@@ -25,7 +25,8 @@ module.exports = obj => {
                 title: "",
                 meta: "",
                 scripts: "",
-                url: options.url
+                url: options.url,
+                manifest: ""
             }
 
             Object.assign(context, options)

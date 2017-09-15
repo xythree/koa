@@ -100,11 +100,13 @@ new Promise((resolve, reject) => {
                         console.log(index, obj.name, obj.code, "data")
                         if (d) {
 
+                            /*
                             let nums = 0
 
                             time.forEach((t, i) => {
                                 mon.stockData.create({
                                     pid: obj.code,
+                                    name: obj.name,
                                     time: t,
                                     biznetcflow: d.a[i],
                                     acquassetcash: d.b[i],
@@ -123,6 +125,31 @@ new Promise((resolve, reject) => {
                                         getResult(codeList[++index])
                                     }
                                 })
+                            })
+                            */
+                            Promise.all(time.map((t, i) => {
+                                return new Promise((resolve, reject) => {
+                                    mon.stockData.create({
+                                        pid: obj.code,
+                                        name: obj.name,
+                                        time: t,
+                                        biznetcflow: d.a[i],
+                                        acquassetcash: d.b[i],
+                                        netprofit: d.c[i],
+                                        parenetp: d.d[i],
+                                        totcurrasset: d.e1[i],
+                                        fixedassenet: d.e2[i],
+                                        righaggr: d.e3[i],
+                                        curfds: d.e4[i],
+                                        shorttermborr: d.e5[i],
+                                        longborr: d.e6[i],
+                                        bdspaya: d.e7[i]
+                                    }).then(() => {
+                                        resolve()
+                                    })
+                                })
+                            })).then(() => {
+                                getResult(codeList[++index])
                             })
                         } else {
                             getResult(codeList[++index])
