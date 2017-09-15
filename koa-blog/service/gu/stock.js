@@ -58,10 +58,8 @@ module.exports = (router, render) => {
             default:
                 result = await render("stock/filter")
         }
-
         ctx.body = await result
 
     })
-
 
 }

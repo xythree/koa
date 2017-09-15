@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html {{manifest}}>
 
 <head>
 
     <title>{{ title }}</title>
-    {{{ meta }}} {{{ renderStyles() }}}
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="恨水无伤,恨水无伤的小站,前端学习笔记分享！"> {{{ meta }}} {{{ renderStyles() }}}
 </head>
 
 <body>
@@ -14,7 +14,6 @@
 
     <!--window-->
     {{{ renderScripts() }}} {{{ scripts }}}
-
     <script>
         var _hmt = _hmt || [];
         (function() {

@@ -1,91 +1,56 @@
-/* reset */
-
 html,
 body,
+div,
+span,
+iframe,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-div,
+hr,
+p,
+blockquote,
+img,
+a,
 dl,
 dt,
 dd,
 ul,
 ol,
 li,
-p,
-blockquote,
 pre,
-hr,
-figure,
-table,
-caption,
-th,
-td,
-form,
+em,
+strong,
+b,
+i,
 fieldset,
+form,
+label,
 legend,
-input,
 button,
+input,
 textarea,
-menu {
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
     margin: 0;
     padding: 0;
-}
-
-header,
-footer,
-section,
-article,
-aside,
-nav,
-hgroup,
-address,
-figure,
-figcaption,
-menu,
-details {
-    display: block;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-caption,
-th {
-    text-align: left;
-    font-weight: normal;
-}
-
-html,
-body,
-fieldset,
-img,
-iframe,
-abbr {
     border: 0;
-}
-
-i,
-cite,
-em,
-var,
-address,
-dfn {
-    font-style: normal;
-}
-
-[hidefocus],
-summary {
     outline: 0;
 }
 
-li {
-    list-style: none;
+body,
+button,
+input,
+select,
+textarea {
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
 }
 
 h1,
@@ -93,36 +58,42 @@ h2,
 h3,
 h4,
 h5,
-h6,
-small {
+h6 {
     font-size: 100%;
 }
 
-sup,
-sub {
-    font-size: 83%;
+address,
+cite,
+dfn,
+em,
+var {
+    font-style: normal;
 }
 
-pre,
 code,
 kbd,
-samp {
-    font-family: inherit;
+pre,
+samp,
+tt {
+    font-family: "Courier New", Courier, monospace;
 }
 
-q:before,
-q:after {
-    content: none;
+small {
+    font-size: 12px;
 }
 
-textarea {
-    overflow: auto;
-    resize: none;
+ul,
+ol,
+li {
+    list-style: none;
 }
 
-label,
-summary {
-    cursor: default;
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
 }
 
 a,
@@ -130,44 +101,38 @@ button {
     cursor: pointer;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
 em,
-strong,
-b {
-    font-weight: bold;
+i {
+    font-style: normal;
 }
 
-del,
-ins,
-u,
-s,
-a,
-a:hover {
-    text-decoration: none;
-}
-
-body,
-textarea,
-input,
-button,
-select,
-keygen,
 legend {
-    font: 12px/1.14 arial, \5b8b\4f53;
-    color: #333;
-    outline: 0;
+    color: #000;
+}
+
+fieldset,
+img {
+    border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+}
+
+input,
+select,
+img {
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 body {
-    background: #fff;
-}
-
-a,
-a:hover {
-    color: #333;
+    -webkit-overflow-scrolling: touch;
 }

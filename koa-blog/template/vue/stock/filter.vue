@@ -1,5 +1,5 @@
 
-<style>
+<style lang="sass">
 * {
     padding: 0;
     margin: 0;
@@ -35,12 +35,13 @@ td {
 .ipagination {
     margin: 50px 0;
 }
+
 </style>
 
 
 <template>
     <div>
-        
+
         <input type="text" v-model="code" @keyup.enter="search" />
         <ul class="list">
             <li v-for="item in list">
@@ -83,7 +84,7 @@ export default {
             var _d = d.reduce((c, p) => {
                 return +c + +p
             })
-            
+
             return {
                 basic: (_d / _b) * 100 + "%",
                 increase: ((d.shift() - d.pop()) / _b) * 100 + "%"
@@ -98,7 +99,7 @@ export default {
                 }
             }).then(data => {
                 let d = data.data
- 
+
                 if (d.length) {
                     let biznetcflow = []
                     let acquassetcash = []
@@ -120,6 +121,7 @@ export default {
 
             })
         }
+
     },
     mounted() {
 
