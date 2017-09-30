@@ -61,32 +61,32 @@ app.use(router.routes())
 
 app.use(async(ctx, next) => {
 
-    if (ctx.response.status == 404) {
-        if (ctx.request.header["content-type"]) {
-            ctx.status = 404
-            ctx.body = ""
-        } else {
-            ctx.redirect("/404")
+        if (ctx.response.status == 404) {
+            if (ctx.request.header["content-type"]) {
+                ctx.status = 404
+                ctx.body = ""
+            } else {
+                ctx.redirect("/404")
+            }
         }
-    }
-    next()
-})
-
-router.use("*", async(ctx, next) => {
-    let ua = ctx.header["user-agent"].toLowerCase()
-    let match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
-        /(webkit)[ \/]([\w.]+)/.exec(ua) ||
-        /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
-        /(msie) ([\w.]+)/.exec(ua) ||
-        ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || []
-
-    if (match[1] == "msie" && parseInt(match[2]) < 9) {
-        ctx.body = "not support browser"
-    } else {
-        await next()
-    }
-})
-
+        next()
+    })
+    /*
+    router.use("*", async(ctx, next) => {
+        let ua = ctx.header["user-agent"].toLowerCase()
+        let match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
+            /(webkit)[ \/]([\w.]+)/.exec(ua) ||
+            /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
+            /(msie) ([\w.]+)/.exec(ua) ||
+            ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || []
+        
+        if (match[1] == "msie" && parseInt(match[2]) < 9) {
+            ctx.body = "not support browser"
+        } else {
+            await next()
+        }
+    })
+    */
 router.get("/404", async ctx => {
     ctx.body = await render("404")
 })
