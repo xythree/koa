@@ -2,9 +2,7 @@ import Vue from "vue"
 import axios from "axios"
 
 //import app from "./../../../vue_component/index/dragLayout.vue"
-import app from "./../../../template/vue/music/controll.vue"
-
-//require("./../../css/word/index.css")
+import app from "./../../../template/vue/demo.vue"
 
 
 
@@ -15,7 +13,6 @@ let vm = new Vue({
         app
     },
     mounted() {
-
 
     }
 })
